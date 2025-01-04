@@ -32,6 +32,12 @@ extern "C" { __declspec(dllexport) extern const char* D3D12SDKPath = (const char
 extern "C" { __declspec(dllexport) extern const char* D3D12SDKPath = (const char*)u8".\\D3D12\\x64\\"; }
 #endif
 
+#ifdef _DEBUG
+#pragma comment(lib, "../library/lib/DirectXTex/DirectXTex_debug.lib")
+#else
+#pragma comment(lib, "../library/lib/DirectXTex/DirectXTex.lib")
+#endif
+
 // Windows Header Files
 #include <windows.h>
 #include <wrl.h>
@@ -51,10 +57,13 @@ using namespace Microsoft::WRL;
 #include <unordered_map>
 #include <list>
 #include <variant>
+#include <filesystem>
+#include <concepts>
 using namespace std::literals;
 
 // Additional Headers
 #include "define.h"
+#include "Utils.h"
 #include "constants.h"
 #include "types.h"
 
@@ -64,6 +73,7 @@ using namespace std::literals;
 
 // Managers
 #include "RenderManager.h"
+#include "ShaderManager.h"
 
 // Debugs
 #ifdef _DEBUG

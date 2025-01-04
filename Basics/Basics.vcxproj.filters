@@ -43,6 +43,15 @@
     <Filter Include="Renderer\Managers">
       <UniqueIdentifier>{a19fff12-a99c-4d65-96b6-8742324b2936}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader">
+      <UniqueIdentifier>{52ba3b40-6de9-4397-9bbd-4b11b2966fc8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer\DirectXTex">
+      <UniqueIdentifier>{7618deeb-8b4d-487e-b559-e50132a13a3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer\Pool">
+      <UniqueIdentifier>{d69f738a-8e54-4a1e-9727-71122f08004a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -75,12 +84,6 @@
     <ClInclude Include="Application.h">
       <Filter>App\Application</Filter>
     </ClInclude>
-    <ClInclude Include="DescriptorPool.h">
-      <Filter>Renderer\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="ConstantBufferPool.h">
-      <Filter>Renderer\Resources</Filter>
-    </ClInclude>
     <ClInclude Include="Utils.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -96,6 +99,22 @@
     <ClInclude Include="TestApp.h">
       <Filter>App\Application</Filter>
     </ClInclude>
+    <ClInclude Include="DDSTextureLoader12.h">
+      <Filter>Renderer\DirectXTex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\library\include\DirectXTex\DirectXTex.h">
+      <Filter>Renderer\DirectXTex</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstantBufferPool.h">
+      <Filter>Renderer\Pool</Filter>
+    </ClInclude>
+    <ClInclude Include="DescriptorPool.h">
+      <Filter>Renderer\Pool</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Renderer\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Basics.ico">
@@ -126,12 +145,6 @@
     <ClCompile Include="Application.cpp">
       <Filter>App\Application</Filter>
     </ClCompile>
-    <ClCompile Include="DescriptorPool.cpp">
-      <Filter>Renderer\Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="ConstantBufferPool.cpp">
-      <Filter>Renderer\Resources</Filter>
-    </ClCompile>
     <ClCompile Include="Utils.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
@@ -147,11 +160,32 @@
     <ClCompile Include="TestApp.cpp">
       <Filter>App\Application</Filter>
     </ClCompile>
+    <ClCompile Include="DDSTextureLoader12.cpp">
+      <Filter>Renderer\DirectXTex</Filter>
+    </ClCompile>
+    <ClCompile Include="ConstantBufferPool.cpp">
+      <Filter>Renderer\Pool</Filter>
+    </ClCompile>
+    <ClCompile Include="DescriptorPool.cpp">
+      <Filter>Renderer\Pool</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Renderer\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="SimpleMath.inl">
       <Filter>Utils</Filter>
     </None>
+    <None Include="..\library\include\DirectXTex\DirectXTex.inl">
+      <Filter>Renderer\DirectXTex</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\Shader\test.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
