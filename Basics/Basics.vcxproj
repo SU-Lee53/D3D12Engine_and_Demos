@@ -146,6 +146,7 @@
     <ClInclude Include="DescriptorPool.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="InputManager.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="RenderManager.h" />
@@ -156,6 +157,7 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="TestApp.h" />
+    <ClInclude Include="TimeManager.h" />
     <ClInclude Include="types.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>
@@ -169,6 +171,7 @@
     <ClCompile Include="DescriptorPool.cpp" />
     <ClCompile Include="Entry.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -180,6 +183,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="TestApp.cpp" />
+    <ClCompile Include="TimeManager.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>

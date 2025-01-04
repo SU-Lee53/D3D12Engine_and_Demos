@@ -21,6 +21,10 @@ public:										\
 #define GAME			GET_SINGLE(Game)
 #define CORE			GET_SINGLE(Core)
 #define RENDER			GET_SINGLE(RenderManager)
+#define SHADER			GET_SINGLE(ShaderManager)
+#define INPUT			GET_SINGLE(InputManager)
+#define TIME			GET_SINGLE(TimeManager)
 
-#define DEVICE					CORE.GetDevice()
-#define COMMAND_QUEUE			CORE.GetCommandQueue()
+#define DEVICE				CORE.GetDevice()
+#define COMMAND_QUEUE		CORE.GetCommandQueue()
+#define DT					TIME.GetDeltaTime()

@@ -26,7 +26,9 @@ WPARAM Game::Run(const GameDesc& desc)
 #else
         CORE.Initialize(FALSE, FALSE);
 #endif 
-
+        SHADER.Initialize();
+        INPUT.Initialize();
+        TIME.Initialize();
         RENDER.Initialize();
 
 
@@ -123,6 +125,15 @@ LRESULT Game::WndProc(HWND handle, UINT message, WPARAM wParam, LPARAM lParam)
 }
 void Game::Update()
 {
+    // Update Managers
+    INPUT.Update();
+    TIME.Update();
+
+    // Update Game Logic
+
+
+    // Update FPS
+    ShowFps();
 }
 void Game::Render()
 {
@@ -132,3 +143,13 @@ void Game::Render()
     RENDER.Present();
 }
 #pragma endregion Win32Callbacks
+
+void Game::ShowFps()
+{
+    UINT fps = TIME.GetFps();
+
+    WCHAR text[100] = L"";
+    wsprintf(text, L"FPS : %d", fps);
+
+    SetWindowText(m_Desc.hWnd, text);
+}

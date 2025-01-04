@@ -54,6 +54,7 @@ using namespace Microsoft::WRL;
 #include <vector>
 #include <memory>
 #include <string>
+#include <map>
 #include <unordered_map>
 #include <list>
 #include <variant>
@@ -74,6 +75,8 @@ using namespace std::literals;
 // Managers
 #include "RenderManager.h"
 #include "ShaderManager.h"
+#include "InputManager.h"
+#include "TimeManager.h"
 
 // Debugs
 #ifdef _DEBUG

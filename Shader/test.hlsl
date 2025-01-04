@@ -1,28 +1,43 @@
+Texture2D texDiffuse : register(t0);
+SamplerState samplerDiffuse : register(s0);
 
-struct VS_IN
+cbuffer CONSTANT_BUFFER_DEFAULT : register(b0)
 {
-    float4 position : SV_POSITION;
-    float4 color    : COLOR;
-    //float4 worldPosition    : POSITION;
-    //float3 normal           : NORMAL;
-    //float3 biNormal         : BINORMAL;
-    //float2 uv               : TEXCOORD;
+    matrix g_matWorld;
+    matrix g_matView;
+    matrix g_matProj;
 };
 
-struct PS_IN
+struct VSInput
+{
+    float4 Pos : POSITION;
+    float4 color : COLOR;
+    float2 TexCoord : TEXCOORD0;
+};
+
+struct PSInput
 {
     float4 position : SV_POSITION;
     float4 color : COLOR;
+    float2 TexCoord : TEXCOORD0;
 };
 
-PS_IN VS_Main(VS_IN input)
+PSInput VSMain(VSInput input)
 {
-    PS_IN output;
+    PSInput result = (PSInput) 0;
     
-    return output;
+    
+    matrix matViewProj = mul(g_matView, g_matProj); // view x proj
+    matrix matWorldViewProj = mul(g_matWorld, matViewProj); // world x view x proj
+    result.position = mul(input.Pos, matWorldViewProj); // pojtected vertex = vertex x world x view x proj
+    result.TexCoord = input.TexCoord;
+    result.color = input.color;
+    
+    return result;
 }
 
-float PS_Main(PS_IN input) : SV_Target
+float4 PSMain(PSInput input) : SV_TARGET
 {
-    return float4(1.f, 1.f, 1.f, 1.f);
+    float4 texColor = texDiffuse.Sample(samplerDiffuse, input.TexCoord);
+    return texColor * input.color;
 }

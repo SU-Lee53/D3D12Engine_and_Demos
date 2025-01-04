@@ -25,6 +25,8 @@ public:
 	void Update();
 	void Render();
 
+	void ShowFps();
+
 public:
 	void UpdateWindowSize(DWORD width, DWORD height)
 	{

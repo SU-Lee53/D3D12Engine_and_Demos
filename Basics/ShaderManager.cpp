@@ -8,8 +8,8 @@ BOOL ShaderManager::Initialize()
 	// 여기는 나중에 외부 파일로 직렬화시켜 빼던가 하는게 좋을듯
 	std::vector<SHADER_COMPILE_TARGET_DESC> descs =
 	{
-		{SHADER_TYPE_VERTEX, L"../Shader/test.hlsl", "VS_Main", "testVS"},
-		{SHADER_TYPE_PIXEL, L"../Shader/test.hlsl", "PS_Main", "testPS"}
+		{SHADER_TYPE_VERTEX, L"../Shader/test.hlsl", "VSMain", "testVS"},
+		{SHADER_TYPE_PIXEL, L"../Shader/test.hlsl", "PSMain", "testPS"}
 	};
 
 	for (const auto& desc : descs)
@@ -40,6 +40,36 @@ BOOL ShaderManager::Initialize()
 	}
 
 	return TRUE;
+}
+
+void ShaderManager::AddVertexShader(const string& key, shared_ptr<VertexShader> shader)
+{
+	m_vsMap.insert({ key, shader });
+}
+
+void ShaderManager::AddGeometryShader(const string& key, shared_ptr<GeometryShader> shader)
+{
+	m_gsMap.insert({ key, shader });
+}
+
+void ShaderManager::AddHullShader(const string& key, shared_ptr<HullShader> shader)
+{
+	m_hsMap.insert({ key, shader });
+}
+
+void ShaderManager::AddDomainShader(const string& key, shared_ptr<DomainShader> shader)
+{
+	m_dsMap.insert({ key, shader });
+}
+
+void ShaderManager::AddPixelShader(const string& key, shared_ptr<PixelShader> shader)
+{
+	m_psMap.insert({ key, shader });
+}
+
+void ShaderManager::AddComputeShader(const string& key, shared_ptr<ComputeShader> shader)
+{
+	m_csMap.insert({ key, shader });
 }
 
 shared_ptr<VertexShader> ShaderManager::GetVertexShader(const string& key)
@@ -170,34 +200,4 @@ void ShaderManager::RemoveComputeShader(const string& key)
 		__debugbreak();
 
 	m_csMap.erase(target);
-}
-
-void ShaderManager::AddVertexShader(const string& key, shared_ptr<VertexShader> shader)
-{
-	m_vsMap.insert({ key, shader });
-}
-
-void ShaderManager::AddGeometryShader(const string& key, shared_ptr<GeometryShader> shader)
-{
-	m_gsMap.insert({ key, shader });
-}
-
-void ShaderManager::AddHullShader(const string& key, shared_ptr<HullShader> shader)
-{
-	m_hsMap.insert({ key, shader });
-}
-
-void ShaderManager::AddDomainShader(const string& key, shared_ptr<DomainShader> shader)
-{
-	m_dsMap.insert({ key, shader });
-}
-
-void ShaderManager::AddPixelShader(const string& key, shared_ptr<PixelShader> shader)
-{
-	m_psMap.insert({ key, shader });
-}
-
-void ShaderManager::AddComputeShader(const string& key, shared_ptr<ComputeShader> shader)
-{
-	m_csMap.insert({ key, shader });
 }

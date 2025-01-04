@@ -114,7 +114,11 @@
     <ClInclude Include="Shader.h">
       <Filter>Renderer\Resources</Filter>
     </ClInclude>
-    <ClInclude Include="ShaderManager.h" />
+    <ClInclude Include="ShaderManager.h">
+      <Filter>Renderer\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="TimeManager.h" />
+    <ClInclude Include="InputManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Basics.ico">
@@ -172,7 +176,11 @@
     <ClCompile Include="Shader.cpp">
       <Filter>Renderer\Resources</Filter>
     </ClCompile>
-    <ClCompile Include="ShaderManager.cpp" />
+    <ClCompile Include="ShaderManager.cpp">
+      <Filter>Renderer\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="TimeManager.cpp" />
+    <ClCompile Include="InputManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
