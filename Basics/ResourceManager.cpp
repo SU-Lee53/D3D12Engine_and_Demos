@@ -31,6 +31,8 @@ BOOL ResourceManager::CreateCommandList()
 	);
 
 	m_pCommandList->Close();
+
+	return TRUE;
 }
 
 BOOL ResourceManager::CreateFence()
@@ -43,6 +45,7 @@ BOOL ResourceManager::CreateFence()
 
 	m_FenceEventHandle = CreateEvent(nullptr, FALSE, FALSE, nullptr);
 
+	return m_ui64FenceValue;
 }
 
 HRESULT ResourceManager::CreateIndexBuffer(const std::vector<UINT>& initData, IndexBuffer& refOutBuffer)
@@ -91,7 +94,7 @@ HRESULT ResourceManager::CreateIndexBuffer(const std::vector<UINT>& initData, In
 		{
 			m_pCommandList->CopyBufferRegion(pIndexBuffer.Get(), 0, pUploadBuffer.Get(), 0, IndexBufferSize);
 		}
-		m_pCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(pIndexBuffer.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_Index_AND_CONSTANT_BUFFER));
+		m_pCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(pIndexBuffer.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER));
 
 		ID3D12CommandList* ppCommandLists[] = { m_pCommandList.Get() };
 		m_pCommandQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);

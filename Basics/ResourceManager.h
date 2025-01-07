@@ -1,7 +1,6 @@
 #pragma once
 
 #include "input_types.h"
-#include <atlplus.h>
 
 class ResourceManager
 {
