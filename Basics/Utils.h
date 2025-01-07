@@ -29,3 +29,12 @@ inline void ThrowIfFailed(HRESULT hr)
         throw HrException(hr);
     }
 }
+inline BOOL FalseIfFailed(HRESULT hr)
+{
+    if (FAILED(hr))
+    {
+        return FALSE;
+    }
+
+    return TRUE;
+}

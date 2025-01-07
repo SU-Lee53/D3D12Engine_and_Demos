@@ -52,6 +52,33 @@
     <Filter Include="Renderer\Pool">
       <UniqueIdentifier>{d69f738a-8e54-4a1e-9727-71122f08004a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Renderer\Resources\Render">
+      <UniqueIdentifier>{c9c80582-eee7-4b03-9504-dc71d91f045c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer\RenderMethods">
+      <UniqueIdentifier>{0f1e38a4-7605-4dd2-a3e8-292ab3d8ed6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer\RenderMethods\Base">
+      <UniqueIdentifier>{f598f5fd-8f85-42bc-939f-b7c1a7b783c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Types">
+      <UniqueIdentifier>{42bb0836-68f3-48ef-903c-555b45478ba1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Object">
+      <UniqueIdentifier>{66ba362a-3ccd-445a-a632-f968b2032999}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Object\Object">
+      <UniqueIdentifier>{f7eaf2b7-0955-4c59-a87f-9284d6d535c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Object\Components">
+      <UniqueIdentifier>{6d085cab-0133-40bf-ac6c-04e3245244c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos">
+      <UniqueIdentifier>{7aa35105-22f3-4b8c-a82f-0b2cb147855c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer\Resources\Model">
+      <UniqueIdentifier>{787703d4-8596-4513-9255-af4876e52345}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -71,9 +98,6 @@
     </ClInclude>
     <ClInclude Include="constants.h">
       <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Object.h">
-      <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="Game.h">
       <Filter>Game\Game</Filter>
@@ -96,9 +120,6 @@
     <ClInclude Include="types.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="TestApp.h">
-      <Filter>App\Application</Filter>
-    </ClInclude>
     <ClInclude Include="DDSTextureLoader12.h">
       <Filter>Renderer\DirectXTex</Filter>
     </ClInclude>
@@ -111,14 +132,49 @@
     <ClInclude Include="DescriptorPool.h">
       <Filter>Renderer\Pool</Filter>
     </ClInclude>
-    <ClInclude Include="Shader.h">
-      <Filter>Renderer\Resources</Filter>
-    </ClInclude>
     <ClInclude Include="ShaderManager.h">
       <Filter>Renderer\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="TimeManager.h" />
-    <ClInclude Include="InputManager.h" />
+    <ClInclude Include="TimeManager.h">
+      <Filter>Renderer\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="InputManager.h">
+      <Filter>Renderer\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Pipeline.h">
+      <Filter>Renderer\Resources\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Renderer\Resources\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderMethod.h">
+      <Filter>Renderer\RenderMethods\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="input_types.h">
+      <Filter>Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>Game\Object\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>Game\Object\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="TestApp.h">
+      <Filter>Game\Demos</Filter>
+    </ClInclude>
+    <ClInclude Include="RootSignature.h">
+      <Filter>Renderer\RenderMethods</Filter>
+    </ClInclude>
+    <ClInclude Include="renderer_types.h">
+      <Filter>Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>Renderer\Resources\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Renderer\Resources\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Basics.ico">
@@ -136,9 +192,6 @@
   <ItemGroup>
     <ClCompile Include="pch.cpp">
       <Filter>pch</Filter>
-    </ClCompile>
-    <ClCompile Include="Object.cpp">
-      <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="Game.cpp">
       <Filter>Game\Game</Filter>
@@ -161,9 +214,6 @@
     <ClCompile Include="Entry.cpp">
       <Filter>Entry</Filter>
     </ClCompile>
-    <ClCompile Include="TestApp.cpp">
-      <Filter>App\Application</Filter>
-    </ClCompile>
     <ClCompile Include="DDSTextureLoader12.cpp">
       <Filter>Renderer\DirectXTex</Filter>
     </ClCompile>
@@ -173,14 +223,49 @@
     <ClCompile Include="DescriptorPool.cpp">
       <Filter>Renderer\Pool</Filter>
     </ClCompile>
-    <ClCompile Include="Shader.cpp">
-      <Filter>Renderer\Resources</Filter>
-    </ClCompile>
     <ClCompile Include="ShaderManager.cpp">
       <Filter>Renderer\Managers</Filter>
     </ClCompile>
-    <ClCompile Include="TimeManager.cpp" />
-    <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="TimeManager.cpp">
+      <Filter>Renderer\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="InputManager.cpp">
+      <Filter>Renderer\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Pipeline.cpp">
+      <Filter>Renderer\Resources\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Renderer\Resources\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderMethod.cpp">
+      <Filter>Renderer\RenderMethods\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="input_types.cpp">
+      <Filter>Types</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>Game\Object\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Game\Object\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="TestApp.cpp">
+      <Filter>Game\Demos</Filter>
+    </ClCompile>
+    <ClCompile Include="RootSignature.cpp">
+      <Filter>Renderer\RenderMethods</Filter>
+    </ClCompile>
+    <ClCompile Include="renderer_types.cpp">
+      <Filter>Types</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>Renderer\Resources\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Renderer\Resources\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

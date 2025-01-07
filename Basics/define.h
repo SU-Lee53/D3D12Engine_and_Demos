@@ -24,6 +24,7 @@ public:										\
 #define SHADER			GET_SINGLE(ShaderManager)
 #define INPUT			GET_SINGLE(InputManager)
 #define TIME			GET_SINGLE(TimeManager)
+#define RESOURCE		GET_SINGLE(ResourceManager)
 
 #define DEVICE				CORE.GetDevice()
 #define COMMAND_QUEUE		CORE.GetCommandQueue()

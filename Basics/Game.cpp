@@ -30,6 +30,7 @@ WPARAM Game::Run(const GameDesc& desc)
         INPUT.Initialize();
         TIME.Initialize();
         RENDER.Initialize();
+        RESOURCE.Initialize();
 
 
     }

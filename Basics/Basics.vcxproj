@@ -139,6 +139,9 @@
   <ItemGroup>
     <ClInclude Include="..\library\include\DirectXTex\DirectXTex.h" />
     <ClInclude Include="Application.h" />
+    <ClInclude Include="Material.h" />
+    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="renderer_types.h" />
     <ClInclude Include="ConstantBufferPool.h" />
     <ClInclude Include="Core.h" />
     <ClInclude Include="DDSTextureLoader12.h" />
@@ -147,10 +150,15 @@
     <ClInclude Include="framework.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="input_types.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Pipeline.h" />
     <ClInclude Include="RenderManager.h" />
+    <ClInclude Include="RenderMethod.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="ResourceManager.h" />
+    <ClInclude Include="RootSignature.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="SimpleMath.h" />
@@ -158,11 +166,15 @@
     <ClInclude Include="constants.h" />
     <ClInclude Include="TestApp.h" />
     <ClInclude Include="TimeManager.h" />
+    <ClInclude Include="Transform.h" />
     <ClInclude Include="types.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
+    <ClCompile Include="Material.cpp" />
+    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="renderer_types.cpp" />
     <ClCompile Include="ConstantBufferPool.cpp" />
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="DDSTextureLoader12.cpp">
@@ -172,11 +184,16 @@
     <ClCompile Include="Entry.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="input_types.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Pipeline.cpp" />
     <ClCompile Include="RenderManager.cpp" />
+    <ClCompile Include="RenderMethod.cpp" />
+    <ClCompile Include="ResourceManager.cpp" />
+    <ClCompile Include="RootSignature.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="SimpleMath.cpp">
@@ -184,6 +201,7 @@
     </ClCompile>
     <ClCompile Include="TestApp.cpp" />
     <ClCompile Include="TimeManager.cpp" />
+    <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -67,6 +67,7 @@ using namespace std::literals;
 #include "Utils.h"
 #include "constants.h"
 #include "types.h"
+#include "renderer_types.h"
 
 // Engine Cores
 #include "Game.h"
@@ -74,6 +75,7 @@ using namespace std::literals;
 
 // Managers
 #include "RenderManager.h"
+#include "ResourceManager.h"
 #include "ShaderManager.h"
 #include "InputManager.h"
 #include "TimeManager.h"
