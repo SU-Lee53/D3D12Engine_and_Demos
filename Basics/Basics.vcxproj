@@ -139,8 +139,11 @@
   <ItemGroup>
     <ClInclude Include="..\library\include\DirectXTex\DirectXTex.h" />
     <ClInclude Include="Application.h" />
+    <ClInclude Include="HR_helper.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="MeshHelper.h" />
+    <ClInclude Include="Model.h" />
     <ClInclude Include="renderer_types.h" />
     <ClInclude Include="ConstantBufferPool.h" />
     <ClInclude Include="Core.h" />
@@ -174,6 +177,8 @@
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="MeshHelper.cpp" />
+    <ClCompile Include="Model.cpp" />
     <ClCompile Include="renderer_types.cpp" />
     <ClCompile Include="ConstantBufferPool.cpp" />
     <ClCompile Include="Core.cpp" />

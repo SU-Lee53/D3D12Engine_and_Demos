@@ -174,7 +174,18 @@
     <ClInclude Include="Mesh.h">
       <Filter>Renderer\Resources\Model</Filter>
     </ClInclude>
-    <ClInclude Include="ResourceManager.h" />
+    <ClInclude Include="HR_helper.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>Renderer\Resources\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshHelper.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>Renderer\Managers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Basics.ico">
@@ -265,7 +276,15 @@
     <ClCompile Include="Mesh.cpp">
       <Filter>Renderer\Resources\Model</Filter>
     </ClCompile>
-    <ClCompile Include="ResourceManager.cpp" />
+    <ClCompile Include="Model.cpp">
+      <Filter>Renderer\Resources\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshHelper.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>Renderer\Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

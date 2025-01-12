@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "Game.h"
-
+#include "Application.h"
 
 
 #pragma region Win32Callbacks
@@ -32,7 +32,7 @@ WPARAM Game::Run(const GameDesc& desc)
         RENDER.Initialize();
         RESOURCE.Initialize();
 
-
+        m_Desc.app->Initialize();
     }
 
     MSG msg;
@@ -131,7 +131,7 @@ void Game::Update()
     TIME.Update();
 
     // Update Game Logic
-
+    m_Desc.app->Update();
 
     // Update FPS
     ShowFps();

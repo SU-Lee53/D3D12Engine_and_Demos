@@ -71,6 +71,7 @@ inline HRESULT ResourceManager::CreateVertexBuffer(const std::vector<T>& initDat
 			)
 		);
 
+
 		UINT8* pVertexDataBegin = nullptr;
 		CD3DX12_RANGE readRange(0, 0);
 		pUploadBuffer->Map(0, &readRange, reinterpret_cast<void**>(&pVertexDataBegin));

@@ -6,7 +6,7 @@ struct Input {};
 
 struct DefaultInput : public Input
 {
-	Vec4 pos;
+	Vec3 pos;
 	Vec4 color;
 	Vec2 texCoord;
 

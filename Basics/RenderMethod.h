@@ -19,8 +19,8 @@ public:
 	RenderMethod();
 	virtual ~RenderMethod();
 
-	virtual void Initialize(std::shared_ptr<Object> owner, const std::vector<D3D12_GRAPHICS_PIPELINE_STATE_DESC>& psoDescs);
-	virtual void Render();
+	virtual void Initialize(std::shared_ptr<Object> owner, const std::vector<D3D12_GRAPHICS_PIPELINE_STATE_DESC>& psoDescs) = 0;
+	virtual void Render() = 0;
 
 protected:
 	std::weak_ptr<Object> m_wpOwner;
@@ -32,3 +32,20 @@ protected:
 
 };
 
+
+// Basic Forward rendering RenderMethod
+// PassCount = 0, RTVCount = 0
+class ForwardRender : public RenderMethod
+{
+public:
+	ForwardRender();
+	virtual ~ForwardRender();
+
+	virtual void Initialize(std::shared_ptr<Object> owner, const std::vector<D3D12_GRAPHICS_PIPELINE_STATE_DESC>& psoDescs);
+	virtual void Render();
+
+
+private:
+
+
+};

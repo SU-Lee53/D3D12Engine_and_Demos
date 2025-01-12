@@ -4,6 +4,8 @@
 #include "RenderMethod.h"
 #include "input_types.h"
 #include "Pipeline.h"
+#include "Model.h"
+#include "Mesh.h"
 
 Object::Object()
 {
@@ -44,6 +46,11 @@ BOOL BasicForwardObject::Initialize()
 	bResult = InitRootSignatrue();
 	bResult = InitRenderMethod();
 
+	std::vector<VertexType> vtx;
+	std::vector<UINT> idx;
+
+	bResult = m_pMesh->Initialize(vtx, idx);
+
 	return bResult;
 }
 
@@ -54,6 +61,7 @@ void BasicForwardObject::Update()
 
 void BasicForwardObject::Render()
 {
+	m_pRenderMethod->Render();
 }
 
 BOOL BasicForwardObject::InitRootSignatrue()

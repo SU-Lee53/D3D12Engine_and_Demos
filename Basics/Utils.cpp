@@ -1,5 +1,8 @@
 #include "pch.h"
 #include "Utils.h"
+#include "Mesh.h"
+#include "input_types.h"
+using namespace std;
 
 void Utils::SetDebugLayerInfo(ComPtr<ID3D12Device> pDevice)
 {

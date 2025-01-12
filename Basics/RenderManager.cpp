@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "RenderManager.h"
 #include "Core.h"
+#include "Object.h"
+#include "RenderMethod.h"
 
 BOOL RenderManager::Initialize()
 {
@@ -33,6 +35,8 @@ BOOL RenderManager::CreateCommandList()
 
 void RenderManager::RenderBegin()
 {
+	m_pRenderQueue.clear();
+
 	DWORD dwCurContextIndex = CORE.GetCurrentContextIndex();
 	ComPtr<ID3D12CommandAllocator> pCommandAllocator = m_pCommandAllocators[dwCurContextIndex];
 	ComPtr<ID3D12GraphicsCommandList> pCommandList = m_pCommandLists[dwCurContextIndex];
@@ -59,7 +63,13 @@ void RenderManager::RenderBegin()
 
 void RenderManager::Render()
 {
-	// TODO : ¿©±ä °í¹ÎÁ» ÇØºÁ¾ßÇÒµí
+	// TODO : Need to think about good structure
+
+	for (const auto& obj : m_pRenderQueue)
+	{
+		obj->Render();
+	}
+
 }
 
 void RenderManager::RenderEnd()
