@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Core.h"
 #include "Utils.h"
+#include "Camera.h"
 
 BOOL Core::Initialize(BOOL bEnableDebugLayer, BOOL bEnableGBV)
 {
@@ -162,6 +163,9 @@ BOOL Core::Initialize(BOOL bEnableDebugLayer, BOOL bEnableGBV)
 
     // Fence
     CreateFence();
+
+    // Main Camera
+    CreateMainCamera();
 
     // TODO : Commamd List, Allocator 는 Render로 뺄지 말지 결정하고 생성
 
@@ -337,4 +341,15 @@ void Core::CreateFence()
 
     m_hFenceEvent = ::CreateEvent(nullptr, FALSE, FALSE, nullptr);
 
+}
+
+void Core::CreateMainCamera()
+{
+    m_pMainCamera = std::make_shared<Camera>();
+    m_pMainCamera->Initialize();
+}
+
+CBCameraData Core::GetMainCameraData()
+{
+    return m_pMainCamera->GetCameraCBData();
 }

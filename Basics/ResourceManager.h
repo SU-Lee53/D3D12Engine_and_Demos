@@ -82,9 +82,10 @@ inline HRESULT ResourceManager::CreateVertexBuffer(const std::vector<T>& initDat
 
 		m_pCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(pVertexBuffer.Get(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_COPY_DEST));
 		{
-			m_pCommandList->CopyBufferRegion(pVertexBuffer.Get(), 0, pUploadBuffer, 0, VertexBufferSize);
+			m_pCommandList->CopyBufferRegion(pVertexBuffer.Get(), 0, pUploadBuffer.Get(), 0, VertexBufferSize);
 		}
-		m_pCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(pVertexBuffer, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER));
+		m_pCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(pVertexBuffer.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER));
+		m_pCommandList->Close();
 
 		ID3D12CommandList* ppCommandLists[] = { m_pCommandList.Get() };
 		m_pCommandQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
@@ -100,6 +101,6 @@ inline HRESULT ResourceManager::CreateVertexBuffer(const std::vector<T>& initDat
 	refOutBuffer.pVertexBuffer = pVertexBuffer;
 	refOutBuffer.VertexBufferView = VertexBufferView;
 
-	return hr;
+	return S_OK;
 
 }

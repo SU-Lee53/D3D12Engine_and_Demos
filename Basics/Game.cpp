@@ -56,6 +56,15 @@ WPARAM Game::Run(const GameDesc& desc)
         }
     }
 
+    // Wait for gpu command complete before terminate
+    CORE.Fence();
+
+    for (DWORD i = 0; i < MAX_PENDING_FRAME_COUNT; i++)
+    {
+        CORE.WaitForFenceValue(CORE.GetFenceValue(i));
+    }
+
+
 #ifdef _DEBUG
     _ASSERT(_CrtCheckMemory());
 #endif _DEBUG
@@ -124,6 +133,8 @@ LRESULT Game::WndProc(HWND handle, UINT message, WPARAM wParam, LPARAM lParam)
         return ::DefWindowProc(handle, message, wParam, lParam);
     }
 }
+#pragma endregion Win32Callbacks
+
 void Game::Update()
 {
     // Update Managers
@@ -136,14 +147,18 @@ void Game::Update()
     // Update FPS
     ShowFps();
 }
+
 void Game::Render()
 {
+
     RENDER.RenderBegin();
+    {
+        m_Desc.app->Render();
+    }
     RENDER.Render();
     RENDER.RenderEnd();
     RENDER.Present();
 }
-#pragma endregion Win32Callbacks
 
 void Game::ShowFps()
 {

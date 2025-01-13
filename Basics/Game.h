@@ -4,7 +4,7 @@ struct GameDesc
 {
 	DWORD width;
 	DWORD height;
-	Color BackColor = Color{ 0.f,1.f,0.f,1.f };
+	Color BackColor = Color{ 0.f,0.f,0.f,1.f };
 	std::wstring windowName = L"";
 	HINSTANCE hInstance = 0;
 	HWND hWnd = 0;

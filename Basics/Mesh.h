@@ -1,7 +1,6 @@
 #pragma once
 
 #include "input_types.h"
-#include "MeshHelper.h"
 
 template<ShaderInputType T>
 class Mesh
@@ -21,6 +20,8 @@ public:
 
 	std::shared_ptr<MeshBuffer>& GetBuffer() { return m_pMeshBuffer; }
 
+	size_t GetVertexCount() { return m_Vertices.size(); }
+	size_t GetIndexCount() { return m_Indices.size(); }
 
 private:
 	std::shared_ptr<MeshBuffer> m_pMeshBuffer = nullptr;
@@ -47,8 +48,13 @@ inline BOOL Mesh<T>::Initialize(const std::vector<T>& vertices, const std::vecto
 	// TODO : Create VTX/IDX buffer
 
 	// cube mesh for test
-	MeshHelper::CreateBoxMesh(vertices, indices);
+	// TODO : Do this outside of this class when testing
+	// MeshHelper::CreateBoxMesh(vertices, indices);
 
+	m_Vertices = vertices;
+	m_Indices = indices;
+
+	m_pMeshBuffer = make_shared<MeshBuffer>();
 	ThrowIfFailed(RESOURCE.CreateVertexBuffer(vertices, m_pMeshBuffer->vertexBuffer));
 	ThrowIfFailed(RESOURCE.CreateIndexBuffer(indices, m_pMeshBuffer->indexBuffer));
 

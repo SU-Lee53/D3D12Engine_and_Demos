@@ -79,6 +79,18 @@
     <Filter Include="Renderer\Resources\Model">
       <UniqueIdentifier>{787703d4-8596-4513-9255-af4876e52345}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Renderer\RootSignature">
+      <UniqueIdentifier>{4b4938de-0d83-46a6-a5a2-6ac466fdc0a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer\Camera">
+      <UniqueIdentifier>{58f34bc4-7c3e-4b6b-afd9-dc1de2f459e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer\ConstantBuffer">
+      <UniqueIdentifier>{c01e5206-23da-49d9-a96d-ca7c9916a4c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer\Pool\Descriptor">
+      <UniqueIdentifier>{fbf38540-028a-42cf-99c0-144d4da07901}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -126,12 +138,6 @@
     <ClInclude Include="..\library\include\DirectXTex\DirectXTex.h">
       <Filter>Renderer\DirectXTex</Filter>
     </ClInclude>
-    <ClInclude Include="ConstantBufferPool.h">
-      <Filter>Renderer\Pool</Filter>
-    </ClInclude>
-    <ClInclude Include="DescriptorPool.h">
-      <Filter>Renderer\Pool</Filter>
-    </ClInclude>
     <ClInclude Include="ShaderManager.h">
       <Filter>Renderer\Managers</Filter>
     </ClInclude>
@@ -162,9 +168,6 @@
     <ClInclude Include="TestApp.h">
       <Filter>Game\Demos</Filter>
     </ClInclude>
-    <ClInclude Include="RootSignature.h">
-      <Filter>Renderer\RenderMethods</Filter>
-    </ClInclude>
     <ClInclude Include="renderer_types.h">
       <Filter>Types</Filter>
     </ClInclude>
@@ -185,6 +188,20 @@
     </ClInclude>
     <ClInclude Include="ResourceManager.h">
       <Filter>Renderer\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstantBuffer.h">
+      <Filter>Renderer\ConstantBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="RootSignature.h">
+      <Filter>Renderer\RootSignature</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="CB_types.h" />
+    <ClInclude Include="DescriptorPool.h">
+      <Filter>Renderer\Pool\Descriptor</Filter>
+    </ClInclude>
+    <ClInclude Include="Descriptor.h">
+      <Filter>Renderer\Pool\Descriptor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -228,12 +245,6 @@
     <ClCompile Include="DDSTextureLoader12.cpp">
       <Filter>Renderer\DirectXTex</Filter>
     </ClCompile>
-    <ClCompile Include="ConstantBufferPool.cpp">
-      <Filter>Renderer\Pool</Filter>
-    </ClCompile>
-    <ClCompile Include="DescriptorPool.cpp">
-      <Filter>Renderer\Pool</Filter>
-    </ClCompile>
     <ClCompile Include="ShaderManager.cpp">
       <Filter>Renderer\Managers</Filter>
     </ClCompile>
@@ -264,9 +275,6 @@
     <ClCompile Include="TestApp.cpp">
       <Filter>Game\Demos</Filter>
     </ClCompile>
-    <ClCompile Include="RootSignature.cpp">
-      <Filter>Renderer\RenderMethods</Filter>
-    </ClCompile>
     <ClCompile Include="renderer_types.cpp">
       <Filter>Types</Filter>
     </ClCompile>
@@ -285,6 +293,20 @@
     <ClCompile Include="ResourceManager.cpp">
       <Filter>Renderer\Managers</Filter>
     </ClCompile>
+    <ClCompile Include="ConstantBuffer.cpp">
+      <Filter>Renderer\ConstantBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="RootSignature.cpp">
+      <Filter>Renderer\RootSignature</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CB_types.cpp" />
+    <ClCompile Include="DescriptorPool.cpp">
+      <Filter>Renderer\Pool\Descriptor</Filter>
+    </ClCompile>
+    <ClCompile Include="Descriptor.cpp">
+      <Filter>Renderer\Pool\Descriptor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -299,5 +321,8 @@
     <FxCompile Include="..\Shader\test.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="prefix_notation.md" />
   </ItemGroup>
 </Project>

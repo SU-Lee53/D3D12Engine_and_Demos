@@ -94,7 +94,8 @@ HRESULT ResourceManager::CreateIndexBuffer(const std::vector<UINT>& initData, In
 		{
 			m_pCommandList->CopyBufferRegion(pIndexBuffer.Get(), 0, pUploadBuffer.Get(), 0, IndexBufferSize);
 		}
-		m_pCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(pIndexBuffer.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER));
+		m_pCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(pIndexBuffer.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_INDEX_BUFFER));
+		m_pCommandList->Close();
 
 		ID3D12CommandList* ppCommandLists[] = { m_pCommandList.Get() };
 		m_pCommandQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
@@ -104,7 +105,7 @@ HRESULT ResourceManager::CreateIndexBuffer(const std::vector<UINT>& initData, In
 	}
 
 	IndexBufferView.BufferLocation = pIndexBuffer->GetGPUVirtualAddress();
-	IndexBufferView.Format = DXGI_FORMAT_R16_UINT;
+	IndexBufferView.Format = DXGI_FORMAT_R32_UINT;
 	IndexBufferView.SizeInBytes = IndexBufferSize;
 
 	refOutBuffer.pIndexBuffer = pIndexBuffer;

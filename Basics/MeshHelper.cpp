@@ -5,42 +5,42 @@ using namespace std;
 
 void MeshHelper::CreateBoxMesh(vector<VertexType>& vtx, vector<UINT>& idx)
 {
-	float w2 = 1.f;
-	float h2 = 1.f;
-	float d2 = 1.f;
+	float w2 = 0.5f;
+	float h2 = 0.5f;
+	float d2 = 0.5f;
 
 	vtx.resize(24);
 
 	// Front 
 	vtx[0] = DefaultInput(Input{}, Vec3{ -w2, -h2, -d2 }, Vec4{ 1.f, 0.f, 0.f, 1.f }, Vec2{ 0.f, 1.f });
-	vtx[1] = DefaultInput(Input{}, Vec3{ -w2, -h2, -d2 }, Vec4{ 1.f, 0.f, 0.f, 1.f }, Vec2{ 0.f, 1.f });
-	vtx[2] = DefaultInput(Input{}, Vec3{ -w2, -h2, -d2 }, Vec4{ 1.f, 0.f, 0.f, 1.f }, Vec2{ 0.f, 1.f });
-	vtx[3] = DefaultInput(Input{}, Vec3{ -w2, -h2, -d2 }, Vec4{ 1.f, 0.f, 0.f, 1.f }, Vec2{ 0.f, 1.f });
+	vtx[1] = DefaultInput(Input{}, Vec3{ -w2, +h2, -d2 }, Vec4{ 0.f, 1.f, 0.f, 1.f }, Vec2{ 0.f, 1.f });
+	vtx[2] = DefaultInput(Input{}, Vec3{ +w2, +h2, -d2 }, Vec4{ 0.f, 0.f, 1.f, 1.f }, Vec2{ 0.f, 1.f });
+	vtx[3] = DefaultInput(Input{}, Vec3{ +w2, -h2, -d2 }, Vec4{ 0.f, 1.f, 1.f, 1.f }, Vec2{ 0.f, 1.f });
 	// Back
 	vtx[4] = DefaultInput(Input{}, Vec3{ -w2, -h2, +d2 }, Vec4{ 1.f, 0.f, 0.f, 1.f }, Vec2{ 1.0f, 1.0f });
-	vtx[5] = DefaultInput(Input{}, Vec3{ +w2, -h2, +d2 }, Vec4{ 1.f, 0.f, 0.f, 1.f }, Vec2{ 0.0f, 1.0f });
-	vtx[6] = DefaultInput(Input{}, Vec3{ +w2, +h2, +d2 }, Vec4{ 1.f, 0.f, 0.f, 1.f }, Vec2{ 0.0f, 0.0f });
-	vtx[7] = DefaultInput(Input{}, Vec3{ -w2, +h2, +d2 }, Vec4{ 1.f, 0.f, 0.f, 1.f }, Vec2{ 1.0f, 0.0f });
+	vtx[5] = DefaultInput(Input{}, Vec3{ +w2, -h2, +d2 }, Vec4{ 0.f, 1.f, 0.f, 1.f }, Vec2{ 0.0f, 1.0f });
+	vtx[6] = DefaultInput(Input{}, Vec3{ +w2, +h2, +d2 }, Vec4{ 0.f, 0.f, 1.f, 1.f }, Vec2{ 0.0f, 0.0f });
+	vtx[7] = DefaultInput(Input{}, Vec3{ -w2, +h2, +d2 }, Vec4{ 1.f, 0.f, 1.f, 1.f }, Vec2{ 1.0f, 0.0f });
 	// Upper
 	vtx[8] = DefaultInput(Input{}, Vec3{ -w2, +h2, -d2 }, Vec4{ 1.f, 0.f, 0.f, 1.f }, Vec2{ 0.0f, 1.0f });
-	vtx[9] = DefaultInput(Input{}, Vec3{ -w2, +h2, +d2 }, Vec4{ 1.f, 0.f, 0.f, 1.f }, Vec2{ 0.0f, 0.0f });
-	vtx[10] = DefaultInput(Input{}, Vec3{ +w2, +h2, +d2 }, Vec4{ 1.f, 0.f, 0.f, 1.f }, Vec2{ 1.0f, 0.0f });
-	vtx[11] = DefaultInput(Input{}, Vec3{ +w2, +h2, -d2 }, Vec4{ 1.f, 0.f, 0.f, 1.f }, Vec2{ 1.0f, 1.0f });
+	vtx[9] = DefaultInput(Input{}, Vec3{ -w2, +h2, +d2 }, Vec4{ 0.f, 1.f, 0.f, 1.f }, Vec2{ 0.0f, 0.0f });
+	vtx[10] = DefaultInput(Input{}, Vec3{ +w2, +h2, +d2 }, Vec4{ 0.f, 0.f, 1.f, 1.f }, Vec2{ 1.0f, 0.0f });
+	vtx[11] = DefaultInput(Input{}, Vec3{ +w2, +h2, -d2 }, Vec4{ 1.f, 1.f, 0.f, 1.f }, Vec2{ 1.0f, 1.0f });
 	// Lower			  										  
 	vtx[12] = DefaultInput(Input{}, Vec3{ -w2, -h2, -d2 }, Vec4{ 1.f, 0.f, 0.f, 1.f }, Vec2{ 0.0f, 1.0f });
-	vtx[13] = DefaultInput(Input{}, Vec3{ +w2, -h2, -d2 }, Vec4{ 1.f, 0.f, 0.f, 1.f }, Vec2{ 0.0f, 0.0f });
-	vtx[14] = DefaultInput(Input{}, Vec3{ +w2, -h2, +d2 }, Vec4{ 1.f, 0.f, 0.f, 1.f }, Vec2{ 1.0f, 0.0f });
-	vtx[15] = DefaultInput(Input{}, Vec3{ -w2, -h2, +d2 }, Vec4{ 1.f, 0.f, 0.f, 1.f }, Vec2{ 1.0f, 1.0f });
+	vtx[13] = DefaultInput(Input{}, Vec3{ +w2, -h2, -d2 }, Vec4{ 0.f, 1.f, 0.f, 1.f }, Vec2{ 0.0f, 0.0f });
+	vtx[14] = DefaultInput(Input{}, Vec3{ +w2, -h2, +d2 }, Vec4{ 0.f, 0.f, 1.f, 1.f }, Vec2{ 1.0f, 0.0f });
+	vtx[15] = DefaultInput(Input{}, Vec3{ -w2, -h2, +d2 }, Vec4{ 0.f, 1.f, 1.f, 1.f }, Vec2{ 1.0f, 1.0f });
 	// Left				  										  
 	vtx[16] = DefaultInput(Input{}, Vec3{ -w2, -h2, +d2 }, Vec4{ 1.f, 0.f, 0.f, 1.f }, Vec2{ 0.0f, 1.0f });
-	vtx[17] = DefaultInput(Input{}, Vec3{ -w2, +h2, +d2 }, Vec4{ 1.f, 0.f, 0.f, 1.f }, Vec2{ 0.0f, 0.0f });
-	vtx[18] = DefaultInput(Input{}, Vec3{ -w2, +h2, -d2 }, Vec4{ 1.f, 0.f, 0.f, 1.f }, Vec2{ 1.0f, 0.0f });
-	vtx[19] = DefaultInput(Input{}, Vec3{ -w2, -h2, -d2 }, Vec4{ 1.f, 0.f, 0.f, 1.f }, Vec2{ 1.0f, 1.0f });
+	vtx[17] = DefaultInput(Input{}, Vec3{ -w2, +h2, +d2 }, Vec4{ 0.f, 1.f, 0.f, 1.f }, Vec2{ 0.0f, 0.0f });
+	vtx[18] = DefaultInput(Input{}, Vec3{ -w2, +h2, -d2 }, Vec4{ 0.f, 0.f, 1.f, 1.f }, Vec2{ 1.0f, 0.0f });
+	vtx[19] = DefaultInput(Input{}, Vec3{ -w2, -h2, -d2 }, Vec4{ 1.f, 0.f, 1.f, 1.f }, Vec2{ 1.0f, 1.0f });
 	// Right
 	vtx[20] = DefaultInput(Input{}, Vec3{ +w2, -h2, -d2 }, Vec4{ 1.f, 0.f, 0.f, 1.f }, Vec2{ 0.0f, 1.0f });
-	vtx[21] = DefaultInput(Input{}, Vec3{ +w2, +h2, -d2 }, Vec4{ 1.f, 0.f, 0.f, 1.f }, Vec2{ 0.0f, 0.0f });
-	vtx[22] = DefaultInput(Input{}, Vec3{ +w2, +h2, +d2 }, Vec4{ 1.f, 0.f, 0.f, 1.f }, Vec2{ 1.0f, 0.0f });
-	vtx[23] = DefaultInput(Input{}, Vec3{ +w2, -h2, +d2 }, Vec4{ 1.f, 0.f, 0.f, 1.f }, Vec2{ 1.0f, 1.0f });
+	vtx[21] = DefaultInput(Input{}, Vec3{ +w2, +h2, -d2 }, Vec4{ 0.f, 1.f, 0.f, 1.f }, Vec2{ 0.0f, 0.0f });
+	vtx[22] = DefaultInput(Input{}, Vec3{ +w2, +h2, +d2 }, Vec4{ 0.f, 0.f, 1.f, 1.f }, Vec2{ 1.0f, 0.0f });
+	vtx[23] = DefaultInput(Input{}, Vec3{ +w2, -h2, +d2 }, Vec4{ 1.f, 1.f, 0.f, 1.f }, Vec2{ 1.0f, 1.0f });
 
 	idx.resize(36);
 

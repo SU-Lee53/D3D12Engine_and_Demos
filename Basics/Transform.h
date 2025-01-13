@@ -20,6 +20,8 @@ public:
 	Matrix GetWorldMatrix() { return m_matWorld; }
 	Matrix GetWorldMatrixTransposed() { return XMMatrixTranspose(m_matWorld); }
 
+	CBTranformData GetTransformCBData() { return CBTranformData{ XMMatrixTranspose(m_matWorld) }; }
+
 private:
 	Vec3 m_vPos = { 0.f,0.f,0.f };
 	Vec3 m_vScale = { 1.f,1.f,1.f };

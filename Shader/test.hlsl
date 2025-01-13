@@ -1,12 +1,16 @@
-Texture2D texDiffuse : register(t0);
+//Texture2D texDiffuse : register(t0);
 SamplerState samplerDiffuse : register(s0);
 
-cbuffer CONSTANT_BUFFER_DEFAULT : register(b0)
+cbuffer TransformData : register(b0)
 {
-    matrix g_matWorld;
-    matrix g_matView;
-    matrix g_matProj;
+    matrix matWorld;
 };
+
+cbuffer CameraData : register(b1)
+{
+    matrix matView;
+    matrix matProj;
+}
 
 struct VSInput
 {
@@ -27,8 +31,8 @@ PSInput VSMain(VSInput input)
     PSInput result = (PSInput) 0;
     
     
-    matrix matViewProj = mul(g_matView, g_matProj); // view x proj
-    matrix matWorldViewProj = mul(g_matWorld, matViewProj); // world x view x proj
+    matrix matViewProj = mul(matView, matProj); // view x proj
+    matrix matWorldViewProj = mul(matWorld, matViewProj); // world x view x proj
     result.position = mul(input.Pos, matWorldViewProj); // pojtected vertex = vertex x world x view x proj
     result.TexCoord = input.TexCoord;
     result.color = input.color;
@@ -38,6 +42,5 @@ PSInput VSMain(VSInput input)
 
 float4 PSMain(PSInput input) : SV_TARGET
 {
-    float4 texColor = texDiffuse.Sample(samplerDiffuse, input.TexCoord);
-    return texColor * input.color;
+    return input.color;
 }

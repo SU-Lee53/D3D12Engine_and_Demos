@@ -10,25 +10,29 @@
 
 // TODO : ±¸Çö
 
+#include "ConstantBuffer.h"
+
 class Object;
 class Pipeline;
+class RootSignature;
 
 class RenderMethod
 {
 public:
-	RenderMethod();
-	virtual ~RenderMethod();
-
-	virtual void Initialize(std::shared_ptr<Object> owner, const std::vector<D3D12_GRAPHICS_PIPELINE_STATE_DESC>& psoDescs) = 0;
+	virtual void Initialize(std::shared_ptr<Object> owner) = 0;
 	virtual void Render() = 0;
 
 protected:
 	std::weak_ptr<Object> m_wpOwner;
 	
-	std::vector<std::shared_ptr<Pipeline>> m_Pipelines;
-	std::vector<ComPtr<ID3D12Resource>> m_RTVs;
+	std::vector<std::shared_ptr<RootSignature>>	m_RootSignatures = {};
+	std::vector<std::shared_ptr<Pipeline>>		m_Pipelines = {};
+	std::vector<ComPtr<ID3D12Resource>>			m_RTVs = {};
 	DWORD m_dwPassCount = 0;
 	DWORD m_dwRTVCount = 0;
+
+	std::unique_ptr<DescriptorHeap> m_upDescriptorHeap = nullptr;
+	D3D12_DESCRIPTOR_HEAP_DESC		m_HeapDesc = {};	// Cache
 
 };
 
@@ -38,14 +42,12 @@ protected:
 class ForwardRender : public RenderMethod
 {
 public:
-	ForwardRender();
-	virtual ~ForwardRender();
-
-	virtual void Initialize(std::shared_ptr<Object> owner, const std::vector<D3D12_GRAPHICS_PIPELINE_STATE_DESC>& psoDescs);
-	virtual void Render();
-
+	virtual void Initialize(std::shared_ptr<Object> owner) override;
+	virtual void Render() override;
 
 private:
+	std::unique_ptr<ConstantBuffer<CBTranformData>> m_upTransformCBuffer = nullptr;
+	std::unique_ptr<ConstantBuffer<CBCameraData>> m_upCameraCBuffer = nullptr;
 
-
+	const UINT DESCRIPTOR_COUNT_FOR_DRAW = 2;
 };

@@ -63,12 +63,13 @@ using namespace Microsoft::WRL;
 using namespace std::literals;
 
 // Additional Headers
-#include "input_types.h"
-#include "renderer_types.h"
 #include "define.h"
 #include "Utils.h"
 #include "constants.h"
 #include "types.h"
+#include "input_types.h"
+#include "renderer_types.h"
+#include "CB_types.h"
 #include "HR_helper.h"
 
 // Engine Cores
@@ -81,6 +82,12 @@ using namespace std::literals;
 #include "ShaderManager.h"
 #include "InputManager.h"
 #include "TimeManager.h"
+
+// Object Components
+#include "Transform.h"
+
+// Descriptor
+#include "Descriptor.h"
 
 // Debugs
 #ifdef _DEBUG

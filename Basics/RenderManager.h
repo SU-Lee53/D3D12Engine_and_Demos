@@ -44,5 +44,10 @@ private:
 
 	BOOL bVsync = FALSE;
 
+	// Camera test
+	Matrix m_matCamView = Matrix::Identity;
+	Matrix m_matCamProj = Matrix::Identity;
+
+
 };
 

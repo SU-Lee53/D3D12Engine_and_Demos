@@ -65,6 +65,9 @@ void RenderManager::Render()
 {
 	// TODO : Need to think about good structure
 
+	// DO NOT PUSH Camera data IN THIS FUNCTION
+	// Reason : camera can be diffrent by each render passes
+
 	for (const auto& obj : m_pRenderQueue)
 	{
 		obj->Render();
