@@ -55,7 +55,9 @@ public:
 		return m_ui64LastFenceValues[contextIndex];
 	}
 
-	CBCameraData GetMainCameraData();
+	CBCameraData GetMainCameraCBData();
+
+	std::shared_ptr<class Camera> GetMainCamera() { return m_pMainCamera; }
 
 private:
 	// Device

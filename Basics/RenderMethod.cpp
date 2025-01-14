@@ -60,7 +60,7 @@ void ForwardRender::Render()
 
 	// 1. Write data in Constant Buffer
 	m_upTransformCBuffer->PushData(pTransform->GetTransformCBData());
-	m_upCameraCBuffer->PushData(CORE.GetMainCameraData());
+	m_upCameraCBuffer->PushData(CORE.GetMainCameraCBData());
 
 	// 2. Get Descriptor from DescriptorHeap(m_upDescriptorHeap)
 	ComPtr<ID3D12DescriptorHeap> pDescriptorHeap = m_upDescriptorHeap->pDescriptorHeap;

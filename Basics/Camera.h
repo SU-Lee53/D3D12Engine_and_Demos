@@ -1,5 +1,6 @@
 #pragma once
 
+
 class Camera
 {
 public:
@@ -8,6 +9,9 @@ public:
 
 public:
     BOOL Initialize();
+    BOOL Update();
+
+    void Resize(DWORD dwWidth, DWORD dwHeight);
 
 public:
     CBCameraData GetCameraCBData()
@@ -15,13 +19,27 @@ public:
         return CBCameraData{ XMMatrixTranspose(m_matView), XMMatrixTranspose(m_matProjection) };
     }
 
-private:
-    BOOL SetCamera(const Vec3& camPos, const Vec3& camDir, const Vec3& camUp);
+    void SetPosition(const Vec3& pos);
+    void SetRotation(const Vec3& rot);
+
+    void SetFovY(float fFovY);
+    void SetAspect(float fWidth, float fHeight);
+    void SetAspectRatio(float fRatio);
+    void SetNear(float fNear);
+    void SetFar(float fFar);
+
+    std::shared_ptr<Transform> GetTransform() { return m_pTransform; }
 
 private:
-    Vec3 m_vCamPos = Vec3::Zero;
-    Vec3 m_vCamDir = Vec3::Zero;
-    Vec3 m_vCamUp  = Vec3::Zero;
+    BOOL SetCamera(const Vec3& camEYE, const Vec3& camAT, const Vec3& camUP);
+
+private:
+    std::shared_ptr<Transform> m_pTransform = nullptr;
+
+    // Camera Parameters Cache
+    Vec3 m_vCamEYE = Vec3::Zero;
+    Vec3 m_vCamAT = Vec3::Zero;
+    Vec3 m_vCamUP = Vec3::Zero;
 
     float m_ffovY = 0.f;
     float m_fAspectRatio = 0.f;
@@ -31,6 +49,7 @@ private:
     Matrix m_matView        = Matrix::Identity;
     Matrix m_matProjection  = Matrix::Identity;
 
-
+    BOOL m_bViewUpdated = FALSE;
+    BOOL m_bProjUpdated = FALSE;
 };
 

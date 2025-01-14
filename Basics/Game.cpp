@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Game.h"
 #include "Application.h"
+#include "Camera.h"
 
 
 #pragma region Win32Callbacks
@@ -142,6 +143,7 @@ void Game::Update()
     TIME.Update();
 
     // Update Game Logic
+    CORE.GetMainCamera()->Update();
     m_Desc.app->Update();
 
     // Update FPS

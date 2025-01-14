@@ -19,9 +19,12 @@ BOOL BasicForwardPipeline::Initialize(shared_ptr<RootSignature> rootSignature)
 		m_Desc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
 		m_Desc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
 		m_Desc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
-		m_Desc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
+		m_Desc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS;
 		m_Desc.DepthStencilState.StencilEnable = FALSE;
-		m_Desc.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
+		m_Desc.DepthStencilState.DepthEnable = TRUE;
+		m_Desc.RasterizerState.CullMode = D3D12_CULL_MODE_BACK;
+		m_Desc.RasterizerState.FillMode = D3D12_FILL_MODE_WIREFRAME;
+		m_Desc.RasterizerState.DepthClipEnable = TRUE;
 		m_Desc.SampleMask = UINT_MAX;
 		m_Desc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 		m_Desc.NumRenderTargets = 1;

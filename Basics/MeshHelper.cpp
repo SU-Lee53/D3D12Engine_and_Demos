@@ -5,62 +5,51 @@ using namespace std;
 
 void MeshHelper::CreateBoxMesh(vector<VertexType>& vtx, vector<UINT>& idx)
 {
-	float w2 = 0.5f;
-	float h2 = 0.5f;
-	float d2 = 0.5f;
+	float fx = 0.5f;
+	float fy = 0.5f;
+	float fz = 0.5f;
 
-	vtx.resize(24);
+	vtx.resize(8);
+
+	Vec4 c0 = DirectX::Colors::Red;
+	Vec4 c1 = DirectX::Colors::Orange;
+	Vec4 c2 = DirectX::Colors::Yellow;
+	Vec4 c3 = DirectX::Colors::Green;
+	Vec4 c4 = DirectX::Colors::Blue;
+	Vec4 c5 = DirectX::Colors::Indigo;
+	Vec4 c6 = DirectX::Colors::Purple;
+	Vec4 c7 = DirectX::Colors::White;
 
 	// Front 
-	vtx[0] = DefaultInput(Input{}, Vec3{ -w2, -h2, -d2 }, Vec4{ 1.f, 0.f, 0.f, 1.f }, Vec2{ 0.f, 1.f });
-	vtx[1] = DefaultInput(Input{}, Vec3{ -w2, +h2, -d2 }, Vec4{ 0.f, 1.f, 0.f, 1.f }, Vec2{ 0.f, 1.f });
-	vtx[2] = DefaultInput(Input{}, Vec3{ +w2, +h2, -d2 }, Vec4{ 0.f, 0.f, 1.f, 1.f }, Vec2{ 0.f, 1.f });
-	vtx[3] = DefaultInput(Input{}, Vec3{ +w2, -h2, -d2 }, Vec4{ 0.f, 1.f, 1.f, 1.f }, Vec2{ 0.f, 1.f });
+	vtx[0] = DefaultInput(Input{}, Vec3{ -fx, +fy, -fz }, c0, Vec2{ 0.f, 1.f });
+	vtx[1] = DefaultInput(Input{}, Vec3{ +fx, +fy, -fz }, c1, Vec2{ 0.f, 1.f });
+	vtx[2] = DefaultInput(Input{}, Vec3{ +fx, +fy, +fz }, c2, Vec2{ 0.f, 1.f });
+	vtx[3] = DefaultInput(Input{}, Vec3{ -fx, +fy, +fz }, c3, Vec2{ 0.f, 1.f });
 	// Back
-	vtx[4] = DefaultInput(Input{}, Vec3{ -w2, -h2, +d2 }, Vec4{ 1.f, 0.f, 0.f, 1.f }, Vec2{ 1.0f, 1.0f });
-	vtx[5] = DefaultInput(Input{}, Vec3{ +w2, -h2, +d2 }, Vec4{ 0.f, 1.f, 0.f, 1.f }, Vec2{ 0.0f, 1.0f });
-	vtx[6] = DefaultInput(Input{}, Vec3{ +w2, +h2, +d2 }, Vec4{ 0.f, 0.f, 1.f, 1.f }, Vec2{ 0.0f, 0.0f });
-	vtx[7] = DefaultInput(Input{}, Vec3{ -w2, +h2, +d2 }, Vec4{ 1.f, 0.f, 1.f, 1.f }, Vec2{ 1.0f, 0.0f });
-	// Upper
-	vtx[8] = DefaultInput(Input{}, Vec3{ -w2, +h2, -d2 }, Vec4{ 1.f, 0.f, 0.f, 1.f }, Vec2{ 0.0f, 1.0f });
-	vtx[9] = DefaultInput(Input{}, Vec3{ -w2, +h2, +d2 }, Vec4{ 0.f, 1.f, 0.f, 1.f }, Vec2{ 0.0f, 0.0f });
-	vtx[10] = DefaultInput(Input{}, Vec3{ +w2, +h2, +d2 }, Vec4{ 0.f, 0.f, 1.f, 1.f }, Vec2{ 1.0f, 0.0f });
-	vtx[11] = DefaultInput(Input{}, Vec3{ +w2, +h2, -d2 }, Vec4{ 1.f, 1.f, 0.f, 1.f }, Vec2{ 1.0f, 1.0f });
-	// Lower			  										  
-	vtx[12] = DefaultInput(Input{}, Vec3{ -w2, -h2, -d2 }, Vec4{ 1.f, 0.f, 0.f, 1.f }, Vec2{ 0.0f, 1.0f });
-	vtx[13] = DefaultInput(Input{}, Vec3{ +w2, -h2, -d2 }, Vec4{ 0.f, 1.f, 0.f, 1.f }, Vec2{ 0.0f, 0.0f });
-	vtx[14] = DefaultInput(Input{}, Vec3{ +w2, -h2, +d2 }, Vec4{ 0.f, 0.f, 1.f, 1.f }, Vec2{ 1.0f, 0.0f });
-	vtx[15] = DefaultInput(Input{}, Vec3{ -w2, -h2, +d2 }, Vec4{ 0.f, 1.f, 1.f, 1.f }, Vec2{ 1.0f, 1.0f });
-	// Left				  										  
-	vtx[16] = DefaultInput(Input{}, Vec3{ -w2, -h2, +d2 }, Vec4{ 1.f, 0.f, 0.f, 1.f }, Vec2{ 0.0f, 1.0f });
-	vtx[17] = DefaultInput(Input{}, Vec3{ -w2, +h2, +d2 }, Vec4{ 0.f, 1.f, 0.f, 1.f }, Vec2{ 0.0f, 0.0f });
-	vtx[18] = DefaultInput(Input{}, Vec3{ -w2, +h2, -d2 }, Vec4{ 0.f, 0.f, 1.f, 1.f }, Vec2{ 1.0f, 0.0f });
-	vtx[19] = DefaultInput(Input{}, Vec3{ -w2, -h2, -d2 }, Vec4{ 1.f, 0.f, 1.f, 1.f }, Vec2{ 1.0f, 1.0f });
-	// Right
-	vtx[20] = DefaultInput(Input{}, Vec3{ +w2, -h2, -d2 }, Vec4{ 1.f, 0.f, 0.f, 1.f }, Vec2{ 0.0f, 1.0f });
-	vtx[21] = DefaultInput(Input{}, Vec3{ +w2, +h2, -d2 }, Vec4{ 0.f, 1.f, 0.f, 1.f }, Vec2{ 0.0f, 0.0f });
-	vtx[22] = DefaultInput(Input{}, Vec3{ +w2, +h2, +d2 }, Vec4{ 0.f, 0.f, 1.f, 1.f }, Vec2{ 1.0f, 0.0f });
-	vtx[23] = DefaultInput(Input{}, Vec3{ +w2, -h2, +d2 }, Vec4{ 1.f, 1.f, 0.f, 1.f }, Vec2{ 1.0f, 1.0f });
+	vtx[4] = DefaultInput(Input{}, Vec3{ -fx, -fy, -fz }, c4, Vec2{ 1.0f, 1.0f });
+	vtx[5] = DefaultInput(Input{}, Vec3{ +fx, -fy, -fz }, c5, Vec2{ 0.0f, 1.0f });
+	vtx[6] = DefaultInput(Input{}, Vec3{ +fx, -fy, +fz }, c6, Vec2{ 0.0f, 0.0f });
+	vtx[7] = DefaultInput(Input{}, Vec3{ -fx, -fy, +fz }, c7, Vec2{ 1.0f, 0.0f });
 
 	idx.resize(36);
 
 	// Front
-	idx[0] = 0; idx[1] = 1; idx[2] = 2;
-	idx[3] = 0; idx[4] = 2; idx[5] = 3;
-	// Back
-	idx[6] = 4; idx[7] = 5; idx[8] = 6;
-	idx[9] = 4; idx[10] = 6; idx[11] = 7;
+	idx[0] = 3; idx[1] = 1; idx[2] = 0;
+	idx[3] = 2; idx[4] = 1; idx[5] = 3;
 	// Upper
-	idx[12] = 8; idx[13] = 9; idx[14] = 10;
-	idx[15] = 8; idx[16] = 10; idx[17] = 11;
+	idx[6] = 0; idx[7] = 5; idx[8] = 4;
+	idx[9] = 1; idx[10] = 5; idx[11] = 0;
+	// Back
+	idx[12] = 3; idx[13] = 4; idx[14] = 7;
+	idx[15] = 0; idx[16] = 4; idx[17] = 3;
 	// Lower
-	idx[18] = 12; idx[19] = 13; idx[20] = 14;
-	idx[21] = 12; idx[22] = 14; idx[23] = 15;
+	idx[18] = 1; idx[19] = 6; idx[20] = 5;
+	idx[21] = 2; idx[22] = 6; idx[23] = 1;
 	// Left
-	idx[24] = 16; idx[25] = 17; idx[26] = 18;
-	idx[27] = 16; idx[28] = 18; idx[29] = 19;
+	idx[24] = 2; idx[25] = 7; idx[26] = 6;
+	idx[27] = 3; idx[28] = 7; idx[29] = 2;
 	// Right
-	idx[30] = 20; idx[31] = 21; idx[32] = 22;
-	idx[33] = 20; idx[34] = 22; idx[35] = 23;
+	idx[30] = 6; idx[31] = 4; idx[32] = 5;
+	idx[33] = 7; idx[34] = 4; idx[35] = 6;
 
 }

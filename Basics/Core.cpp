@@ -229,6 +229,8 @@ BOOL Core::UpdateWindowSize(DWORD dwBackBufferWidth, DWORD dwBackBufferHeight)
     m_ScissorRect.bottom = dwBackBufferHeight;
 
     // TODO : Reset Camera
+    m_pMainCamera->Resize(dwBackBufferWidth, dwBackBufferHeight);
+
 
     return FALSE;
 }
@@ -349,7 +351,7 @@ void Core::CreateMainCamera()
     m_pMainCamera->Initialize();
 }
 
-CBCameraData Core::GetMainCameraData()
+CBCameraData Core::GetMainCameraCBData()
 {
     return m_pMainCamera->GetCameraCBData();
 }

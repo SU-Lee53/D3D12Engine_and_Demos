@@ -2,11 +2,11 @@
 
 struct CBTranformData
 {
-    XMMATRIX matWorld;
+    Matrix matWorld;
 };
 
 struct CBCameraData
 {
-    XMMATRIX matView;
-    XMMATRIX matProj;
+    Matrix matView;
+    Matrix matProj;
 };
