@@ -1,17 +1,18 @@
 #include "pch.h"
-#include "TestApp.h"
+#include "BasicForwardRenderDemo.h"
+#include "BasicForwardRenderResources.h"
 #include "Object.h"
 #include "Camera.h"
 using namespace std;
 
-void TestApp::Initialize()
+void BasicForwardRenderDemo::Initialize()
 {
 	m_pObj = make_shared<BasicForwardObject>();
 	m_pObj->Initialize();
 
 }
 
-void TestApp::Update()
+void BasicForwardRenderDemo::Update()
 {
 	Vec3 pos = CORE.GetMainCamera()->GetTransform()->GetPosition();
 	Vec3 rot = m_pObj->GetTransform()->GetRotation();
@@ -20,27 +21,27 @@ void TestApp::Update()
 	{
 		rot.x += m_sensitivity * DT;
 	}
-	
+
 	if (INPUT.GetButton(KEY_TYPE::S))
 	{
 		rot.x -= m_sensitivity * DT;
 	}
-	
+
 	if (INPUT.GetButton(KEY_TYPE::A))
 	{
 		rot.y += m_sensitivity * DT;
 	}
-	
+
 	if (INPUT.GetButton(KEY_TYPE::D))
 	{
 		rot.y -= m_sensitivity * DT;
 	}
-	
+
 	if (INPUT.GetButton(KEY_TYPE::E))
 	{
 		rot.z += m_sensitivity * DT;
 	}
-	
+
 	if (INPUT.GetButton(KEY_TYPE::Q))
 	{
 		rot.z -= m_sensitivity * DT;
@@ -48,22 +49,22 @@ void TestApp::Update()
 
 	if (INPUT.GetButton(KEY_TYPE::LEFT))
 	{
-		pos.x -= 0.01f * DT;
+		pos.x -= m_sensitivity * DT;
 	}
-	
+
 	if (INPUT.GetButton(KEY_TYPE::RIGHT))
 	{
-		pos.x += 0.01f * DT;
+		pos.x += m_sensitivity * DT;
 	}
-	
+
 	if (INPUT.GetButton(KEY_TYPE::UP))
 	{
-		pos.z += 0.01f * DT;
+		pos.z += m_sensitivity * DT;
 	}
-	
+
 	if (INPUT.GetButton(KEY_TYPE::DOWN))
 	{
-		pos.z -= 0.01f * DT;
+		pos.z -= m_sensitivity * DT;
 	}
 
 	CORE.GetMainCamera()->SetPosition(pos);
@@ -74,7 +75,7 @@ void TestApp::Update()
 
 }
 
-void TestApp::Render()
+void BasicForwardRenderDemo::Render()
 {
 	RENDER.Add(m_pObj);
 }

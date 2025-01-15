@@ -1,9 +1,7 @@
 #pragma once
 #include "Application.h"
 
-class Object;
-
-class TestApp : public Application
+class BasicForwardRenderDemo : public Application
 {
 public:
 	virtual void Initialize() override;
@@ -19,7 +17,7 @@ private:
 	POINT _point;
 	float m_deltaX = 0.f;
 	float m_deltaY = 0.f;
-		  
+
 	float m_sensitivity = 1.0f;
 };
 

@@ -142,6 +142,8 @@
   <ItemGroup>
     <ClInclude Include="..\library\include\DirectXTex\DirectXTex.h" />
     <ClInclude Include="Application.h" />
+    <ClInclude Include="BasicForwardRenderDemo.h" />
+    <ClInclude Include="BasicForwardRenderResources.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CB_types.h" />
     <ClInclude Include="ConstantBuffer.h" />
@@ -173,7 +175,6 @@
     <ClInclude Include="SimpleMath.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="constants.h" />
-    <ClInclude Include="TestApp.h" />
     <ClInclude Include="TimeManager.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="types.h" />
@@ -181,6 +182,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
+    <ClCompile Include="BasicForwardRenderDemo.cpp" />
+    <ClCompile Include="BasicForwardRenderResources.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CB_types.cpp" />
     <ClCompile Include="ConstantBuffer.cpp" />
@@ -213,7 +216,6 @@
     <ClCompile Include="SimpleMath.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="TestApp.cpp" />
     <ClCompile Include="TimeManager.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Utils.cpp" />

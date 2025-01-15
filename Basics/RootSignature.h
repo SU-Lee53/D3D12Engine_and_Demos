@@ -122,11 +122,3 @@ protected:
 	StaticSampler m_StaticSampler;
 
 };
-
-// Basic Forward Rendering Root Signature (Without Texture)
-class BasicForwardRootSignature : public RootSignature
-{
-public:
-	virtual BOOL Initialize() override;
-
-};

@@ -19,10 +19,3 @@ protected:
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC m_Desc = {};
 	ComPtr<ID3D12PipelineState> m_PipelineState = nullptr;
 };
-
-class BasicForwardPipeline : public Pipeline
-{
-public:
-	virtual BOOL Initialize(std::shared_ptr<class RootSignature> rootSignature) override;
-
-};

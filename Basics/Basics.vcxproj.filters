@@ -91,6 +91,18 @@
     <Filter Include="Renderer\Pool\Descriptor">
       <UniqueIdentifier>{fbf38540-028a-42cf-99c0-144d4da07901}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Demos\Easy">
+      <UniqueIdentifier>{942167d2-04d9-405e-bcca-ae187ef50ecf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos\Easy\BasicForwardRender">
+      <UniqueIdentifier>{2afe6b7a-d7df-4814-90e0-771fc2fd18a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos\Easy\BasicForwardRender\App">
+      <UniqueIdentifier>{ff82f672-35f9-4aee-91a9-d64d49d5859b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos\Easy\BasicForwardRender\Render Resources">
+      <UniqueIdentifier>{3470798c-b9a4-4505-b2e8-8c2866f155e4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -165,9 +177,6 @@
     <ClInclude Include="Transform.h">
       <Filter>Game\Object\Components</Filter>
     </ClInclude>
-    <ClInclude Include="TestApp.h">
-      <Filter>Game\Demos</Filter>
-    </ClInclude>
     <ClInclude Include="renderer_types.h">
       <Filter>Types</Filter>
     </ClInclude>
@@ -195,13 +204,23 @@
     <ClInclude Include="RootSignature.h">
       <Filter>Renderer\RootSignature</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="CB_types.h" />
     <ClInclude Include="DescriptorPool.h">
       <Filter>Renderer\Pool\Descriptor</Filter>
     </ClInclude>
     <ClInclude Include="Descriptor.h">
       <Filter>Renderer\Pool\Descriptor</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Types</Filter>
+    </ClInclude>
+    <ClInclude Include="CB_types.h">
+      <Filter>Types</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicForwardRenderDemo.h">
+      <Filter>Game\Demos\Easy\BasicForwardRender\App</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicForwardRenderResources.h">
+      <Filter>Game\Demos\Easy\BasicForwardRender\Render Resources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -272,9 +291,6 @@
     <ClCompile Include="Transform.cpp">
       <Filter>Game\Object\Components</Filter>
     </ClCompile>
-    <ClCompile Include="TestApp.cpp">
-      <Filter>Game\Demos</Filter>
-    </ClCompile>
     <ClCompile Include="renderer_types.cpp">
       <Filter>Types</Filter>
     </ClCompile>
@@ -299,13 +315,23 @@
     <ClCompile Include="RootSignature.cpp">
       <Filter>Renderer\RootSignature</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="CB_types.cpp" />
     <ClCompile Include="DescriptorPool.cpp">
       <Filter>Renderer\Pool\Descriptor</Filter>
     </ClCompile>
     <ClCompile Include="Descriptor.cpp">
       <Filter>Renderer\Pool\Descriptor</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Renderer\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="CB_types.cpp">
+      <Filter>Types</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicForwardRenderDemo.cpp">
+      <Filter>Game\Demos\Easy\BasicForwardRender\App</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicForwardRenderResources.cpp">
+      <Filter>Game\Demos\Easy\BasicForwardRender\Render Resources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

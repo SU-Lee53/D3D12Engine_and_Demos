@@ -29,16 +29,3 @@ protected:
 
 
 };
-
-
-class BasicForwardObject : public Object
-{
-public:
-	virtual BOOL Initialize() override;
-	virtual void Update() override;
-	virtual void Render() override;
-
-private:
-	BOOL InitRenderMethod();
-
-};

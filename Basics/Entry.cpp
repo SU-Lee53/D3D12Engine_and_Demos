@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "Game.h"
-#include "TestApp.h"
+#include "BasicForwardRenderDemo.h"
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
 {
@@ -12,7 +12,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		desc.windowName = L"D3D12Engine";
 		desc.hInstance = hInstance;
 		desc.hWnd = NULL;
-		desc.app = std::make_shared<TestApp>();
+		desc.app = std::make_shared<BasicForwardRenderDemo>();
 
 	}
 

@@ -35,19 +35,3 @@ protected:
 	D3D12_DESCRIPTOR_HEAP_DESC		m_HeapDesc = {};	// Cache
 
 };
-
-
-// Basic Forward rendering RenderMethod
-// PassCount = 0, RTVCount = 0
-class ForwardRender : public RenderMethod
-{
-public:
-	virtual void Initialize(std::shared_ptr<Object> owner) override;
-	virtual void Render() override;
-
-private:
-	std::unique_ptr<ConstantBuffer<CBTranformData>> m_upTransformCBuffer = nullptr;
-	std::unique_ptr<ConstantBuffer<CBCameraData>> m_upCameraCBuffer = nullptr;
-
-	const UINT DESCRIPTOR_COUNT_FOR_DRAW = 2;
-};

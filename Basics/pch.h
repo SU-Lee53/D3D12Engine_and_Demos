@@ -85,9 +85,16 @@ using namespace std::literals;
 
 // Object Components
 #include "Transform.h"
+#include "Mesh.h"
 
 // Descriptor
 #include "Descriptor.h"
+
+// Demo Resources
+#include "Pipeline.h"
+#include "RootSignature.h"
+#include "RenderMethod.h"
+#include "Object.h"
 
 // Debugs
 #ifdef _DEBUG
