@@ -103,6 +103,12 @@
     <Filter Include="Game\Demos\Easy\BasicForwardRender\Render Resources">
       <UniqueIdentifier>{3470798c-b9a4-4505-b2e8-8c2866f155e4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Demos\Easy\Skybox">
+      <UniqueIdentifier>{1a1ea299-4ed8-4998-a373-09c41ec9d3ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos\Easy\DirectionalLight">
+      <UniqueIdentifier>{b6376d27-7ac6-4444-82fa-f3c4e9f29989}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
