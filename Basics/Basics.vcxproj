@@ -141,6 +141,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\library\include\DirectXTex\DirectXTex.h" />
+    <ClInclude Include="..\ModelImporter\define.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="BasicForwardRenderDemo.h" />
     <ClInclude Include="BasicForwardRenderResources.h" />
@@ -156,7 +157,6 @@
     <ClInclude Include="renderer_types.h" />
     <ClInclude Include="Core.h" />
     <ClInclude Include="DDSTextureLoader12.h" />
-    <ClInclude Include="define.h" />
     <ClInclude Include="DescriptorPool.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Game.h" />

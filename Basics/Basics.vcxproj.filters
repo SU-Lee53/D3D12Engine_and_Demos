@@ -114,9 +114,6 @@
     <ClInclude Include="pch.h">
       <Filter>pch</Filter>
     </ClInclude>
-    <ClInclude Include="define.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="framework.h">
       <Filter>Headers\Etc</Filter>
     </ClInclude>
@@ -227,6 +224,9 @@
     </ClInclude>
     <ClInclude Include="BasicForwardRenderResources.h">
       <Filter>Game\Demos\Easy\BasicForwardRender\Render Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ModelImporter\define.h">
+      <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

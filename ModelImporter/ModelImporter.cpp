@@ -1,14 +1,14 @@
 ﻿// ModelImporter.cpp : 애플리케이션에 대한 진입점을 정의합니다.
 //
 #include "stdafx.h"
-#include "framework.h"
 #include "ModelImporter.h"
+#include "Application.h"
 
 #define MAX_LOADSTRING 100
 
 // 전역 변수:
 HINSTANCE hInst;                                // 현재 인스턴스입니다.
-WCHAR szTitle[MAX_LOADSTRING];                  // 제목 표시줄 텍스트입니다.
+WCHAR szTitle[MAX_LOADSTRING] = L"FBX Importer";                  // 제목 표시줄 텍스트입니다.
 WCHAR szWindowClass[MAX_LOADSTRING];            // 기본 창 클래스 이름입니다.
 
 // 이 코드 모듈에 포함된 함수의 선언을 전달합니다:
@@ -16,6 +16,18 @@ ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
+
+HWND g_hWnd = nullptr;
+UINT g_uiWindowWidth = 1600;
+UINT g_uiWindowHeight = 900;
+
+std::shared_ptr<Application> g_pApp = nullptr;
+
+void Update();
+void Render();
+
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
@@ -38,19 +50,41 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         return FALSE;
     }
 
+    {
+        CORE.Initialize(g_hWnd, g_uiWindowWidth, g_uiWindowHeight);
+        GUI.Init();
+
+        g_pApp = std::make_shared<Application>();
+        g_pApp->Initialize();
+    }
+
+
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_MODELIMPORTER));
 
-    MSG msg;
+    MSG msg = { 0 };
 
     // 기본 메시지 루프입니다:
-    while (GetMessage(&msg, nullptr, 0, 0))
+    while (msg.message != WM_QUIT)
     {
-        if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
+        if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
         {
+            if (msg.message == WM_QUIT)
+                break;
+
             TranslateMessage(&msg);
             DispatchMessage(&msg);
         }
+        else
+        {
+            // TODO: Run
+            Update();
+            Render();
+        }
     }
+
+    ImGui_ImplDX11_Shutdown();
+    ImGui_ImplWin32_Shutdown();
+    ImGui::DestroyContext();
 
     return (int) msg.wParam;
 }
@@ -97,16 +131,19 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
    hInst = hInstance; // 인스턴스 핸들을 전역 변수에 저장합니다.
 
-   HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-      CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
+   RECT windowRect = { 0,0,g_uiWindowWidth, g_uiWindowHeight };
+   ::AdjustWindowRect(&windowRect, WS_OVERLAPPEDWINDOW, false);
 
-   if (!hWnd)
+   g_hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
+       CW_USEDEFAULT, 0, windowRect.right - windowRect.left, windowRect.bottom - windowRect.top, nullptr, nullptr, hInstance, nullptr);
+
+   if (!g_hWnd)
    {
       return FALSE;
    }
 
-   ShowWindow(hWnd, nCmdShow);
-   UpdateWindow(hWnd);
+   ShowWindow(g_hWnd, nCmdShow);
+   UpdateWindow(g_hWnd);
 
    return TRUE;
 }
@@ -123,38 +160,28 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+    if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam))
+        return true;
+
     switch (message)
     {
-    case WM_COMMAND:
-        {
-            int wmId = LOWORD(wParam);
-            // 메뉴 선택을 구문 분석합니다:
-            switch (wmId)
-            {
-            case IDM_ABOUT:
-                DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
-                break;
-            case IDM_EXIT:
-                DestroyWindow(hWnd);
-                break;
-            default:
-                return DefWindowProc(hWnd, message, wParam, lParam);
-            }
-        }
-        break;
-    case WM_PAINT:
-        {
-            PAINTSTRUCT ps;
-            HDC hdc = BeginPaint(hWnd, &ps);
-            // TODO: 여기에 hdc를 사용하는 그리기 코드를 추가합니다...
-            EndPaint(hWnd, &ps);
-        }
-        break;
+    case WM_SIZE:
+    {
+        RECT	rect;
+        HWND hWnd = ::GetActiveWindow();    // 이래도 되는지 모르겠음...
+        GetClientRect(hWnd, &rect);
+        UINT	dwWndWidth = rect.right - rect.left;
+        UINT	dwWndHeight = rect.bottom - rect.top;
+        CORE.UpdateWindowSize(dwWndWidth, dwWndHeight);
+    }
+    break;
+    case WM_CLOSE:
     case WM_DESTROY:
         PostQuitMessage(0);
         break;
+
     default:
-        return DefWindowProc(hWnd, message, wParam, lParam);
+        return ::DefWindowProc(hWnd, message, wParam, lParam);
     }
     return 0;
 }
@@ -177,4 +204,22 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
         break;
     }
     return (INT_PTR)FALSE;
+}
+
+void Update()
+{
+    // Manager
+    GUI.Update();
+
+    g_pApp->Update();
+}
+
+void Render()
+{
+    CORE.RenderBegin();
+    {
+        GUI.Render();
+    }
+
+    CORE.RenderEnd();
 }

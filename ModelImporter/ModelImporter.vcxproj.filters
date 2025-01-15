@@ -13,23 +13,76 @@
     <Filter Include="Headers\pch">
       <UniqueIdentifier>{27c76889-efe8-4694-bf25-a8af950a1547}</UniqueIdentifier>
     </Filter>
+    <Filter Include="D3D11Renderer\Core">
+      <UniqueIdentifier>{06b21a43-1f87-4e88-9fe1-17fef0069bdb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\etc">
+      <UniqueIdentifier>{80b4c66a-0cd4-407e-9624-5c9093969c32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="D3D11Renderer\Entry">
+      <UniqueIdentifier>{2bd20593-2acc-424a-b7d8-45c5ea0f0eb7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="D3D11Renderer\ImGUI">
+      <UniqueIdentifier>{92cce53b-26d1-482d-9fd9-9f10cd095531}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="D3D11Renderer\Managers">
+      <UniqueIdentifier>{c4754b4e-f057-4c33-94c9-90ff3a35a58e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="D3D11Renderer\App">
+      <UniqueIdentifier>{aa9c6905-4122-4778-accf-96c7756806b4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="framework.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="ModelImporter.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="stdafx.h">
       <Filter>Headers\pch</Filter>
     </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>Headers\etc</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Headers\etc</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Headers\etc</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11Core.h">
+      <Filter>D3D11Renderer\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelImporter.h">
+      <Filter>D3D11Renderer\Entry</Filter>
+    </ClInclude>
+    <ClInclude Include="Importer.h" />
+    <ClInclude Include="ImGuiManager.h">
+      <Filter>D3D11Renderer\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Imgui\imgui.h">
+      <Filter>D3D11Renderer\ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Imgui\imgui_impl_dx11.h">
+      <Filter>D3D11Renderer\ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Imgui\imgui_impl_win32.h">
+      <Filter>D3D11Renderer\ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Imgui\imgui_internal.h">
+      <Filter>D3D11Renderer\ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Imgui\imstb_rectpack.h">
+      <Filter>D3D11Renderer\ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Imgui\imstb_textedit.h">
+      <Filter>D3D11Renderer\ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Imgui\imstb_truetype.h">
+      <Filter>D3D11Renderer\ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Imgui\imconfig.h">
+      <Filter>D3D11Renderer\ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="define.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Application.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="ModelImporter.ico">
@@ -40,12 +93,41 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ModelImporter.cpp">
-      <Filter>D3D11Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>Headers\pch</Filter>
     </ClCompile>
+    <ClCompile Include="D3D11Core.cpp">
+      <Filter>D3D11Renderer\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelImporter.cpp">
+      <Filter>D3D11Renderer\Entry</Filter>
+    </ClCompile>
+    <ClCompile Include="Importer.cpp" />
+    <ClCompile Include="ImGuiManager.cpp">
+      <Filter>D3D11Renderer\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Imgui\imgui.cpp">
+      <Filter>D3D11Renderer\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Imgui\imgui_demo.cpp">
+      <Filter>D3D11Renderer\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Imgui\imgui_draw.cpp">
+      <Filter>D3D11Renderer\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Imgui\imgui_impl_dx11.cpp">
+      <Filter>D3D11Renderer\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Imgui\imgui_impl_win32.cpp">
+      <Filter>D3D11Renderer\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Imgui\imgui_tables.cpp">
+      <Filter>D3D11Renderer\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Imgui\imgui_widgets.cpp">
+      <Filter>D3D11Renderer\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Application.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ModelImporter.rc">

@@ -152,7 +152,6 @@ void Game::Update()
 
 void Game::Render()
 {
-
     RENDER.RenderBegin();
     {
         m_Desc.app->Render();
