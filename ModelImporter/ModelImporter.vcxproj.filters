@@ -31,6 +31,21 @@
     <Filter Include="D3D11Renderer\App">
       <UniqueIdentifier>{aa9c6905-4122-4778-accf-96c7756806b4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="D3D11Renderer\Model">
+      <UniqueIdentifier>{d642a8fd-e245-48f2-acd1-031e7b723324}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Importer">
+      <UniqueIdentifier>{5eba26b1-48d2-45c7-9320-a6255e0e9354}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="D3D11Renderer\Model\Components">
+      <UniqueIdentifier>{ec83776f-fc1a-46b8-8a2f-fd798d495a85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="D3D11Renderer\Model\Components\Buffers">
+      <UniqueIdentifier>{b345e326-7a80-4248-82f5-014957f7d719}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="D3D11Renderer\Model\Components\Material Components">
+      <UniqueIdentifier>{7580aebe-9f59-480b-bb43-314cef360440}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -51,7 +66,6 @@
     <ClInclude Include="ModelImporter.h">
       <Filter>D3D11Renderer\Entry</Filter>
     </ClInclude>
-    <ClInclude Include="Importer.h" />
     <ClInclude Include="ImGuiManager.h">
       <Filter>D3D11Renderer\Managers</Filter>
     </ClInclude>
@@ -82,7 +96,36 @@
     <ClInclude Include="define.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Application.h" />
+    <ClInclude Include="Importer.h">
+      <Filter>Importer</Filter>
+    </ClInclude>
+    <ClInclude Include="Application.h">
+      <Filter>D3D11Renderer\App</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>D3D11Renderer\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>D3D11Renderer\Model\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>D3D11Renderer\Model\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="IndexBuffer.h">
+      <Filter>D3D11Renderer\Model\Components\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexBuffer.h">
+      <Filter>D3D11Renderer\Model\Components\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>D3D11Renderer\Model\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>D3D11Renderer\Model\Components\Material Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>D3D11Renderer\Model\Components\Material Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="ModelImporter.ico">
@@ -102,7 +145,6 @@
     <ClCompile Include="ModelImporter.cpp">
       <Filter>D3D11Renderer\Entry</Filter>
     </ClCompile>
-    <ClCompile Include="Importer.cpp" />
     <ClCompile Include="ImGuiManager.cpp">
       <Filter>D3D11Renderer\Managers</Filter>
     </ClCompile>
@@ -127,7 +169,36 @@
     <ClCompile Include="Imgui\imgui_widgets.cpp">
       <Filter>D3D11Renderer\ImGUI</Filter>
     </ClCompile>
-    <ClCompile Include="Application.cpp" />
+    <ClCompile Include="Importer.cpp">
+      <Filter>Importer</Filter>
+    </ClCompile>
+    <ClCompile Include="Application.cpp">
+      <Filter>D3D11Renderer\App</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>D3D11Renderer\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>D3D11Renderer\Model\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>D3D11Renderer\Model\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="IndexBuffer.cpp">
+      <Filter>D3D11Renderer\Model\Components\Buffers</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexBuffer.cpp">
+      <Filter>D3D11Renderer\Model\Components\Buffers</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>D3D11Renderer\Model\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>D3D11Renderer\Model\Components\Material Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>D3D11Renderer\Model\Components\Material Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ModelImporter.rc">

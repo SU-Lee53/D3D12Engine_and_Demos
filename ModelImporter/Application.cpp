@@ -17,7 +17,7 @@ void Application::Initialize()
 	m_pImporter = make_unique<Importer>();
 	m_pImporter->Initialize();
 
-	m_pImporter->LoadFBXFile("../fbx/pool_last.fbx");
+	m_pImporter->LoadFBXFile("../fbx/Apache.FBX");
 }
 
 void Application::Update()

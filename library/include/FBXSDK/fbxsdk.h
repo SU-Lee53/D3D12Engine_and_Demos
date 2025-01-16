@@ -135,6 +135,7 @@
 //Scene Includes
 #include <fbxsdk/scene/fbxaudio.h>
 #include <fbxsdk/scene/fbxaudiolayer.h>
+#include <fbxsdk/scene/fbxaxissystem.h>
 #include <fbxsdk/scene/fbxcollection.h>
 #include <fbxsdk/scene/fbxcollectionexclusive.h>
 #include <fbxsdk/scene/fbxcontainer.h>

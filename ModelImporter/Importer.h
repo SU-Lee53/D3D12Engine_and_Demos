@@ -1,5 +1,7 @@
 #pragma once
 
+class Model;
+
 class Importer
 {
 public:
@@ -14,9 +16,15 @@ public:
 
 private:
 	void PrintTabs();
-	void ProcessNode(FbxNode* pFbxNode);
+	void ProcessNode(FbxNode* pFbxNode, const char* nodeName);
 	void PrintAttribute(FbxNodeAttribute* pfbxAttribute);
 	FbxString GetAttributeTypeName(FbxNodeAttribute::EType fbxType);
+
+	void PrintLayerInfo(FbxMesh* pfbxMesh, const char* nodeName);
+	void PrintMeshInfo(FbxMesh* pfbxMesh, const char* nodeName);
+	void PrintSurfaceMaterialInfo(FbxNode* pfbxNode, const char* nodeName);
+
+	void ExportModelInSceneToModel(std::shared_ptr<Model>& pOutModel);
 
 private:
 	void CleanUp();
@@ -38,6 +46,7 @@ private:
 	std::string m_strFilename = "";
 
 	UINT m_tabs;
+
 
 };
 

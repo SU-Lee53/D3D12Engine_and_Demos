@@ -84,6 +84,7 @@ using namespace Microsoft::WRL;
 #endif
 
 #include "fbxsdk.h"
+#define FBXSDK_SHARED
 
 // headers
 #include "define.h"

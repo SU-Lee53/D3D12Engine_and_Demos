@@ -144,7 +144,7 @@ BOOL D3D11Core::UpdateWindowSize(UINT windowWidth, UINT windowHeight)
 	if (!(windowWidth * windowHeight))
 		return FALSE;
 
-	if (m_uiScreenWidth == windowWidth and m_uiScreenHeight == windowHeight)
+	if (m_uiScreenWidth == windowWidth && m_uiScreenHeight == windowHeight)
 		return FALSE;
 
 	if (m_pSwapChain)
