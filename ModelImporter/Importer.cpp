@@ -55,7 +55,11 @@ void Importer::ShowFBXNodeToImGui()
 
 void Importer::PrintTabs()
 {
-	for (UINT i = 0; i < m_tabs; i++) ImGui::Text("\t");
+	for (UINT i = 0; i < m_tabs; i++)
+	{
+		ImGui::Text("\t");
+		ImGui::SameLine();
+	}
 }
 
 void Importer::ProcessNode(FbxNode* pfbxNode, const char* nodeName)
@@ -209,47 +213,21 @@ void Importer::PrintLayerInfo(FbxMesh* pfbxMesh, const char* nodeName)
 			if (tangent != nullptr) ImGui::Text("layer has tangent");
 
 			FbxArray<const FbxLayerElementUV*> uvSet = pfbxLayer->GetUVSets();
-			if (uvSet.GetCount() > 0) ImGui::Text("layer has uvs");
+			if (uvSet.GetCount() > 0)
+			{
+				ImGui::Text("layer has uvs");
+				
+				if (ImGui::TreeNode("UV Sets"))
+				{
 
+					ImGui::TreePop();
+				}
+			
+			}
 			const FbxLayerElementTemplate<FbxSurfaceMaterial*>* materials = pfbxLayer->GetMaterials();
 			if (materials)
 			{
 				ImGui::Text("layer has materialElement");
-
-				if (ImGui::TreeNode(string("Element Info : "s + nodeName).c_str()))
-				{
-					FbxLayerElementArrayTemplate<FbxSurfaceMaterial*> matArr = materials->GetDirectArray();
-					int arrCount = matArr.GetCount();
-					ImGui::Text("Material Array Count : %d", arrCount);
-
-					for (int j = 0; j < arrCount; j++)
-					{
-						ImGui::Text("\tShadingModel : %s", matArr[j]->sShadingModel);
-						ImGui::Text("\tMultiLayer : %s", matArr[j]->sMultiLayer);
-						ImGui::Text("\tEmissive : %s", matArr[j]->sEmissive);
-						ImGui::Text("\tEmissiveFactor : %s", matArr[j]->sEmissiveFactor);
-						ImGui::Text("\tDiffuse : %s", matArr[j]->sDiffuse);
-						ImGui::Text("\tDiffuseFactor : %s", matArr[j]->sDiffuseFactor);
-						ImGui::Text("\tSpecular : %s", matArr[j]->sSpecular);
-						ImGui::Text("\tSpecularFactor : %s", matArr[j]->sSpecularFactor);
-						ImGui::Text("\tShininess : %s", matArr[j]->sShininess);
-						ImGui::Text("\tBump : %s", matArr[j]->sBump);
-						ImGui::Text("\tBumpFactor : %s", matArr[j]->sBumpFactor);
-						ImGui::Text("\tNormalMap : %s", matArr[j]->sNormalMap);
-						ImGui::Text("\tTransparentColor : %s", matArr[j]->sTransparentColor);
-						ImGui::Text("\tTransparencyFactor : %s", matArr[j]->sTransparencyFactor);
-						ImGui::Text("\tsReflection : %s", matArr[j]->sReflection);
-						ImGui::Text("\tsReflectionFactor : %s", matArr[j]->sReflectionFactor);
-						ImGui::Text("\tsDisplacementColor : %s", matArr[j]->sDisplacementColor);
-						ImGui::Text("\tsDisplacementFactor : %s", matArr[j]->sDisplacementFactor);
-						ImGui::Text("\tsVectorDisplacementColor : %s", matArr[j]->sVectorDisplacementColor);
-						ImGui::Text("\tsVectorDisplacementFactor : %s", matArr[j]->sVectorDisplacementFactor);
-
-					}
-
-
-					ImGui::TreePop();
-				}
 
 			}
 			const FbxLayerElementTemplate<FbxColor>* vertexColor = pfbxLayer->GetVertexColors();
@@ -313,6 +291,51 @@ void Importer::PrintMeshInfo(FbxMesh* pfbxMesh, const char* nodeName)
 
 void Importer::PrintSurfaceMaterialInfo(FbxNode* pfbxNode, const char* nodeName)
 {
+	int nMaterials = pfbxNode->GetMaterialCount();
+
+	if (ImGui::TreeNode(string("Materials in Node"s + nodeName).c_str()))
+	{
+		if (nMaterials != 0)
+		{
+			for (int i = 0; i < nMaterials; i++)
+			{
+				if (ImGui::TreeNode(string("Material #"s + to_string(i)).c_str()))
+				{
+					FbxSurfaceMaterial* pfbxSurfaceMaterial = pfbxNode->GetMaterial(i);
+
+					ImGui::Text("Name : %s", pfbxSurfaceMaterial->GetName());
+					ImGui::Text("sShadingModel : %s", pfbxSurfaceMaterial->sShadingModel);
+					ImGui::Text("sMultiLayer : %s", pfbxSurfaceMaterial->sMultiLayer);
+					ImGui::Text("sEmissive : %s", pfbxSurfaceMaterial->sEmissive);
+					ImGui::Text("sEmissiveFactor : %s", pfbxSurfaceMaterial->sEmissiveFactor);
+					ImGui::Text("sAmbient : %s", pfbxSurfaceMaterial->sAmbient);
+					ImGui::Text("sAmbientFactor : %s", pfbxSurfaceMaterial->sAmbientFactor);
+					ImGui::Text("sDiffuse : %s", pfbxSurfaceMaterial->sDiffuse);
+					ImGui::Text("sDiffuseFactor : %s", pfbxSurfaceMaterial->sDiffuseFactor);
+					ImGui::Text("sSpecular : %s", pfbxSurfaceMaterial->sSpecular);
+					ImGui::Text("sSpecularFactor : %s", pfbxSurfaceMaterial->sSpecularFactor);
+					ImGui::Text("sShininess : %s", pfbxSurfaceMaterial->sShininess);
+					ImGui::Text("sBump : %s", pfbxSurfaceMaterial->sBump);
+					ImGui::Text("sNormalMap : %s", pfbxSurfaceMaterial->sNormalMap);
+					ImGui::Text("sTransparentColor : %s", pfbxSurfaceMaterial->sTransparentColor);
+					ImGui::Text("sTransparencyFactor : %s", pfbxSurfaceMaterial->sTransparencyFactor);
+					ImGui::Text("sReflection : %s", pfbxSurfaceMaterial->sReflection);
+					ImGui::Text("sReflectionFactor : %s", pfbxSurfaceMaterial->sReflectionFactor);
+
+					ImGui::TreePop();
+				}
+			}
+		}
+		else
+		{
+			ImGui::Text("This Node has no Material");
+		}
+		
+		ImGui::TreePop();
+	}
+
+
+
 }
 
 void Importer::ExportModelInSceneToModel(std::shared_ptr<Model>& pOutModel)
