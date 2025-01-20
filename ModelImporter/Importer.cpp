@@ -64,12 +64,17 @@ void Importer::PrintTabs()
 
 void Importer::ProcessNode(FbxNode* pfbxNode, const char* cstrNodeName)
 {
-	PrintTabs();
 	
 	const char* pStrcstrNodeName = pfbxNode->GetName();
 	FbxDouble3 fbxvTranslation = pfbxNode->LclTranslation.Get();
 	FbxDouble3 fbxvRotation = pfbxNode->LclRotation.Get();
 	FbxDouble3 fbxvScaling = pfbxNode->LclScaling.Get();
+
+	ImGui::NewLine();
+	for (int i = 0; i < m_tabs; i++)
+	{
+		ImGui::Text("\t"); ImGui::SameLine();
+	}
 
 	ImGui::Text(
 		"< Node name = '%s' Translation = '(%f, %f, %f)' Rotation = '(%f, %f, %f)' Scaling = '(%f, %f, %f)' >",
@@ -83,8 +88,11 @@ void Importer::ProcessNode(FbxNode* pfbxNode, const char* cstrNodeName)
 
 	FbxMesh* pfbxMesh = pfbxNode->GetMesh();
 
-	PrintMeshInfo(pfbxMesh, cstrNodeName);
-	PrintLayerInfo(pfbxMesh, cstrNodeName);
+	if (pfbxMesh)
+	{
+		PrintMeshInfo(pfbxMesh, cstrNodeName);
+		PrintLayerInfo(pfbxMesh, cstrNodeName);
+	}
 	PrintSurfaceMaterialInfo(pfbxNode, cstrNodeName);
 
 	for (int i = 0; i < pfbxNode->GetNodeAttributeCount(); i++)
@@ -213,22 +221,11 @@ void Importer::PrintLayerInfo(FbxMesh* pfbxMesh, const char* cstrNodeName)
 			if (tangent != nullptr) ImGui::Text("layer has tangent");
 
 			FbxArray<const FbxLayerElementUV*> uvSet = pfbxLayer->GetUVSets();
-			if (uvSet.GetCount() > 0)
-			{
-				ImGui::Text("layer has uvs");
-				
-				if (ImGui::TreeNode("UV Sets"))
-				{
 
-					ImGui::TreePop();
-				}
-			
-			}
 			const FbxLayerElementTemplate<FbxSurfaceMaterial*>* materials = pfbxLayer->GetMaterials();
 			if (materials)
 			{
 				ImGui::Text("layer has materialElement");
-
 			}
 			const FbxLayerElementTemplate<FbxColor>* vertexColor = pfbxLayer->GetVertexColors();
 			if (vertexColor != nullptr) ImGui::Text("layer has vertexColors");
@@ -244,45 +241,156 @@ void Importer::PrintMeshInfo(FbxMesh* pfbxMesh, const char* cstrNodeName)
 	string meshTreecstrNodeName = "Mesh Info | Name : " + string(cstrNodeName);
 	if (ImGui::TreeNode(meshTreecstrNodeName.c_str()))
 	{
-		int polygonCount = pfbxMesh->GetPolygonCount();
-		ImGui::Text("Polygon Count : %d", polygonCount);
+		// Polygons
+		// Some models has 4 vertices per polygons
+		// But, D3D supports triangle primitive only
+		// So, We need to Triangulate into 3 Vertices when Export
+		int nPolygons = pfbxMesh->GetPolygonCount();
+		ImGui::Text("Polygon Count : %d", nPolygons);
 
-		std::string polygonTreeName = "polygon vertices"s + " | Name : " + string(cstrNodeName);
+		std::string strPolygonTreeName = "polygon vertices"s + " | Name : " + string(cstrNodeName);
 
-		if (ImGui::TreeNode(polygonTreeName.c_str()))
+		if (ImGui::TreeNode(strPolygonTreeName.c_str()))
 		{
-			for (int i = 0; i < polygonCount; i++)
+			for (int i = 0; i < nPolygons; i++)
 			{
 				ImGui::Text("polygon index : %d", i);
-				int polygonSize = pfbxMesh->GetPolygonSize(i);
-				ImGui::Text("polygon size : %d", polygonSize);
+				int nPolygonSize = pfbxMesh->GetPolygonSize(i);
+				ImGui::Text("polygon size : %d", nPolygonSize);
 
 				ImGui::NewLine();
-				for (int j = 0; j < polygonSize; j++)
+				for (int j = 0; j < nPolygonSize; j++)
 				{
 					int vtx = pfbxMesh->GetPolygonVertex(i, j);
 					ImGui::SameLine();
 					ImGui::Text("%d", vtx);
 				}
+
+				// if Polygon Size is bigger then 4, Do Triangulate
+				if (nPolygonSize > 3)
+				{
+					string strTriangulateNodeName = "Triangulate #"s + to_string(i);
+					if (ImGui::TreeNode(strTriangulateNodeName.c_str()))
+					{
+						for (int j = 1; j < nPolygonSize - 1; j++)
+						{
+							ImGui::Text("(%d, %d, %d)", pfbxMesh->GetPolygonVertex(i, 0), pfbxMesh->GetPolygonVertex(i, j), pfbxMesh->GetPolygonVertex(i, j + 1));
+							ImGui::SameLine();
+						}
+						ImGui::NewLine();
+
+						ImGui::TreePop();
+					}
+				}
+
 			}
 
 			ImGui::TreePop();
 		}
 
-		int controlPointCount = pfbxMesh->GetControlPointsCount();
-		ImGui::Text("Vertex Count : %d", controlPointCount);
+		// Vertices
+		int nControlPoints = pfbxMesh->GetControlPointsCount();
+		ImGui::Text("Vertex Count : %d", nControlPoints);
 
-		string vertexTreeName = "Vertex(Control Point)"s + " | Name : " + string(cstrNodeName);
-		if (ImGui::TreeNode(vertexTreeName.c_str()))
+		string strVertexTreeName = "Vertex(Control Point) | Name : "s + string(cstrNodeName);
+		if (ImGui::TreeNode(strVertexTreeName.c_str()))
 		{
-			for (int i = 0; i < controlPointCount; i++)
+			ImGui::Text("Vertices");
+			for (int i = 0; i < nControlPoints; i++)
 			{
-				FbxVector4 pfbxControlPoints = pfbxMesh->GetControlPointAt(i);
-				ImGui::Text("%d : (%f, %f, %f, %f)", i, pfbxControlPoints[0], pfbxControlPoints[1], pfbxControlPoints[2], pfbxControlPoints[3]);
+				FbxVector4 fbxControlPoints = pfbxMesh->GetControlPointAt(i);
+				ImGui::Text("%d : (%f, %f, %f, %f)", i, fbxControlPoints[0], fbxControlPoints[1], fbxControlPoints[2], fbxControlPoints[3]);
 			}
 
 			ImGui::TreePop();
 		}
+
+		// UVs
+		int nUVs = pfbxMesh->GetElementUVCount();
+		ImGui::Text("UV Element Count : %d", nUVs);
+		if (nUVs > 0)	// if UV is valid
+		{
+			for (int i = 0; i < nUVs; i++)
+			{
+				FbxGeometryElementUV* uvElement = pfbxMesh->GetElementUV(0);
+
+				FbxGeometryElement::EMappingMode mappingMode = uvElement->GetMappingMode();
+				FbxGeometryElement::EReferenceMode referenceMode = uvElement->GetReferenceMode();
+
+				if (mappingMode != FbxGeometryElement::eByPolygonVertex)
+				{
+					ImGui::Text("Unsupported UV mapping mode");
+					goto lb_PrintUV_Break;	// if mappingMode is not eByPolygonVertex, Do not print UV data
+				}
+
+				string strUVTreeName = "UV | Name : "s + string(cstrNodeName) + " #"s + to_string(i);
+				if (ImGui::TreeNode(strUVTreeName.c_str()))
+				{
+					for (int polygonIdx = 0; polygonIdx < nPolygons; polygonIdx++)
+					{
+						int polygonSize = pfbxMesh->GetPolygonSize(polygonIdx);
+						for (int vertexIdx = 0; vertexIdx < polygonSize; vertexIdx++)
+						{
+							int controlPointIndex = pfbxMesh->GetPolygonVertex(polygonIdx, vertexIdx);
+							FbxVector2 uv;
+
+							switch (referenceMode)
+							{
+							case fbxsdk::FbxLayerElement::eDirect:
+							{
+								uv = uvElement->GetDirectArray().GetAt(controlPointIndex);
+								break;
+							}
+							case fbxsdk::FbxLayerElement::eIndexToDirect:
+							{
+								int uvIndex = uvElement->GetIndexArray().GetAt(controlPointIndex);
+								uv = uvElement->GetDirectArray().GetAt(uvIndex);
+								break;
+							}
+							case fbxsdk::FbxLayerElement::eIndex:
+								ImGui::Text("Unsupported UV reference mode");
+								goto lb_PrintUV_Break;	// if referenceMode is not eDirect or eIndexToDirect, Do not print UV data
+							default:
+								__debugbreak();
+							}
+
+							FbxVector4 fbxControlPoints = pfbxMesh->GetControlPointAt(controlPointIndex);
+							ImGui::Text("Polygon : %d\t", polygonIdx); ImGui::SameLine();
+							ImGui::Text("Vertex : %d (#%d : {%f, %f, %f})\t", vertexIdx, controlPointIndex, fbxControlPoints[0], fbxControlPoints[1], fbxControlPoints[2]); ImGui::SameLine();
+							ImGui::Text("UV : (%f, %f)", uv[0], uv[1]);
+						}
+						ImGui::NewLine();
+					}
+					ImGui::TreePop();
+				}
+			}
+
+		}
+
+	lb_PrintUV_Break:
+
+
+		// Normals
+		int nNormals = pfbxMesh->GetElementNormalCount();
+		ImGui::Text("Normals Count : %d", nNormals);
+
+		// Binormals
+		int nBinormals = pfbxMesh->GetElementBinormalCount();
+		ImGui::Text("Binormals Count : %d", nBinormals);
+
+		// Tangents
+		int nTangents = pfbxMesh->GetElementTangentCount();
+		ImGui::Text("Tangents Count : %d", nTangents);
+
+		// Vertex Color
+		int nVertexColor = pfbxMesh->GetElementVertexColorCount();
+		ImGui::Text("Vertex Color Count : %d", nVertexColor);
+
+		// Smoothing : dunno this works
+		int nSmoothing = pfbxMesh->GetElementSmoothingCount();
+		ImGui::Text("Smoothing Count : %d", nSmoothing);
+
+
 
 		ImGui::TreePop();
 	}
@@ -303,32 +411,8 @@ void Importer::PrintSurfaceMaterialInfo(FbxNode* pfbxNode, const char* cstrNodeN
 				{
 					FbxSurfaceMaterial* pfbxSurfaceMaterial = pfbxNode->GetMaterial(i);
 
-					//PrintMaterialPropertyInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sShadingModel, cstrNodeName);
-					//PrintMaterialPropertyInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sMultiLayer, cstrNodeName);
-					//PrintMaterialPropertyInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sEmissive, cstrNodeName);
-					//PrintMaterialPropertyInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sEmissiveFactor, cstrNodeName);
-					//PrintMaterialPropertyInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sAmbient, cstrNodeName);
-					//PrintMaterialPropertyInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sAmbientFactor, cstrNodeName);
-					//PrintMaterialPropertyInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sDiffuse, cstrNodeName);
-					//PrintMaterialPropertyInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sDiffuseFactor, cstrNodeName);
-					//PrintMaterialPropertyInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sSpecular, cstrNodeName);
-					//PrintMaterialPropertyInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sSpecularFactor, cstrNodeName);
-					//PrintMaterialPropertyInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sShininess, cstrNodeName);
-					//PrintMaterialPropertyInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sBump, cstrNodeName);
-					//PrintMaterialPropertyInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sNormalMap, cstrNodeName);
-					//PrintMaterialPropertyInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sTransparentColor, cstrNodeName);
-					//PrintMaterialPropertyInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sTransparencyFactor, cstrNodeName);
-					//PrintMaterialPropertyInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sReflection, cstrNodeName);
-					//PrintMaterialPropertyInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sReflectionFactor, cstrNodeName);
-
-					PrintMaterialPropertyInfoAll(pfbxSurfaceMaterial, cstrNodeName);
-
-					PrintTextureInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sDiffuse);
-					PrintTextureInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sSpecular);
-					PrintTextureInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sAmbient);
-					PrintTextureInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sEmissive);
-					PrintTextureInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sBump);
-					PrintTextureInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sNormalMap);
+					if(pfbxSurfaceMaterial)
+						PrintMaterialPropertyInfoAll(pfbxSurfaceMaterial, cstrNodeName);
 
 					ImGui::TreePop();
 				}
