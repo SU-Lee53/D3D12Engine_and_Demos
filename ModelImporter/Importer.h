@@ -16,13 +16,18 @@ public:
 
 private:
 	void PrintTabs();
-	void ProcessNode(FbxNode* pFbxNode, const char* nodeName);
+	void ProcessNode(FbxNode* pFbxNode, const char* cstrNodeName);
 	void PrintAttribute(FbxNodeAttribute* pfbxAttribute);
 	FbxString GetAttributeTypeName(FbxNodeAttribute::EType fbxType);
 
-	void PrintLayerInfo(FbxMesh* pfbxMesh, const char* nodeName);
-	void PrintMeshInfo(FbxMesh* pfbxMesh, const char* nodeName);
-	void PrintSurfaceMaterialInfo(FbxNode* pfbxNode, const char* nodeName);
+	void PrintLayerInfo(FbxMesh* pfbxMesh, const char* cstrNodeName);
+	void PrintMeshInfo(FbxMesh* pfbxMesh, const char* cstrNodeName);
+	void PrintSurfaceMaterialInfo(FbxNode* pfbxNode, const char* cstrNodeName);
+	void PrintMaterialPropertyInfo(FbxSurfaceMaterial* pfbxSurfaceMaterial, const char* cstrPropertyName, const char* cstrNodeName);
+	void PrintMaterialPropertyInfoAll(FbxSurfaceMaterial* pfbxSurfaceMaterial, const char* cstrNodeName);
+	void PrintTextureInfo(FbxSurfaceMaterial* pfbxSurfaceMaterial, const char* cstrPropertyName);
+
+	BOOL HasTexture(FbxSurfaceMaterial* pfbxSurfaceMaterial, const char* cstrPropertyName);
 
 	void ExportModelInSceneToModel(std::shared_ptr<Model>& pOutModel);
 
@@ -45,7 +50,7 @@ private:
 	// File metadata cache
 	std::string m_strFilename = "";
 
-	UINT m_tabs;
+	UINT m_tabs = 0;
 
 
 };

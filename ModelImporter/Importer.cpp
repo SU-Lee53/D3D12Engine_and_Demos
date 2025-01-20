@@ -62,18 +62,18 @@ void Importer::PrintTabs()
 	}
 }
 
-void Importer::ProcessNode(FbxNode* pfbxNode, const char* nodeName)
+void Importer::ProcessNode(FbxNode* pfbxNode, const char* cstrNodeName)
 {
 	PrintTabs();
 	
-	const char* pStrNodeName = pfbxNode->GetName();
+	const char* pStrcstrNodeName = pfbxNode->GetName();
 	FbxDouble3 fbxvTranslation = pfbxNode->LclTranslation.Get();
 	FbxDouble3 fbxvRotation = pfbxNode->LclRotation.Get();
 	FbxDouble3 fbxvScaling = pfbxNode->LclScaling.Get();
 
 	ImGui::Text(
 		"< Node name = '%s' Translation = '(%f, %f, %f)' Rotation = '(%f, %f, %f)' Scaling = '(%f, %f, %f)' >",
-		pStrNodeName,
+		pStrcstrNodeName,
 		fbxvTranslation[0], fbxvTranslation[1], fbxvTranslation[2],
 		fbxvRotation[0], fbxvRotation[1], fbxvRotation[2],
 		fbxvScaling[0], fbxvScaling[1], fbxvScaling[2]
@@ -83,9 +83,9 @@ void Importer::ProcessNode(FbxNode* pfbxNode, const char* nodeName)
 
 	FbxMesh* pfbxMesh = pfbxNode->GetMesh();
 
-	PrintMeshInfo(pfbxMesh, nodeName);
-	PrintLayerInfo(pfbxMesh, nodeName);
-	PrintSurfaceMaterialInfo(pfbxNode, nodeName);
+	PrintMeshInfo(pfbxMesh, cstrNodeName);
+	PrintLayerInfo(pfbxMesh, cstrNodeName);
+	PrintSurfaceMaterialInfo(pfbxNode, cstrNodeName);
 
 	for (int i = 0; i < pfbxNode->GetNodeAttributeCount(); i++)
 	{
@@ -188,15 +188,15 @@ FbxString Importer::GetAttributeTypeName(FbxNodeAttribute::EType fbxType)
 	return ("Error");
 }
 
-void Importer::PrintLayerInfo(FbxMesh* pfbxMesh, const char* nodeName)
+void Importer::PrintLayerInfo(FbxMesh* pfbxMesh, const char* cstrNodeName)
 {
 	int layerCount = pfbxMesh->GetLayerCount();
 	ImGui::Text("< Layer Count : %d >", layerCount);
 
 	for (int i = 0; i < layerCount; i++)
 	{
-		string treeNodeName = "Layer Info : " + to_string(i) + " | Name : " + string(nodeName);
-		if (ImGui::TreeNode(treeNodeName.c_str()))
+		string treecstrNodeName = "Layer Info : " + to_string(i) + " | Name : " + string(cstrNodeName);
+		if (ImGui::TreeNode(treecstrNodeName.c_str()))
 		{
 			FbxLayer* pfbxLayer = pfbxMesh->GetLayer(i);
 
@@ -239,15 +239,15 @@ void Importer::PrintLayerInfo(FbxMesh* pfbxMesh, const char* nodeName)
 	
 }
 
-void Importer::PrintMeshInfo(FbxMesh* pfbxMesh, const char* nodeName)
+void Importer::PrintMeshInfo(FbxMesh* pfbxMesh, const char* cstrNodeName)
 {
-	string meshTreeNodeName = "Mesh Info | Name : " + string(nodeName);
-	if (ImGui::TreeNode(meshTreeNodeName.c_str()))
+	string meshTreecstrNodeName = "Mesh Info | Name : " + string(cstrNodeName);
+	if (ImGui::TreeNode(meshTreecstrNodeName.c_str()))
 	{
 		int polygonCount = pfbxMesh->GetPolygonCount();
 		ImGui::Text("Polygon Count : %d", polygonCount);
 
-		std::string polygonTreeName = "polygon vertices"s + " | Name : " + string(nodeName);
+		std::string polygonTreeName = "polygon vertices"s + " | Name : " + string(cstrNodeName);
 
 		if (ImGui::TreeNode(polygonTreeName.c_str()))
 		{
@@ -272,7 +272,7 @@ void Importer::PrintMeshInfo(FbxMesh* pfbxMesh, const char* nodeName)
 		int controlPointCount = pfbxMesh->GetControlPointsCount();
 		ImGui::Text("Vertex Count : %d", controlPointCount);
 
-		string vertexTreeName = "Vertex(Control Point)"s + " | Name : " + string(nodeName);
+		string vertexTreeName = "Vertex(Control Point)"s + " | Name : " + string(cstrNodeName);
 		if (ImGui::TreeNode(vertexTreeName.c_str()))
 		{
 			for (int i = 0; i < controlPointCount; i++)
@@ -289,11 +289,11 @@ void Importer::PrintMeshInfo(FbxMesh* pfbxMesh, const char* nodeName)
 
 }
 
-void Importer::PrintSurfaceMaterialInfo(FbxNode* pfbxNode, const char* nodeName)
+void Importer::PrintSurfaceMaterialInfo(FbxNode* pfbxNode, const char* cstrNodeName)
 {
 	int nMaterials = pfbxNode->GetMaterialCount();
 
-	if (ImGui::TreeNode(string("Materials in Node"s + nodeName).c_str()))
+	if (ImGui::TreeNode(string("Materials in Node : "s + cstrNodeName).c_str()))
 	{
 		if (nMaterials != 0)
 		{
@@ -303,24 +303,32 @@ void Importer::PrintSurfaceMaterialInfo(FbxNode* pfbxNode, const char* nodeName)
 				{
 					FbxSurfaceMaterial* pfbxSurfaceMaterial = pfbxNode->GetMaterial(i);
 
-					ImGui::Text("Name : %s", pfbxSurfaceMaterial->GetName());
-					ImGui::Text("sShadingModel : %s", pfbxSurfaceMaterial->sShadingModel);
-					ImGui::Text("sMultiLayer : %s", pfbxSurfaceMaterial->sMultiLayer);
-					ImGui::Text("sEmissive : %s", pfbxSurfaceMaterial->sEmissive);
-					ImGui::Text("sEmissiveFactor : %s", pfbxSurfaceMaterial->sEmissiveFactor);
-					ImGui::Text("sAmbient : %s", pfbxSurfaceMaterial->sAmbient);
-					ImGui::Text("sAmbientFactor : %s", pfbxSurfaceMaterial->sAmbientFactor);
-					ImGui::Text("sDiffuse : %s", pfbxSurfaceMaterial->sDiffuse);
-					ImGui::Text("sDiffuseFactor : %s", pfbxSurfaceMaterial->sDiffuseFactor);
-					ImGui::Text("sSpecular : %s", pfbxSurfaceMaterial->sSpecular);
-					ImGui::Text("sSpecularFactor : %s", pfbxSurfaceMaterial->sSpecularFactor);
-					ImGui::Text("sShininess : %s", pfbxSurfaceMaterial->sShininess);
-					ImGui::Text("sBump : %s", pfbxSurfaceMaterial->sBump);
-					ImGui::Text("sNormalMap : %s", pfbxSurfaceMaterial->sNormalMap);
-					ImGui::Text("sTransparentColor : %s", pfbxSurfaceMaterial->sTransparentColor);
-					ImGui::Text("sTransparencyFactor : %s", pfbxSurfaceMaterial->sTransparencyFactor);
-					ImGui::Text("sReflection : %s", pfbxSurfaceMaterial->sReflection);
-					ImGui::Text("sReflectionFactor : %s", pfbxSurfaceMaterial->sReflectionFactor);
+					//PrintMaterialPropertyInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sShadingModel, cstrNodeName);
+					//PrintMaterialPropertyInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sMultiLayer, cstrNodeName);
+					//PrintMaterialPropertyInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sEmissive, cstrNodeName);
+					//PrintMaterialPropertyInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sEmissiveFactor, cstrNodeName);
+					//PrintMaterialPropertyInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sAmbient, cstrNodeName);
+					//PrintMaterialPropertyInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sAmbientFactor, cstrNodeName);
+					//PrintMaterialPropertyInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sDiffuse, cstrNodeName);
+					//PrintMaterialPropertyInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sDiffuseFactor, cstrNodeName);
+					//PrintMaterialPropertyInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sSpecular, cstrNodeName);
+					//PrintMaterialPropertyInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sSpecularFactor, cstrNodeName);
+					//PrintMaterialPropertyInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sShininess, cstrNodeName);
+					//PrintMaterialPropertyInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sBump, cstrNodeName);
+					//PrintMaterialPropertyInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sNormalMap, cstrNodeName);
+					//PrintMaterialPropertyInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sTransparentColor, cstrNodeName);
+					//PrintMaterialPropertyInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sTransparencyFactor, cstrNodeName);
+					//PrintMaterialPropertyInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sReflection, cstrNodeName);
+					//PrintMaterialPropertyInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sReflectionFactor, cstrNodeName);
+
+					PrintMaterialPropertyInfoAll(pfbxSurfaceMaterial, cstrNodeName);
+
+					PrintTextureInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sDiffuse);
+					PrintTextureInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sSpecular);
+					PrintTextureInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sAmbient);
+					PrintTextureInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sEmissive);
+					PrintTextureInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sBump);
+					PrintTextureInfo(pfbxSurfaceMaterial, pfbxSurfaceMaterial->sNormalMap);
 
 					ImGui::TreePop();
 				}
@@ -336,6 +344,325 @@ void Importer::PrintSurfaceMaterialInfo(FbxNode* pfbxNode, const char* nodeName)
 
 
 
+}
+
+void Importer::PrintMaterialPropertyInfo(FbxSurfaceMaterial* pfbxSurfaceMaterial, const char* cstrPropertyName, const char* cstrNodeName)
+{
+	FbxProperty& prop = pfbxSurfaceMaterial->FindProperty(cstrPropertyName);
+
+	if (prop.IsValid())
+	{
+		FbxDataType dataType = prop.GetPropertyDataType();
+		EFbxType typeEnum = dataType.GetType();
+
+		ImGui::Text("<%s>", cstrPropertyName);
+		ImGui::Text("\tProperty : %s", cstrPropertyName);
+		ImGui::Text("\tProperty Data type : %s", dataType.GetName());
+		
+		switch (typeEnum)
+		{
+		case fbxsdk::eFbxUndefined:
+			break;
+		case fbxsdk::eFbxUChar:
+		case fbxsdk::eFbxUShort:
+		case fbxsdk::eFbxUInt:
+		case fbxsdk::eFbxULongLong:
+		{
+			FbxULongLong value = prop.Get<FbxULongLong>();
+			ImGui::Text("\tValue : %llu", value);
+			break;
+		}
+		case fbxsdk::eFbxChar:
+		case fbxsdk::eFbxShort:
+		case fbxsdk::eFbxInt:
+		case fbxsdk::eFbxLongLong:
+		{
+			FbxLongLong value = prop.Get<FbxLongLong>();
+			ImGui::Text("\tValue : %lli", value);
+			break;
+		}
+		case fbxsdk::eFbxHalfFloat:
+		case fbxsdk::eFbxFloat:
+		case fbxsdk::eFbxDouble:
+		{
+			FbxDouble value = prop.Get<FbxDouble>();
+			ImGui::Text("\tValue : %llf", value);
+			break;
+		}
+		case fbxsdk::eFbxDouble2:
+		{
+			FbxDouble2 value = prop.Get<FbxDouble2>();
+			ImGui::Text("\tValue : (%f, %f)", value[0], value[1]);
+			break;
+		}
+		case fbxsdk::eFbxDouble3:
+		{
+			FbxDouble3 value = prop.Get<FbxDouble3>();
+			ImGui::Text("\tValue : (%f, %f, %f)", value[0], value[1], value[2]);
+			break;
+		}
+		case fbxsdk::eFbxDouble4:
+		{
+			FbxDouble4 value = prop.Get<FbxDouble4>();
+			ImGui::Text("\tValue : (%f, %f, %f, %f)", value[0], value[1], value[2], value[3]);
+			break;
+		}
+		case fbxsdk::eFbxDouble4x4:
+		{
+			FbxDouble4x4 value = prop.Get<FbxDouble4x4>();
+			ImGui::Text("\tValue : ");
+			ImGui::Text("\t%f\t%f\t%f\t%f\n\t%f\t%f\t%f\t%f\n\t%f\t%f\t%f\t%f\n\t%f\t%f\t%f\t%f", 
+				value[0][1], value[0][1], value[0][2], value[0][3],
+				value[1][1], value[1][1], value[1][2], value[1][3],
+				value[2][1], value[2][1], value[2][2], value[2][3],
+				value[3][1], value[3][1], value[3][2], value[3][3]
+			);
+			break;
+		}
+		case fbxsdk::eFbxString:
+		{
+			FbxString value = prop.Get<FbxString>();
+			ImGui::Text("\tValue : %s", (const char*)value.Buffer());
+			break;
+		}
+		case fbxsdk::eFbxBool:
+		{
+			FbxBool value = prop.Get<FbxBool>();
+
+			const char* boolalphaValue = value ? "True" : "False";
+
+			ImGui::Text("\tValue : %s", boolalphaValue);
+			break;
+		}
+		case fbxsdk::eFbxEnum:
+		case fbxsdk::eFbxEnumM:
+		case fbxsdk::eFbxTime:
+		case fbxsdk::eFbxReference:
+		case fbxsdk::eFbxBlob:
+		case fbxsdk::eFbxDistance:
+		case fbxsdk::eFbxDateTime:
+		case fbxsdk::eFbxTypeCount:
+		default:
+			ImGui::Text("\tNot Now");
+			break;
+		}
+
+		ImGui::Text("</%s>", cstrPropertyName);
+	}
+	else
+	{
+		ImGui::Text("%s is Not Valid", cstrPropertyName);
+	}
+
+	ImGui::NewLine();
+}
+
+void Importer::PrintMaterialPropertyInfoAll(FbxSurfaceMaterial* pfbxSurfaceMaterial, const char* cstrNodeName)
+{
+	FbxProperty prop = pfbxSurfaceMaterial->GetFirstProperty();
+
+	while (prop.IsValid())
+	{
+		prop.GetName();
+		FbxDataType dataType = prop.GetPropertyDataType();
+		EFbxType typeEnum = dataType.GetType();
+		const char* cstrDataTypeName = dataType.GetName();
+
+		ImGui::Text("<%s>", prop.GetName());
+		ImGui::Text("\tProperty Name : %s", prop.GetName());
+		ImGui::Text("\tProperty Data type : %s", dataType.GetName());
+
+		switch (typeEnum)
+		{
+		case fbxsdk::eFbxUndefined:
+			break;
+		case fbxsdk::eFbxUChar:
+		case fbxsdk::eFbxUShort:
+		case fbxsdk::eFbxUInt:
+		case fbxsdk::eFbxULongLong:
+		{
+			FbxULongLong value = prop.Get<FbxULongLong>();
+			ImGui::Text("\tValue : %llu", value);
+			break;
+		}
+		case fbxsdk::eFbxChar:
+		case fbxsdk::eFbxShort:
+		case fbxsdk::eFbxInt:
+		case fbxsdk::eFbxLongLong:
+		{
+			FbxLongLong value = prop.Get<FbxLongLong>();
+			ImGui::Text("\tValue : %lli", value);
+			break;
+		}
+		case fbxsdk::eFbxHalfFloat:
+		case fbxsdk::eFbxFloat:
+		case fbxsdk::eFbxDouble:
+		{
+			FbxDouble value = prop.Get<FbxDouble>();
+			ImGui::Text("\tValue : %llf", value);
+			break;
+		}
+		case fbxsdk::eFbxDouble2:
+		{
+			FbxDouble2 value = prop.Get<FbxDouble2>();
+			ImGui::Text("\tValue : (%f, %f)", value[0], value[1]);
+			break;
+		}
+		case fbxsdk::eFbxDouble3:
+		{
+			FbxDouble3 value = prop.Get<FbxDouble3>();
+			ImGui::Text("\tValue : (%f, %f, %f)", value[0], value[1], value[2]);
+			break;
+		}
+		case fbxsdk::eFbxDouble4:
+		{
+			FbxDouble4 value = prop.Get<FbxDouble4>();
+			ImGui::Text("\tValue : (%f, %f, %f, %f)", value[0], value[1], value[2], value[3]);
+			break;
+		}
+		case fbxsdk::eFbxDouble4x4:
+		{
+			FbxDouble4x4 value = prop.Get<FbxDouble4x4>();
+			ImGui::Text("\tValue : ");
+			ImGui::Text("\t%f\t%f\t%f\t%f\n\t%f\t%f\t%f\t%f\n\t%f\t%f\t%f\t%f\n\t%f\t%f\t%f\t%f",
+				value[0][1], value[0][1], value[0][2], value[0][3],
+				value[1][1], value[1][1], value[1][2], value[1][3],
+				value[2][1], value[2][1], value[2][2], value[2][3],
+				value[3][1], value[3][1], value[3][2], value[3][3]
+			);
+			break;
+		}
+		case fbxsdk::eFbxString:
+		{
+			FbxString value = prop.Get<FbxString>();
+			ImGui::Text("\tValue : %s", (const char*)value.Buffer());
+			break;
+		}
+		case fbxsdk::eFbxBool:
+		{
+			FbxBool value = prop.Get<FbxBool>();
+
+			const char* boolalphaValue = value ? "True" : "False";
+
+			ImGui::Text("\tValue : %s", boolalphaValue);
+			break;
+		}
+		case fbxsdk::eFbxEnum:
+		case fbxsdk::eFbxEnumM:
+		case fbxsdk::eFbxTime:
+		case fbxsdk::eFbxReference:
+		case fbxsdk::eFbxBlob:
+		case fbxsdk::eFbxDistance:
+		case fbxsdk::eFbxDateTime:
+		case fbxsdk::eFbxTypeCount:
+		default:
+			ImGui::Text("\tNot Now");
+			break;
+		}
+
+		if (std::strcmp(cstrDataTypeName, "Vector") == 0 || std::strcmp(cstrDataTypeName, "Color") == 0)
+		{
+			BOOL bHasTexure = HasTexture(pfbxSurfaceMaterial, prop.GetName());
+			ImGui::Text("\tIs Texture : %s", bHasTexure ? "True" : "False");
+			if (bHasTexure)
+			{
+				PrintTextureInfo(pfbxSurfaceMaterial, prop.GetName());
+			}
+		}
+
+		ImGui::Text("</%s>\n", prop.GetName());
+
+		prop = pfbxSurfaceMaterial->GetNextProperty(prop);
+	}
+}
+
+void Importer::PrintTextureInfo(FbxSurfaceMaterial* pfbxSurfaceMaterial, const char* cstrPropertyName)
+{
+	FbxProperty& reffbxProperty = pfbxSurfaceMaterial->FindProperty(cstrPropertyName);
+
+	string strcstrNodeName = cstrPropertyName + " Info"s;
+
+	if (reffbxProperty.IsValid())
+	{
+		if (ImGui::TreeNode(strcstrNodeName.c_str()))
+		{
+			ImGui::Text("Texture Property : %s -> ", cstrPropertyName);
+			ImGui::SameLine();
+
+			int nLayeredTextures = reffbxProperty.GetSrcObjectCount<FbxLayeredTexture>();
+			if (nLayeredTextures > 0)
+			{
+				ImGui::Text("has Layered Texture");
+
+				for (int i = 0; i < nLayeredTextures; i++)
+				{
+					FbxLayeredTexture* pfbxLayeredTexture = reffbxProperty.GetSrcObject<FbxLayeredTexture>();
+					int nTextures = pfbxLayeredTexture->GetSrcObjectCount<FbxTexture>();
+					for (int j = 0; j < nTextures; j++)
+					{
+						const char* cstrLayeredTextureName = pfbxLayeredTexture->GetName();
+						ImGui::Text("Texture Name : %s", cstrLayeredTextureName);
+					}
+				}
+			}
+			else
+			{
+				int nTextures = reffbxProperty.GetSrcObjectCount<FbxTexture>();
+				if (nTextures > 0)
+				{
+					ImGui::Text("has Non-Layered Texture");
+
+					for (int i = 0; i < nTextures; i++)
+					{
+						FbxTexture* pfbxTexture = reffbxProperty.GetSrcObject<FbxTexture>();
+						if (pfbxTexture)
+						{
+							const char* cstrTextureName = pfbxTexture->GetName();
+							ImGui::Text("Texture Name : %s", cstrTextureName);
+						}
+
+						FbxFileTexture* pfbxFileTexture = FbxCast<FbxFileTexture>(pfbxTexture);
+						if (pfbxFileTexture)
+						{
+							ImGui::Text("This Texture is File Texture");
+							ImGui::Text("Texture Path : %s", pfbxFileTexture->GetFileName());
+						}
+						else
+						{
+							ImGui::Text("This Texture Cannot be File Texture");
+						}
+					}
+				}
+				else
+				{
+					ImGui::Text("has no texture");
+				}
+			}
+
+			ImGui::TreePop();
+		}
+	}
+	else
+	{
+		ImGui::Text("%s property don't have Texture", cstrPropertyName);
+	}
+}
+
+BOOL Importer::HasTexture(FbxSurfaceMaterial* pfbxSurfaceMaterial, const char* cstrPropertyName)
+{
+	BOOL bResult = FALSE;
+	FbxProperty& reffbxProperty = pfbxSurfaceMaterial->FindProperty(cstrPropertyName);
+
+	if (reffbxProperty.IsValid())
+	{
+		int nLayeredTextures = reffbxProperty.GetSrcObjectCount<FbxLayeredTexture>();
+		int nNonLayeredTextures = reffbxProperty.GetSrcObjectCount<FbxTexture>();
+
+		if (nLayeredTextures != 0 || nNonLayeredTextures != 0)
+			bResult = TRUE;
+	} 
+
+	return bResult;
 }
 
 void Importer::ExportModelInSceneToModel(std::shared_ptr<Model>& pOutModel)
