@@ -27,7 +27,7 @@ private:
 	void PrintMaterialPropertyInfoAll(FbxSurfaceMaterial* pfbxSurfaceMaterial, const char* cstrNodeName);
 	void PrintTextureInfo(FbxSurfaceMaterial* pfbxSurfaceMaterial, const char* cstrPropertyName);
 
-	BOOL HasTexture(FbxSurfaceMaterial* pfbxSurfaceMaterial, const char* cstrPropertyName);
+	BOOL IsTexture(FbxSurfaceMaterial* pfbxSurfaceMaterial, const char* cstrPropertyName);
 
 	void ExportModelInSceneToModel(std::shared_ptr<Model>& pOutModel);
 

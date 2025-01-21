@@ -644,14 +644,11 @@ void Importer::PrintMaterialPropertyInfoAll(FbxSurfaceMaterial* pfbxSurfaceMater
 			break;
 		}
 
-		if (std::strcmp(cstrDataTypeName, "Vector") == 0 || std::strcmp(cstrDataTypeName, "Color") == 0)
+		BOOL bHasTexure = IsTexture(pfbxSurfaceMaterial, prop.GetName());
+		ImGui::Text("\tIs Texture : %s", bHasTexure ? "True" : "False");
+		if (bHasTexure)
 		{
-			BOOL bHasTexure = HasTexture(pfbxSurfaceMaterial, prop.GetName());
-			ImGui::Text("\tIs Texture : %s", bHasTexure ? "True" : "False");
-			if (bHasTexure)
-			{
-				PrintTextureInfo(pfbxSurfaceMaterial, prop.GetName());
-			}
+			PrintTextureInfo(pfbxSurfaceMaterial, prop.GetName());
 		}
 
 		ImGui::Text("</%s>\n", prop.GetName());
@@ -732,7 +729,7 @@ void Importer::PrintTextureInfo(FbxSurfaceMaterial* pfbxSurfaceMaterial, const c
 	}
 }
 
-BOOL Importer::HasTexture(FbxSurfaceMaterial* pfbxSurfaceMaterial, const char* cstrPropertyName)
+BOOL Importer::IsTexture(FbxSurfaceMaterial* pfbxSurfaceMaterial, const char* cstrPropertyName)
 {
 	BOOL bResult = FALSE;
 	FbxProperty& reffbxProperty = pfbxSurfaceMaterial->FindProperty(cstrPropertyName);

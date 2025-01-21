@@ -49,6 +49,9 @@
     <Filter Include="D3D11Renderer\Model\Components\Model Components">
       <UniqueIdentifier>{f5a1350a-9250-48ae-b62b-433931a3e6e8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="D3D11Renderer\Shader">
+      <UniqueIdentifier>{b80affbf-7e22-4ff4-ad36-935f7196ab9e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -207,5 +210,10 @@
     <ResourceCompile Include="ModelImporter.rc">
       <Filter>Resource</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shader\ImporterShader.hlsl">
+      <Filter>D3D11Renderer\Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

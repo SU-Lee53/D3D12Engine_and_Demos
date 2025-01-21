@@ -17,7 +17,7 @@ void Application::Initialize()
 	m_pImporter = make_unique<Importer>();
 	m_pImporter->Initialize();
 
-	m_pImporter->LoadFBXFile("../fbx/Ford GT LM Spec ll Test Car.fbx");
+	m_pImporter->LoadFBXFile("../fbx/Gunship.fbx");
 }
 
 void Application::Update()
