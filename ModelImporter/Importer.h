@@ -1,17 +1,21 @@
 #pragma once
 
 class Model;
+struct ModelNode;
 
-class Importer
+class FbxLoader
 {
 public:
-	Importer();
-	~Importer();
+	FbxLoader();
+	~FbxLoader();
 
 	BOOL Initialize();
 
 public:
 	void LoadFBXFile(std::string strFilename);
+
+#pragma region FBX_VIEWER
+public:
 	void ShowFBXNodeToImGui();
 
 private:
@@ -19,6 +23,8 @@ private:
 	void ProcessNode(FbxNode* pFbxNode, const char* cstrNodeName);
 	void PrintAttribute(FbxNodeAttribute* pfbxAttribute);
 	FbxString GetAttributeTypeName(FbxNodeAttribute::EType fbxType);
+	std::string GetFbxMappingNodeName(FbxGeometryElement::EMappingMode mappingMode);
+	std::string GetFbxReferenceNodeName(FbxGeometryElement::EReferenceMode referenceMode);
 
 	void PrintLayerInfo(FbxMesh* pfbxMesh, const char* cstrNodeName);
 	void PrintMeshInfo(FbxMesh* pfbxMesh, const char* cstrNodeName);
@@ -29,11 +35,25 @@ private:
 
 	BOOL IsTexture(FbxSurfaceMaterial* pfbxSurfaceMaterial, const char* cstrPropertyName);
 
-	void ExportModelInSceneToModel(std::shared_ptr<Model>& pOutModel);
+#pragma endregion FBX_VIEWER
+
+
+#pragma region FBX_TO_MODEL
+public:
+	void ExportModelInSceneToModel(std::shared_ptr<Model> pOutModel);
+
+private:
+	void ExportNode(std::shared_ptr<Model> pOutModel, const FbxNode* pfbxNode);
+
+	void ExportMesh(std::shared_ptr<ModelNode> pOutModelNode, const FbxNode* pfbxNode);
+	void ExportMaterial(std::shared_ptr<ModelNode> pOutModelNode, const FbxNode* pfbxNode);
+
+
+#pragma endregion FBX_TO_MODEL
+
 
 private:
 	void CleanUp();
-
 
 private:
 	// FBX SDK memory management object

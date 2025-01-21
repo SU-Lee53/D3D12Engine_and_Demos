@@ -1,6 +1,6 @@
 #pragma once
 
-class Importer;
+class FbxLoader;
 
 class Application
 {
@@ -13,7 +13,7 @@ public:
 	void Update();
 
 private:
-	std::unique_ptr<Importer> m_pImporter = nullptr;
+	std::unique_ptr<FbxLoader> m_pImporter = nullptr;
 
 	BOOL m_bShown = FALSE;
 

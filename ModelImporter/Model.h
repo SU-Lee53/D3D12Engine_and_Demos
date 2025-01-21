@@ -1,8 +1,8 @@
 #pragma once
 
-class Mesh;
-class Transform;
-class Material;
+#include "Mesh.h"
+#include "Transform.h"
+#include "Material.h"
 
 struct ModelNode
 {
@@ -10,8 +10,8 @@ struct ModelNode
 	std::unique_ptr<Transform> pTransform;
 	std::unique_ptr<Material> pMaterial;
 
-	UINT uiParentIndex;
-	std::vector<UINT> uiChildrenIndices;
+	UINT uiParentIndex = -1;
+	std::vector<UINT> uiChildrenIndices = {};
 };
 
 class Model
@@ -22,6 +22,12 @@ public:
 
 public:
 	BOOL Initialize();
+
+public:
+	std::vector<std::shared_ptr<ModelNode>>& GetModelNodes() { return m_pModelNodes; }
+
+	void AddModelNode(std::shared_ptr<ModelNode> pNode) { m_pModelNodes.push_back(pNode); }
+	std::shared_ptr<ModelNode>& GetModelNode(UINT index) { return m_pModelNodes[index]; }
 
 private:
 	std::vector<std::shared_ptr<ModelNode>> m_pModelNodes = {};

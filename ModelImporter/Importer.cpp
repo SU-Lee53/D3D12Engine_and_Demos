@@ -1,18 +1,19 @@
 #include "stdafx.h"
 #include "Importer.h"
+#include "Model.h"
 
 using namespace std;
 using namespace std::literals;
 
-Importer::Importer()
+FbxLoader::FbxLoader()
 {
 }
 
-Importer::~Importer()
+FbxLoader::~FbxLoader()
 {
 }
 
-BOOL Importer::Initialize()
+BOOL FbxLoader::Initialize()
 {
 	m_rpfbxManager = FbxManager::Create();
 	
@@ -27,7 +28,7 @@ BOOL Importer::Initialize()
 	return TRUE;
 }
 
-void Importer::LoadFBXFile(std::string strFilename)
+void FbxLoader::LoadFBXFile(std::string strFilename)
 {
 	m_strFilename = strFilename;
 	m_rpfbxImporter->Initialize(strFilename.c_str(), -1, m_rpfbxManager->GetIOSettings());
@@ -44,7 +45,7 @@ void Importer::LoadFBXFile(std::string strFilename)
 
 }
 
-void Importer::ShowFBXNodeToImGui()
+void FbxLoader::ShowFBXNodeToImGui()
 {
 	if (m_rpfbxRootNode)
 	{
@@ -53,7 +54,7 @@ void Importer::ShowFBXNodeToImGui()
 
 }
 
-void Importer::PrintTabs()
+void FbxLoader::PrintTabs()
 {
 	for (UINT i = 0; i < m_tabs; i++)
 	{
@@ -62,9 +63,8 @@ void Importer::PrintTabs()
 	}
 }
 
-void Importer::ProcessNode(FbxNode* pfbxNode, const char* cstrNodeName)
+void FbxLoader::ProcessNode(FbxNode* pfbxNode, const char* cstrNodeName)
 {
-	
 	const char* pStrcstrNodeName = pfbxNode->GetName();
 	FbxDouble3 fbxvTranslation = pfbxNode->LclTranslation.Get();
 	FbxDouble3 fbxvRotation = pfbxNode->LclRotation.Get();
@@ -111,7 +111,7 @@ void Importer::ProcessNode(FbxNode* pfbxNode, const char* cstrNodeName)
 
 }
 
-void Importer::PrintAttribute(FbxNodeAttribute* pfbxAttribute)
+void FbxLoader::PrintAttribute(FbxNodeAttribute* pfbxAttribute)
 {
 	FbxString strType = GetAttributeTypeName(pfbxAttribute->GetAttributeType());
 	FbxString strName = pfbxAttribute->GetName();
@@ -119,7 +119,7 @@ void Importer::PrintAttribute(FbxNodeAttribute* pfbxAttribute)
 	ImGui::Text("< Attribute type = '%s' name = '%s'/>\n", strType.Buffer(), strName.Buffer());
 }
 
-FbxString Importer::GetAttributeTypeName(FbxNodeAttribute::EType fbxType)
+FbxString FbxLoader::GetAttributeTypeName(FbxNodeAttribute::EType fbxType)
 {
 	switch (fbxType)
 	{
@@ -191,15 +191,58 @@ FbxString Importer::GetAttributeTypeName(FbxNodeAttribute::EType fbxType)
 
 	default:
 		__debugbreak();
+		return ("Error");
 	}
 
 	return ("Error");
 }
 
-void Importer::PrintLayerInfo(FbxMesh* pfbxMesh, const char* cstrNodeName)
+string FbxLoader::GetFbxMappingNodeName(FbxGeometryElement::EMappingMode mappingMode)
+{
+	switch (mappingMode)
+	{
+	case fbxsdk::FbxLayerElement::eNone:
+		return ("eNone");
+	case fbxsdk::FbxLayerElement::eByControlPoint:
+		return ("eByControlPoint");
+	case fbxsdk::FbxLayerElement::eByPolygonVertex:
+		return ("eByPolygonVertex");
+	case fbxsdk::FbxLayerElement::eByPolygon:
+		return ("eByPolygon");
+	case fbxsdk::FbxLayerElement::eByEdge:
+		return ("eByEdge");
+	case fbxsdk::FbxLayerElement::eAllSame:
+		return ("eAllSame");
+	default:
+		__debugbreak();
+		return ("Error");
+	}
+
+	return ("Error");
+}
+
+string FbxLoader::GetFbxReferenceNodeName(FbxGeometryElement::EReferenceMode referenceMode)
+{
+	switch (referenceMode)
+	{
+	case fbxsdk::FbxLayerElement::eDirect:
+		return ("eDirect");
+	case fbxsdk::FbxLayerElement::eIndex:
+		return ("eIndex");
+	case fbxsdk::FbxLayerElement::eIndexToDirect:
+		return ("eIndexToDirect");
+	default:
+		__debugbreak();
+		return ("Error");
+	}
+
+	return ("Error");
+}
+
+void FbxLoader::PrintLayerInfo(FbxMesh* pfbxMesh, const char* cstrNodeName)
 {
 	int layerCount = pfbxMesh->GetLayerCount();
-	ImGui::Text("< Layer Count : %d >", layerCount);
+	//ImGui::Text("< Layer Count : %d >", layerCount);
 
 	for (int i = 0; i < layerCount; i++)
 	{
@@ -236,7 +279,7 @@ void Importer::PrintLayerInfo(FbxMesh* pfbxMesh, const char* cstrNodeName)
 	
 }
 
-void Importer::PrintMeshInfo(FbxMesh* pfbxMesh, const char* cstrNodeName)
+void FbxLoader::PrintMeshInfo(FbxMesh* pfbxMesh, const char* cstrNodeName)
 {
 	string meshTreecstrNodeName = "Mesh Info | Name : " + string(cstrNodeName);
 	if (ImGui::TreeNode(meshTreecstrNodeName.c_str()))
@@ -246,9 +289,8 @@ void Importer::PrintMeshInfo(FbxMesh* pfbxMesh, const char* cstrNodeName)
 		// But, D3D supports triangle primitive only
 		// So, We need to Triangulate into 3 Vertices when Export
 		int nPolygons = pfbxMesh->GetPolygonCount();
-		ImGui::Text("Polygon Count : %d", nPolygons);
 
-		std::string strPolygonTreeName = "polygon vertices"s + " | Name : " + string(cstrNodeName);
+		std::string strPolygonTreeName = "polygon vertices"s + " | Name : " + string(cstrNodeName) + " | Count : "s + to_string(nPolygons);
 
 		if (ImGui::TreeNode(strPolygonTreeName.c_str()))
 		{
@@ -290,9 +332,8 @@ void Importer::PrintMeshInfo(FbxMesh* pfbxMesh, const char* cstrNodeName)
 
 		// Vertices
 		int nControlPoints = pfbxMesh->GetControlPointsCount();
-		ImGui::Text("Vertex Count : %d", nControlPoints);
 
-		string strVertexTreeName = "Vertex(Control Point) | Name : "s + string(cstrNodeName);
+		string strVertexTreeName = "Vertex(Control Point) | Name : "s + string(cstrNodeName) + " | Count : "s + to_string(nControlPoints);
 		if (ImGui::TreeNode(strVertexTreeName.c_str()))
 		{
 			ImGui::Text("Vertices");
@@ -305,27 +346,40 @@ void Importer::PrintMeshInfo(FbxMesh* pfbxMesh, const char* cstrNodeName)
 			ImGui::TreePop();
 		}
 
+		ImGui::Text("<Additional Datas from FbxMesh>");
+		ImGui::NewLine();
+
 		// UVs
-		int nUVs = pfbxMesh->GetElementUVCount();
-		ImGui::Text("UV Element Count : %d", nUVs);
-		if (nUVs > 0)	// if UV is valid
+		int nUVElements = pfbxMesh->GetElementUVCount();
+		ImGui::Text("UV Element Count : %d", nUVElements);
+		if (nUVElements > 0)	// if UV is valid
 		{
-			for (int i = 0; i < nUVs; i++)
+			for (int i = 0; i < nUVElements; i++)
 			{
 				FbxGeometryElementUV* uvElement = pfbxMesh->GetElementUV(0);
 
 				FbxGeometryElement::EMappingMode mappingMode = uvElement->GetMappingMode();
 				FbxGeometryElement::EReferenceMode referenceMode = uvElement->GetReferenceMode();
 
+				string strMappingMode = GetFbxMappingNodeName(mappingMode);
+				string strReferenceMode = GetFbxReferenceNodeName(referenceMode);
+
 				if (mappingMode != FbxGeometryElement::eByPolygonVertex)
 				{
-					ImGui::Text("Unsupported UV mapping mode");
-					goto lb_PrintUV_Break;	// if mappingMode is not eByPolygonVertex, Do not print UV data
+					ImGui::Text("%s : Unsupported mapping mode", strMappingMode.c_str());
+					continue;	// if mappingMode is not eByPolygonVertex, Do not print UV data
+				}
+
+				if (referenceMode == FbxGeometryElement::eIndex)
+				{
+					ImGui::Text("%s : Unsupported reference mode", strReferenceMode.c_str());
+					continue; // if referenceMode is not eDirect or eIndexToDirect, Do not print UV data
 				}
 
 				string strUVTreeName = "UV | Name : "s + string(cstrNodeName) + " #"s + to_string(i);
 				if (ImGui::TreeNode(strUVTreeName.c_str()))
 				{
+					ImGui::Text("Mapping Mode : %s\nReference Mode : %s", strMappingMode.c_str(), strReferenceMode.c_str());
 					for (int polygonIdx = 0; polygonIdx < nPolygons; polygonIdx++)
 					{
 						int polygonSize = pfbxMesh->GetPolygonSize(polygonIdx);
@@ -348,10 +402,11 @@ void Importer::PrintMeshInfo(FbxMesh* pfbxMesh, const char* cstrNodeName)
 								break;
 							}
 							case fbxsdk::FbxLayerElement::eIndex:
-								ImGui::Text("Unsupported UV reference mode");
-								goto lb_PrintUV_Break;	// if referenceMode is not eDirect or eIndexToDirect, Do not print UV data
+								__debugbreak();
+								break;
 							default:
 								__debugbreak();
+								break;
 							}
 
 							FbxVector4 fbxControlPoints = pfbxMesh->GetControlPointAt(controlPointIndex);
@@ -367,29 +422,374 @@ void Importer::PrintMeshInfo(FbxMesh* pfbxMesh, const char* cstrNodeName)
 
 		}
 
-	lb_PrintUV_Break:
-
-
 		// Normals
-		int nNormals = pfbxMesh->GetElementNormalCount();
-		ImGui::Text("Normals Count : %d", nNormals);
+		int nNormalElements = pfbxMesh->GetElementNormalCount();
+		ImGui::Text("Normal Element Count : %d", nNormalElements);
+		if (nNormalElements > 0)
+		{
+			for (int i = 0; i < nNormalElements; i++)
+			{
+				FbxGeometryElementNormal* pNormalElement = pfbxMesh->GetElementNormal(i);
+				int nNormals = pNormalElement->GetDirectArray().GetCount();
+
+				FbxGeometryElement::EMappingMode mappingMode = pNormalElement->GetMappingMode();
+				FbxGeometryElement::EReferenceMode referenceMode = pNormalElement->GetReferenceMode();
+
+				string strMappingMode = GetFbxMappingNodeName(mappingMode);
+				string strReferenceMode = GetFbxReferenceNodeName(referenceMode);
+
+				if (mappingMode != FbxGeometryElement::eByPolygonVertex)
+				{
+					ImGui::Text("%s : Unsupported mapping mode", strMappingMode.c_str());
+					continue;	// if mappingMode is not eByPolygonVertex, Do not print UV data
+				}
+
+				if (referenceMode == FbxGeometryElement::eIndex)
+				{
+					ImGui::Text("%s : Unsupported reference mode", strReferenceMode.c_str());
+					continue; // if referenceMode is not eDirect or eIndexToDirect, Do not print UV data
+				}
+
+				string strNormalTreeName = "Normal | Name : "s + string(cstrNodeName) + " #"s + to_string(i) + " | Count : "s + to_string(nNormals);
+				if (ImGui::TreeNode(strNormalTreeName.c_str()))
+				{
+					ImGui::Text("Mapping Mode : %s\nReference Mode : %s", strMappingMode.c_str(), strReferenceMode.c_str());
+					for (int polygonIdx = 0; polygonIdx < nPolygons; polygonIdx++)
+					{
+						int polygonSize = pfbxMesh->GetPolygonSize(polygonIdx);
+						for (int vertexIdx = 0; vertexIdx < polygonSize; vertexIdx++)
+						{
+							int controlPointIndex = pfbxMesh->GetPolygonVertex(polygonIdx, vertexIdx);
+							FbxVector4 normal;
+
+							switch (referenceMode)
+							{
+							case fbxsdk::FbxLayerElement::eDirect:
+							{
+								normal = pNormalElement->GetDirectArray().GetAt(controlPointIndex);
+								break;
+							}
+							case fbxsdk::FbxLayerElement::eIndexToDirect:
+							{
+								int uvIndex = pNormalElement->GetIndexArray().GetAt(controlPointIndex);
+								normal = pNormalElement->GetDirectArray().GetAt(uvIndex);
+								break;
+							}
+							case fbxsdk::FbxLayerElement::eIndex:
+								__debugbreak();
+								break;
+							default:
+								__debugbreak();
+								break;
+							}
+
+							FbxVector4 fbxControlPoints = pfbxMesh->GetControlPointAt(controlPointIndex);
+							ImGui::Text("Polygon : %d\t", polygonIdx); ImGui::SameLine();
+							ImGui::Text("Vertex : %d (#%d : {%f, %f, %f})\t", vertexIdx, controlPointIndex, fbxControlPoints[0], fbxControlPoints[1], fbxControlPoints[2]); ImGui::SameLine();
+							ImGui::Text("Normal : (%f, %f, %f, %f)", normal[0], normal[1], normal[2], normal[3]);
+						}
+						ImGui::NewLine();
+					}
+					ImGui::TreePop();
+				}
+			}
+		}
+
 
 		// Binormals
-		int nBinormals = pfbxMesh->GetElementBinormalCount();
-		ImGui::Text("Binormals Count : %d", nBinormals);
+		int nBinormalElements = pfbxMesh->GetElementBinormalCount();
+		ImGui::Text("Binormals Count : %d", nBinormalElements);
+		if (nBinormalElements)
+		{
+			for (int i = 0; i < nBinormalElements; i++)
+			{
+				FbxGeometryElementBinormal* pBinormalElement = pfbxMesh->GetElementBinormal(i);
+				int nBinormals = pBinormalElement->GetDirectArray().GetCount();
+
+				FbxGeometryElement::EMappingMode mappingMode = pBinormalElement->GetMappingMode();
+				FbxGeometryElement::EReferenceMode referenceMode = pBinormalElement->GetReferenceMode();
+
+				string strMappingMode = GetFbxMappingNodeName(mappingMode);
+				string strReferenceMode = GetFbxReferenceNodeName(referenceMode);
+
+				if (mappingMode != FbxGeometryElement::eByPolygonVertex)
+				{
+					ImGui::Text("%s : Unsupported mapping mode", strMappingMode.c_str());
+					continue;	// if mappingMode is not eByPolygonVertex, Do not print UV data
+				}
+
+				if (referenceMode == FbxGeometryElement::eIndex)
+				{
+					ImGui::Text("%s : Unsupported reference mode", strReferenceMode.c_str());
+					continue; // if referenceMode is not eDirect or eIndexToDirect, Do not print UV data
+				}
+
+				string strBinormalTreeName = "Binormal | Name : "s + string(cstrNodeName) + " #"s + to_string(i) + " | Count : "s + to_string(nBinormals);
+				if (ImGui::TreeNode(strBinormalTreeName.c_str()))
+				{
+					ImGui::Text("Mapping Mode : %s\nReference Mode : %s", strMappingMode.c_str(), strReferenceMode.c_str());
+					for (int polygonIdx = 0; polygonIdx < nPolygons; polygonIdx++)
+					{
+						int polygonSize = pfbxMesh->GetPolygonSize(polygonIdx);
+						for (int vertexIdx = 0; vertexIdx < polygonSize; vertexIdx++)
+						{
+							int controlPointIndex = pfbxMesh->GetPolygonVertex(polygonIdx, vertexIdx);
+							FbxVector4 Binormal;
+
+							switch (referenceMode)
+							{
+							case fbxsdk::FbxLayerElement::eDirect:
+							{
+								Binormal = pBinormalElement->GetDirectArray().GetAt(controlPointIndex);
+								break;
+							}
+							case fbxsdk::FbxLayerElement::eIndexToDirect:
+							{
+								int uvIndex = pBinormalElement->GetIndexArray().GetAt(controlPointIndex);
+								Binormal = pBinormalElement->GetDirectArray().GetAt(uvIndex);
+								break;
+							}
+							case fbxsdk::FbxLayerElement::eIndex:
+								__debugbreak();
+								break;
+							default:
+								__debugbreak();
+								break;
+							}
+
+							FbxVector4 fbxControlPoints = pfbxMesh->GetControlPointAt(controlPointIndex);
+							ImGui::Text("Polygon : %d\t", polygonIdx); ImGui::SameLine();
+							ImGui::Text("Vertex : %d (#%d : {%f, %f, %f})\t", vertexIdx, controlPointIndex, fbxControlPoints[0], fbxControlPoints[1], fbxControlPoints[2]); ImGui::SameLine();
+							ImGui::Text("Binormal : (%f, %f, %f, %f)", Binormal[0], Binormal[1], Binormal[2], Binormal[3]);
+						}
+						ImGui::NewLine();
+					}
+					ImGui::TreePop();
+				}
+			}
+		}
 
 		// Tangents
-		int nTangents = pfbxMesh->GetElementTangentCount();
-		ImGui::Text("Tangents Count : %d", nTangents);
+		int nTangentElements = pfbxMesh->GetElementTangentCount();
+		ImGui::Text("Tangents Count : %d", nTangentElements);
+		if (nTangentElements > 0)
+		{
+			for (int i = 0; i < nTangentElements; i++)
+			{
+				FbxGeometryElementTangent* pTangentElement = pfbxMesh->GetElementTangent(i);
+				int nTangents = pTangentElement->GetDirectArray().GetCount();
+
+				FbxGeometryElement::EMappingMode mappingMode = pTangentElement->GetMappingMode();
+				FbxGeometryElement::EReferenceMode referenceMode = pTangentElement->GetReferenceMode();
+
+				string strMappingMode = GetFbxMappingNodeName(mappingMode);
+				string strReferenceMode = GetFbxReferenceNodeName(referenceMode);
+
+				if (mappingMode != FbxGeometryElement::eByPolygonVertex)
+				{
+					ImGui::Text("%s : Unsupported mapping mode", strMappingMode.c_str());
+					continue;	// if mappingMode is not eByPolygonVertex, Do not print UV data
+				}
+
+				if (referenceMode == FbxGeometryElement::eIndex)
+				{
+					ImGui::Text("%s : Unsupported reference mode", strReferenceMode.c_str());
+					continue; // if referenceMode is not eDirect or eIndexToDirect, Do not print UV data
+				}
+
+				string strTangentTreeName = "Tangent | Name : "s + string(cstrNodeName) + " #"s + to_string(i) + " | Count : "s + to_string(nTangents);
+				if (ImGui::TreeNode(strTangentTreeName.c_str()))
+				{
+					ImGui::Text("Mapping Mode : %s\nReference Mode : %s", strMappingMode.c_str(), strReferenceMode.c_str());
+					for (int polygonIdx = 0; polygonIdx < nPolygons; polygonIdx++)
+					{
+						int polygonSize = pfbxMesh->GetPolygonSize(polygonIdx);
+						for (int vertexIdx = 0; vertexIdx < polygonSize; vertexIdx++)
+						{
+							int controlPointIndex = pfbxMesh->GetPolygonVertex(polygonIdx, vertexIdx);
+							FbxVector4 Tangent;
+
+							switch (referenceMode)
+							{
+							case fbxsdk::FbxLayerElement::eDirect:
+							{
+								Tangent = pTangentElement->GetDirectArray().GetAt(controlPointIndex);
+								break;
+							}
+							case fbxsdk::FbxLayerElement::eIndexToDirect:
+							{
+								int uvIndex = pTangentElement->GetIndexArray().GetAt(controlPointIndex);
+								Tangent = pTangentElement->GetDirectArray().GetAt(uvIndex);
+								break;
+							}
+							case fbxsdk::FbxLayerElement::eIndex:
+								__debugbreak();
+								break;
+							default:
+								__debugbreak();
+								break;
+							}
+
+							FbxVector4 fbxControlPoints = pfbxMesh->GetControlPointAt(controlPointIndex);
+							ImGui::Text("Polygon : %d\t", polygonIdx); ImGui::SameLine();
+							ImGui::Text("Vertex : %d (#%d : {%f, %f, %f})\t", vertexIdx, controlPointIndex, fbxControlPoints[0], fbxControlPoints[1], fbxControlPoints[2]); ImGui::SameLine();
+							ImGui::Text("Tangent : (%f, %f, %f, %f)", Tangent[0], Tangent[1], Tangent[2], Tangent[3]);
+						}
+						ImGui::NewLine();
+					}
+					ImGui::TreePop();
+				}
+			}
+		}
 
 		// Vertex Color
-		int nVertexColor = pfbxMesh->GetElementVertexColorCount();
-		ImGui::Text("Vertex Color Count : %d", nVertexColor);
+		int nVertexColorElements = pfbxMesh->GetElementVertexColorCount();
+		ImGui::Text("Vertex Color Count : %d", nVertexColorElements);
+		if (nVertexColorElements > 0)
+		{
+			for (int i = 0; i < nVertexColorElements; i++)
+			{
+				FbxGeometryElementVertexColor* pVtxColorElement = pfbxMesh->GetElementVertexColor(i);
+				int nVertexColors = pVtxColorElement->GetDirectArray().GetCount();
 
-		// Smoothing : dunno this works
-		int nSmoothing = pfbxMesh->GetElementSmoothingCount();
-		ImGui::Text("Smoothing Count : %d", nSmoothing);
+				FbxGeometryElement::EMappingMode mappingMode = pVtxColorElement->GetMappingMode();
+				FbxGeometryElement::EReferenceMode referenceMode = pVtxColorElement->GetReferenceMode();
 
+				string strMappingMode = GetFbxMappingNodeName(mappingMode);
+				string strReferenceMode = GetFbxReferenceNodeName(referenceMode);
+
+				if (mappingMode != FbxGeometryElement::eByPolygonVertex)
+				{
+					ImGui::Text("%s : Unsupported mapping mode", strMappingMode.c_str());
+					continue;	// if mappingMode is not eByPolygonVertex, Do not print UV data
+				}
+
+				if (referenceMode == FbxGeometryElement::eIndex)
+				{
+					ImGui::Text("%s : Unsupported reference mode", strReferenceMode.c_str());
+					continue; // if referenceMode is not eDirect or eIndexToDirect, Do not print UV data
+				}
+
+				string strVtxColorTreeName = "VtxColor | Name : "s + string(cstrNodeName) + " #"s + to_string(i);
+				if (ImGui::TreeNode(strVtxColorTreeName.c_str()))
+				{
+					ImGui::Text("Mapping Mode : %s\nReference Mode : %s", strMappingMode.c_str(), strReferenceMode.c_str());
+					for (int polygonIdx = 0; polygonIdx < nPolygons; polygonIdx++)
+					{
+						int polygonSize = pfbxMesh->GetPolygonSize(polygonIdx);
+						for (int vertexIdx = 0; vertexIdx < polygonSize; vertexIdx++)
+						{
+							int controlPointIndex = pfbxMesh->GetPolygonVertex(polygonIdx, vertexIdx);
+							FbxColor VtxColor;
+
+							switch (referenceMode)
+							{
+							case fbxsdk::FbxLayerElement::eDirect:
+							{
+								VtxColor = pVtxColorElement->GetDirectArray().GetAt(controlPointIndex);
+								break;
+							}
+							case fbxsdk::FbxLayerElement::eIndexToDirect:
+							{
+								int VtxColorIndex = pVtxColorElement->GetIndexArray().GetAt(controlPointIndex);
+								VtxColor = pVtxColorElement->GetDirectArray().GetAt(VtxColorIndex);
+								break;
+							}
+							case fbxsdk::FbxLayerElement::eIndex:
+								__debugbreak();
+								break;
+							default:
+								__debugbreak();
+								break;
+							}
+
+							FbxVector4 fbxControlPoints = pfbxMesh->GetControlPointAt(controlPointIndex);
+							ImGui::Text("Polygon : %d\t", polygonIdx); ImGui::SameLine();
+							ImGui::Text("Vertex : %d (#%d : {%f, %f, %f})\t", vertexIdx, controlPointIndex, fbxControlPoints[0], fbxControlPoints[1], fbxControlPoints[2]); ImGui::SameLine();
+							ImGui::Text("VtxColor : (%f, %f, %f, %f)", VtxColor.mRed, VtxColor.mGreen, VtxColor.mBlue, VtxColor.mAlpha);
+						}
+						ImGui::NewLine();
+					}
+					ImGui::TreePop();
+				}
+			}
+		}
+
+		// Smoothing : dunno this works -> Probably used in animation
+		/*
+		int nSmoothingElements = pfbxMesh->GetElementSmoothingCount();
+		ImGui::Text("Smoothing Count : %d", nSmoothingElements);
+		if (nSmoothingElements > 0)
+		{
+			for (int i = 0; i < nSmoothingElements; i++)
+			{
+				FbxGeometryElementSmoothing* pSmoothingElement = pfbxMesh->GetElementSmoothing(i);
+
+				int nSmoothings = pSmoothingElement->GetDirectArray().GetCount();
+
+				FbxGeometryElement::EMappingMode mappingMode = pSmoothingElement->GetMappingMode();
+				FbxGeometryElement::EReferenceMode referenceMode = pSmoothingElement->GetReferenceMode();
+
+				string strMappingMode = GetFbxMappingNodeName(mappingMode);
+				string strReferenceMode = GetFbxReferenceNodeName(referenceMode);
+
+				if (mappingMode != FbxGeometryElement::eByPolygonVertex)
+				{
+					ImGui::Text("%s : Unsupported mapping mode", strMappingMode.c_str());
+					continue;	// if mappingMode is not eByPolygonVertex, Do not print UV data
+				}
+
+				if (referenceMode == FbxGeometryElement::eIndex)
+				{
+					ImGui::Text("%s : Unsupported reference mode", strReferenceMode.c_str());
+					continue; // if referenceMode is not eDirect or eIndexToDirect, Do not print UV data
+				}
+
+				string strSmoothingTreeName = "Smoothing | Name : "s + string(cstrNodeName) + " #"s + to_string(i);
+				if (ImGui::TreeNode(strSmoothingTreeName.c_str()))
+				{
+					ImGui::Text("Mapping Mode : %s\nReference Mode : %s", strMappingMode.c_str(), strReferenceMode.c_str());
+					for (int polygonIdx = 0; polygonIdx < nPolygons; polygonIdx++)
+					{
+						int polygonSize = pfbxMesh->GetPolygonSize(polygonIdx);
+						for (int vertexIdx = 0; vertexIdx < polygonSize; vertexIdx++)
+						{
+							int controlPointIndex = pfbxMesh->GetPolygonVertex(polygonIdx, vertexIdx);
+							int Smoothing;
+
+							switch (referenceMode)
+							{
+							case fbxsdk::FbxLayerElement::eDirect:
+							{
+								Smoothing = pSmoothingElement->GetDirectArray().GetAt(controlPointIndex);
+								break;
+							}
+							case fbxsdk::FbxLayerElement::eIndexToDirect:
+							{
+								int SmoothingIndex = pSmoothingElement->GetIndexArray().GetAt(controlPointIndex);
+								Smoothing = pSmoothingElement->GetDirectArray().GetAt(SmoothingIndex);
+								break;
+							}
+							case fbxsdk::FbxLayerElement::eIndex:
+								__debugbreak();
+								break;
+							default:
+								__debugbreak();
+								break;
+							}
+
+							FbxVector4 fbxControlPoints = pfbxMesh->GetControlPointAt(controlPointIndex);
+							ImGui::Text("Polygon : %d\t", polygonIdx); ImGui::SameLine();
+							ImGui::Text("Vertex : %d (#%d : {%f, %f, %f})\t", vertexIdx, controlPointIndex, fbxControlPoints[0], fbxControlPoints[1], fbxControlPoints[2]); ImGui::SameLine();
+							ImGui::Text("Smoothing : %d", Smoothing);
+						}
+						ImGui::NewLine();
+					}
+					ImGui::TreePop();
+				}
+			}
+		}
+		*/
 
 
 		ImGui::TreePop();
@@ -397,7 +797,7 @@ void Importer::PrintMeshInfo(FbxMesh* pfbxMesh, const char* cstrNodeName)
 
 }
 
-void Importer::PrintSurfaceMaterialInfo(FbxNode* pfbxNode, const char* cstrNodeName)
+void FbxLoader::PrintSurfaceMaterialInfo(FbxNode* pfbxNode, const char* cstrNodeName)
 {
 	int nMaterials = pfbxNode->GetMaterialCount();
 
@@ -430,7 +830,7 @@ void Importer::PrintSurfaceMaterialInfo(FbxNode* pfbxNode, const char* cstrNodeN
 
 }
 
-void Importer::PrintMaterialPropertyInfo(FbxSurfaceMaterial* pfbxSurfaceMaterial, const char* cstrPropertyName, const char* cstrNodeName)
+void FbxLoader::PrintMaterialPropertyInfo(FbxSurfaceMaterial* pfbxSurfaceMaterial, const char* cstrPropertyName, const char* cstrNodeName)
 {
 	FbxProperty& prop = pfbxSurfaceMaterial->FindProperty(cstrPropertyName);
 
@@ -541,7 +941,7 @@ void Importer::PrintMaterialPropertyInfo(FbxSurfaceMaterial* pfbxSurfaceMaterial
 	ImGui::NewLine();
 }
 
-void Importer::PrintMaterialPropertyInfoAll(FbxSurfaceMaterial* pfbxSurfaceMaterial, const char* cstrNodeName)
+void FbxLoader::PrintMaterialPropertyInfoAll(FbxSurfaceMaterial* pfbxSurfaceMaterial, const char* cstrNodeName)
 {
 	FbxProperty prop = pfbxSurfaceMaterial->GetFirstProperty();
 
@@ -657,7 +1057,7 @@ void Importer::PrintMaterialPropertyInfoAll(FbxSurfaceMaterial* pfbxSurfaceMater
 	}
 }
 
-void Importer::PrintTextureInfo(FbxSurfaceMaterial* pfbxSurfaceMaterial, const char* cstrPropertyName)
+void FbxLoader::PrintTextureInfo(FbxSurfaceMaterial* pfbxSurfaceMaterial, const char* cstrPropertyName)
 {
 	FbxProperty& reffbxProperty = pfbxSurfaceMaterial->FindProperty(cstrPropertyName);
 
@@ -729,7 +1129,7 @@ void Importer::PrintTextureInfo(FbxSurfaceMaterial* pfbxSurfaceMaterial, const c
 	}
 }
 
-BOOL Importer::IsTexture(FbxSurfaceMaterial* pfbxSurfaceMaterial, const char* cstrPropertyName)
+BOOL FbxLoader::IsTexture(FbxSurfaceMaterial* pfbxSurfaceMaterial, const char* cstrPropertyName)
 {
 	BOOL bResult = FALSE;
 	FbxProperty& reffbxProperty = pfbxSurfaceMaterial->FindProperty(cstrPropertyName);
@@ -746,11 +1146,39 @@ BOOL Importer::IsTexture(FbxSurfaceMaterial* pfbxSurfaceMaterial, const char* cs
 	return bResult;
 }
 
-void Importer::ExportModelInSceneToModel(std::shared_ptr<Model>& pOutModel)
+void FbxLoader::ExportModelInSceneToModel(std::shared_ptr<Model> pOutModel)
+{
+	if (m_rpfbxRootNode)
+	{
+		for (int i = 0; i < m_rpfbxRootNode->GetChildCount(); i++)
+			ExportNode(pOutModel, m_rpfbxRootNode->GetChild(i));
+	}
+}
+
+void FbxLoader::ExportNode(std::shared_ptr<Model> pOutModel, const FbxNode* pfbxNode)
+{
+	shared_ptr<ModelNode> pModelNode = make_shared<ModelNode>();
+
+	ExportMesh(pModelNode, pfbxNode);
+	ExportMaterial(pModelNode, pfbxNode);
+
+	pOutModel->AddModelNode(pModelNode);
+
+	for (int i = 0; i < pfbxNode->GetChildCount(); i++)
+	{
+		ExportNode(pOutModel, m_rpfbxRootNode->GetChild(i));
+	}
+}
+
+void FbxLoader::ExportMesh(std::shared_ptr<ModelNode> pOutModelNode, const FbxNode* pfbxNode)
 {
 }
 
-void Importer::CleanUp()
+void FbxLoader::ExportMaterial(std::shared_ptr<ModelNode> pOutModelNode, const FbxNode* pfbxNode)
+{
+}
+
+void FbxLoader::CleanUp()
 {
 	m_rpfbxRootNode->Destroy();
 	m_rpfbxScene->Destroy();

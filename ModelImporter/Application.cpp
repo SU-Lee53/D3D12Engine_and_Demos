@@ -14,10 +14,10 @@ Application::~Application()
 
 void Application::Initialize()
 {
-	m_pImporter = make_unique<Importer>();
+	m_pImporter = make_unique<FbxLoader>();
 	m_pImporter->Initialize();
 
-	m_pImporter->LoadFBXFile("../fbx/Gunship.fbx");
+	m_pImporter->LoadFBXFile("../fbx/pool_last.fbx");
 }
 
 void Application::Update()
