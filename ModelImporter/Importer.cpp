@@ -296,16 +296,16 @@ void FbxLoader::PrintMeshInfo(FbxMesh* pfbxMesh, const char* cstrNodeName)
 		{
 			for (int i = 0; i < nPolygons; i++)
 			{
+				ImGui::NewLine();
 				ImGui::Text("polygon index : %d", i);
 				int nPolygonSize = pfbxMesh->GetPolygonSize(i);
 				ImGui::Text("polygon size : %d", nPolygonSize);
 
-				ImGui::NewLine();
 				for (int j = 0; j < nPolygonSize; j++)
 				{
-					int vtx = pfbxMesh->GetPolygonVertex(i, j);
-					ImGui::SameLine();
-					ImGui::Text("%d", vtx);
+					int vtxIdx = pfbxMesh->GetPolygonVertex(i, j);
+					FbxVector4 vtx = pfbxMesh->GetControlPointAt(vtxIdx);
+					ImGui::Text("%d : (%f, %f, %f, %f)", vtxIdx, vtx[0], vtx[1], vtx[2], vtx[3]);
 				}
 
 				// if Polygon Size is bigger then 4, Do Triangulate
@@ -324,7 +324,6 @@ void FbxLoader::PrintMeshInfo(FbxMesh* pfbxMesh, const char* cstrNodeName)
 						ImGui::TreePop();
 					}
 				}
-
 			}
 
 			ImGui::TreePop();
@@ -341,6 +340,220 @@ void FbxLoader::PrintMeshInfo(FbxMesh* pfbxMesh, const char* cstrNodeName)
 			{
 				FbxVector4 fbxControlPoints = pfbxMesh->GetControlPointAt(i);
 				ImGui::Text("%d : (%f, %f, %f, %f)", i, fbxControlPoints[0], fbxControlPoints[1], fbxControlPoints[2], fbxControlPoints[3]);
+
+				int nUVElements = pfbxMesh->GetElementUVCount();
+				int nNormalElements = pfbxMesh->GetElementNormalCount();
+				int nBinormalElements = pfbxMesh->GetElementBinormalCount();
+				int nTangentElements = pfbxMesh->GetElementTangentCount();
+
+				FbxGeometryElementUV* uvElement = nullptr;
+				FbxGeometryElementNormal* normalElement = nullptr;
+				FbxGeometryElementBinormal* binormalElement = nullptr;
+				FbxGeometryElementTangent* tangentElement = nullptr;
+
+				if (nUVElements > 0)
+					uvElement = pfbxMesh->GetElementUV();
+
+				if (nNormalElements > 0)
+					normalElement = pfbxMesh->GetElementNormal();
+
+				if (nBinormalElements > 0)
+					binormalElement = pfbxMesh->GetElementBinormal();
+
+				if (nTangentElements > 0)
+					tangentElement = pfbxMesh->GetElementTangent();
+
+				if (uvElement)
+				{
+					ImGui::SameLine();
+					FbxGeometryElement::EMappingMode mappingMode = uvElement->GetMappingMode();
+					FbxGeometryElement::EReferenceMode referenceMode = uvElement->GetReferenceMode();
+
+					string strMappingMode = GetFbxMappingNodeName(mappingMode);
+					string strReferenceMode = GetFbxReferenceNodeName(referenceMode);
+
+					if (mappingMode != FbxGeometryElement::eByPolygonVertex)
+					{
+						ImGui::Text("%s : Unsupported mapping mode", strMappingMode.c_str());
+						continue;	// if mappingMode is not eByPolygonVertex, Do not print UV data
+					}
+
+					if (referenceMode == FbxGeometryElement::eIndex)
+					{
+						ImGui::Text("%s : Unsupported reference mode", strReferenceMode.c_str());
+						continue; // if referenceMode is not eDirect or eIndexToDirect, Do not print UV data
+					}
+
+					FbxVector2 uv;
+
+					switch (referenceMode)
+					{
+					case fbxsdk::FbxLayerElement::eDirect:
+					{
+						uv = uvElement->GetDirectArray().GetAt(i);
+						break;
+					}
+					case fbxsdk::FbxLayerElement::eIndexToDirect:
+					{
+						int uvIndex = uvElement->GetIndexArray().GetAt(i);
+						uv = uvElement->GetDirectArray().GetAt(uvIndex);
+						break;
+					}
+					case fbxsdk::FbxLayerElement::eIndex:
+						__debugbreak();
+						break;
+					default:
+						__debugbreak();
+						break;
+					}
+
+					ImGui::Text("\t| UV : (%f, %f)", uv[0], uv[1]);
+				}
+
+				if (normalElement)
+				{
+					ImGui::SameLine();
+
+					FbxGeometryElement::EMappingMode mappingMode = normalElement->GetMappingMode();
+					FbxGeometryElement::EReferenceMode referenceMode = normalElement->GetReferenceMode();
+
+					string strMappingMode = GetFbxMappingNodeName(mappingMode);
+					string strReferenceMode = GetFbxReferenceNodeName(referenceMode);
+
+					if (mappingMode != FbxGeometryElement::eByPolygonVertex)
+					{
+						ImGui::Text("%s : Unsupported mapping mode", strMappingMode.c_str());
+						continue;	// if mappingMode is not eByPolygonVertex, Do not print UV data
+					}
+
+					if (referenceMode == FbxGeometryElement::eIndex)
+					{
+						ImGui::Text("%s : Unsupported reference mode", strReferenceMode.c_str());
+						continue; // if referenceMode is not eDirect or eIndexToDirect, Do not print UV data
+					}
+
+					FbxVector4 normal;
+
+					switch (referenceMode)
+					{
+					case fbxsdk::FbxLayerElement::eDirect:
+					{
+						normal = normalElement->GetDirectArray().GetAt(i);
+						break;
+					}
+					case fbxsdk::FbxLayerElement::eIndexToDirect:
+					{
+						int normalIndex = normalElement->GetIndexArray().GetAt(i);
+						normal = normalElement->GetDirectArray().GetAt(normalIndex);
+						break;
+					}
+					case fbxsdk::FbxLayerElement::eIndex:
+						__debugbreak();
+						break;
+					default:
+						__debugbreak();
+						break;
+					}
+
+					ImGui::Text("\t| Normal : (%f, %f, %f, %f)", normal[0], normal[1], normal[2], normal[3]);
+				}
+
+				if (binormalElement)
+				{
+					ImGui::SameLine();
+
+					FbxGeometryElement::EMappingMode mappingMode = binormalElement->GetMappingMode();
+					FbxGeometryElement::EReferenceMode referenceMode = binormalElement->GetReferenceMode();
+
+					string strMappingMode = GetFbxMappingNodeName(mappingMode);
+					string strReferenceMode = GetFbxReferenceNodeName(referenceMode);
+
+					if (mappingMode != FbxGeometryElement::eByPolygonVertex)
+					{
+						ImGui::Text("%s : Unsupported mapping mode", strMappingMode.c_str());
+						continue;	// if mappingMode is not eByPolygonVertex, Do not print UV data
+					}
+
+					if (referenceMode == FbxGeometryElement::eIndex)
+					{
+						ImGui::Text("%s : Unsupported reference mode", strReferenceMode.c_str());
+						continue; // if referenceMode is not eDirect or eIndexToDirect, Do not print UV data
+					}
+
+					FbxVector4 binormal;
+
+					switch (referenceMode)
+					{
+					case fbxsdk::FbxLayerElement::eDirect:
+					{
+						binormal = binormalElement->GetDirectArray().GetAt(i);
+						break;
+					}
+					case fbxsdk::FbxLayerElement::eIndexToDirect:
+					{
+						int binormalIndex = binormalElement->GetIndexArray().GetAt(i);
+						binormal = binormalElement->GetDirectArray().GetAt(binormalIndex);
+						break;
+					}
+					case fbxsdk::FbxLayerElement::eIndex:
+						__debugbreak();
+						break;
+					default:
+						__debugbreak();
+						break;
+					}
+
+					ImGui::Text("\t| Binormal : (%f, %f, %f, %f)", binormal[0], binormal[1], binormal[2], binormal[3]);
+				}
+				
+				if (tangentElement)
+				{
+					ImGui::SameLine();
+
+					FbxGeometryElement::EMappingMode mappingMode = tangentElement->GetMappingMode();
+					FbxGeometryElement::EReferenceMode referenceMode = tangentElement->GetReferenceMode();
+
+					string strMappingMode = GetFbxMappingNodeName(mappingMode);
+					string strReferenceMode = GetFbxReferenceNodeName(referenceMode);
+
+					if (mappingMode != FbxGeometryElement::eByPolygonVertex)
+					{
+						ImGui::Text("%s : Unsupported mapping mode", strMappingMode.c_str());
+						continue;	// if mappingMode is not eByPolygonVertex, Do not print UV data
+					}
+
+					if (referenceMode == FbxGeometryElement::eIndex)
+					{
+						ImGui::Text("%s : Unsupported reference mode", strReferenceMode.c_str());
+						continue; // if referenceMode is not eDirect or eIndexToDirect, Do not print UV data
+					}
+
+					FbxVector4 tangent;
+
+					switch (referenceMode)
+					{
+					case fbxsdk::FbxLayerElement::eDirect:
+					{
+						tangent = tangentElement->GetDirectArray().GetAt(i);
+						break;
+					}
+					case fbxsdk::FbxLayerElement::eIndexToDirect:
+					{
+						int tangentIndex = tangentElement->GetIndexArray().GetAt(i);
+						tangent = tangentElement->GetDirectArray().GetAt(tangentIndex);
+						break;
+					}
+					case fbxsdk::FbxLayerElement::eIndex:
+						__debugbreak();
+						break;
+					default:
+						__debugbreak();
+						break;
+					}
+
+					ImGui::Text("\t| Tangent : (%f, %f, %f, %f)", tangent[0], tangent[1], tangent[2], tangent[3]);
+				}
+
 			}
 
 			ImGui::TreePop();
@@ -494,7 +707,6 @@ void FbxLoader::PrintMeshInfo(FbxMesh* pfbxMesh, const char* cstrNodeName)
 				}
 			}
 		}
-
 
 		// Binormals
 		int nBinormalElements = pfbxMesh->GetElementBinormalCount();
@@ -1155,26 +1367,298 @@ void FbxLoader::ExportModelInSceneToModel(std::shared_ptr<Model> pOutModel)
 	}
 }
 
-void FbxLoader::ExportNode(std::shared_ptr<Model> pOutModel, const FbxNode* pfbxNode)
+void FbxLoader::ExportNode(std::shared_ptr<Model> pOutModel, FbxNode* pfbxNode)
 {
 	shared_ptr<ModelNode> pModelNode = make_shared<ModelNode>();
 
-	ExportMesh(pModelNode, pfbxNode);
+	// Transform
+	FbxDouble3 fbxvTranslation = pfbxNode->LclTranslation.Get();
+	FbxDouble3 fbxvRotation = pfbxNode->LclRotation.Get();
+	FbxDouble3 fbxvScaling = pfbxNode->LclScaling.Get();
+
+	pModelNode->pTransform->SetLocalPosition(XMFLOAT3(fbxvTranslation[0], fbxvTranslation[1], fbxvTranslation[2]));
+	pModelNode->pTransform->SetLocalRotation(XMFLOAT3(fbxvRotation[0], fbxvRotation[1], fbxvRotation[2]));
+	pModelNode->pTransform->SetLocalScale(XMFLOAT3(fbxvScaling[0], fbxvScaling[1], fbxvScaling[2]));
+
+	// Mesh, Material
+	ExportMesh(pModelNode, pfbxNode->GetMesh());
 	ExportMaterial(pModelNode, pfbxNode);
 
 	pOutModel->AddModelNode(pModelNode);
 
 	for (int i = 0; i < pfbxNode->GetChildCount(); i++)
 	{
-		ExportNode(pOutModel, m_rpfbxRootNode->GetChild(i));
+		ExportNode(pOutModel, pfbxNode->GetChild(i));
 	}
 }
 
-void FbxLoader::ExportMesh(std::shared_ptr<ModelNode> pOutModelNode, const FbxNode* pfbxNode)
+void FbxLoader::ExportMesh(std::shared_ptr<ModelNode> pOutModelNode, FbxMesh* pfbxMesh)
 {
+	vector<VertexType>	vertices = {};
+	vector<UINT>		indices = {};
+
+	// Indices first
+	int nPolygons = pfbxMesh->GetPolygonCount();
+	size_t nIndices = nPolygons * 3;
+	for (int i = 0; i < nPolygons; i++)
+	{
+		int nPolygonSize = pfbxMesh->GetPolygonSize(i);
+		for (int j = 1; j < nPolygonSize - 1; j++)
+		{
+			UINT index0 = pfbxMesh->GetPolygonVertex(i, 0);
+			UINT index1 = pfbxMesh->GetPolygonVertex(i, j);
+			UINT index2 = pfbxMesh->GetPolygonVertex(i, j + 1);
+			indices.push_back(index0);
+			indices.push_back(index1);
+			indices.push_back(index2);
+		}
+	}
+
+	// Vertices Next
+	// Other Input Varibles are loaded in same time
+	int nVertices = pfbxMesh->GetControlPointsCount();
+
+	for (int i = 0; i < nVertices; i++)
+	{
+		VertexType vtx = {};
+
+		// Vertex
+		FbxVector4 position = pfbxMesh->GetControlPointAt(i);
+		vtx.Position = XMFLOAT4(position[0], position[1], position[2], position[3]);
+
+		// UV, Normal, BiNormal, Tangent
+		int nUVElements = pfbxMesh->GetElementUVCount();
+		int nNormalElements = pfbxMesh->GetElementNormalCount();
+		int nBinormalElements = pfbxMesh->GetElementBinormalCount();
+		int nTangentElements = pfbxMesh->GetElementTangentCount();
+		int nvtxColorElements = pfbxMesh->GetElementVertexColorCount();
+
+		FbxGeometryElementUV* uvElement = nullptr;
+		FbxGeometryElementNormal* normalElement = nullptr;
+		FbxGeometryElementBinormal* binormalElement = nullptr;
+		FbxGeometryElementTangent* tangentElement = nullptr;
+		FbxGeometryElementVertexColor* vtxColorElement = nullptr;
+
+		uvElement = nUVElements > 0 ? pfbxMesh->GetElementUV() : nullptr;
+		normalElement = nNormalElements > 0 ? pfbxMesh->GetElementNormal() : nullptr;
+		binormalElement = nBinormalElements > 0 ? pfbxMesh->GetElementBinormal() : nullptr;
+		tangentElement = nBinormalElements > 0 ? pfbxMesh->GetElementTangent() : nullptr;
+		vtxColorElement = nvtxColorElements > 0 ? pfbxMesh->GetElementVertexColor() : nullptr;
+
+		// UV
+		if (uvElement)
+		{
+			FbxVector2 uv;
+			if (uvElement->GetMappingMode() == FbxGeometryElement::eByPolygonVertex)
+			{
+				switch (uvElement->GetReferenceMode())
+				{
+				case fbxsdk::FbxLayerElement::eDirect:
+				{
+					uv = uvElement->GetDirectArray().GetAt(i);
+					break;
+				}
+				case fbxsdk::FbxLayerElement::eIndexToDirect:
+				{
+					int uvIndex = uvElement->GetIndexArray().GetAt(i);
+					uv = uvElement->GetDirectArray().GetAt(uvIndex);
+					break;
+				}
+				case fbxsdk::FbxLayerElement::eIndex:
+				{
+					uv = { 0.f, 0.f };
+					break;
+				}
+				default:
+					__debugbreak();
+					break;
+				}
+			}
+			else
+			{
+				uv = { 0.f, 0.f };
+			}
+
+			vtx.TexCoord = XMFLOAT2(uv[0], uv[1]);
+		}
+		else
+		{
+			vtx.TexCoord = XMFLOAT2(0.f, 0.f);
+		}
+		
+		// Normal
+		if (normalElement)
+		{
+			FbxVector4 normal;
+			if (normalElement->GetMappingMode() == FbxGeometryElement::eByPolygonVertex)
+			{
+				switch (normalElement->GetReferenceMode())
+				{
+				case fbxsdk::FbxLayerElement::eDirect:
+				{
+					normal = normalElement->GetDirectArray().GetAt(i);
+					break;
+				}
+				case fbxsdk::FbxLayerElement::eIndexToDirect:
+				{
+					int normalIndex = normalElement->GetIndexArray().GetAt(i);
+					normal = normalElement->GetDirectArray().GetAt(normalIndex);
+					break;
+				}
+				case fbxsdk::FbxLayerElement::eIndex:
+				{
+					normal = { 0.f, 0.f, 0.f, 0.f };
+					break;
+				}
+				default:
+					__debugbreak();
+					break;
+				}
+			}
+			else
+			{
+				normal = { 0.f, 0.f, 0.f, 0.f };
+			}
+
+			vtx.Normal = XMFLOAT3(normal[0], normal[1], normal[2]);
+		}
+		else
+		{
+			vtx.Normal = XMFLOAT3(0.f, 0.f, 0.f);
+		}
+		
+		// Binormal
+		if (binormalElement)
+		{
+			FbxVector4 binormal;
+			if (binormalElement->GetMappingMode() == FbxGeometryElement::eByPolygonVertex)
+			{
+				switch (binormalElement->GetReferenceMode())
+				{
+				case fbxsdk::FbxLayerElement::eDirect:
+				{
+					binormal = binormalElement->GetDirectArray().GetAt(i);
+					break;
+				}
+				case fbxsdk::FbxLayerElement::eIndexToDirect:
+				{
+					int binormalIndex = binormalElement->GetIndexArray().GetAt(i);
+					binormal = binormalElement->GetDirectArray().GetAt(binormalIndex);
+					break;
+				}
+				case fbxsdk::FbxLayerElement::eIndex:
+				{
+					binormal = { 0.f, 0.f, 0.f, 0.f };
+					break;
+				}
+				default:
+					__debugbreak();
+					break;
+				}
+			}
+			else
+			{
+				binormal = { 0.f, 0.f, 0.f, 0.f };
+			}
+
+			vtx.BiNormal = XMFLOAT3(binormal[0], binormal[1], binormal[2]);
+		}
+		else
+		{
+			vtx.BiNormal = XMFLOAT3(0.f, 0.f, 0.f);
+		}
+		
+		// Tangent
+		if (tangentElement)
+		{
+			FbxVector4 tangent;
+			if (tangentElement->GetMappingMode() == FbxGeometryElement::eByPolygonVertex)
+			{
+				switch (tangentElement->GetReferenceMode())
+				{
+				case fbxsdk::FbxLayerElement::eDirect:
+				{
+					tangent = tangentElement->GetDirectArray().GetAt(i);
+					break;
+				}
+				case fbxsdk::FbxLayerElement::eIndexToDirect:
+				{
+					int tangentIndex = tangentElement->GetIndexArray().GetAt(i);
+					tangent = tangentElement->GetDirectArray().GetAt(tangentIndex);
+					break;
+				}
+				case fbxsdk::FbxLayerElement::eIndex:
+				{
+					tangent = { 0.f, 0.f, 0.f, 0.f };
+					break;
+				}
+				default:
+					__debugbreak();
+					break;
+				}
+			}
+			else
+			{
+				tangent = { 0.f, 0.f, 0.f, 0.f };
+			}
+
+			vtx.Tangent = XMFLOAT3(tangent[0], tangent[1], tangent[2]);
+		}
+		else
+		{
+			vtx.Tangent = XMFLOAT3(0.f, 0.f, 0.f);
+		}
+		
+		// vtxColor
+		if (vtxColorElement)
+		{
+			FbxColor vtxColor;
+			if (vtxColorElement->GetMappingMode() == FbxGeometryElement::eByPolygonVertex)
+			{
+				switch (vtxColorElement->GetReferenceMode())
+				{
+				case fbxsdk::FbxLayerElement::eDirect:
+				{
+					vtxColor = vtxColorElement->GetDirectArray().GetAt(i);
+					break;
+				}
+				case fbxsdk::FbxLayerElement::eIndexToDirect:
+				{
+					int vtxColorIndex = vtxColorElement->GetIndexArray().GetAt(i);
+					vtxColor = vtxColorElement->GetDirectArray().GetAt(vtxColorIndex);
+					break;
+				}
+				case fbxsdk::FbxLayerElement::eIndex:
+				{
+					vtxColor = FbxColor(1.f, 0.f, 0.f, 1.f);
+					break;
+				}
+				default:
+					__debugbreak();
+					break;
+				}
+			}
+			else
+			{
+				vtxColor = FbxColor(1.f, 0.f, 0.f, 1.f);
+			}
+
+			vtx.Color = XMFLOAT4(vtxColor.mRed, vtxColor.mGreen, vtxColor.mBlue, vtxColor.mAlpha);
+		}
+		else
+		{
+			vtx.Color = XMFLOAT4(1.f, 0.f, 0.f, 1.f);
+		}
+
+		vertices.push_back(vtx);
+
+	}
+
+	pOutModelNode->pMesh->Initialize(vertices, indices);
+
 }
 
-void FbxLoader::ExportMaterial(std::shared_ptr<ModelNode> pOutModelNode, const FbxNode* pfbxNode)
+void FbxLoader::ExportMaterial(std::shared_ptr<ModelNode> pOutModelNode, FbxNode* pfbxNode)
 {
 }
 

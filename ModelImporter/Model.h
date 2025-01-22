@@ -6,6 +6,13 @@
 
 struct ModelNode
 {
+	ModelNode()
+	{
+		pMesh = std::make_unique<Mesh>();
+		pTransform = std::make_unique<Transform>();
+		pMaterial = std::make_unique<Material>();
+	}
+
 	std::unique_ptr<Mesh> pMesh;
 	std::unique_ptr<Transform> pTransform;
 	std::unique_ptr<Material> pMaterial;

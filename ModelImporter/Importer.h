@@ -43,10 +43,10 @@ public:
 	void ExportModelInSceneToModel(std::shared_ptr<Model> pOutModel);
 
 private:
-	void ExportNode(std::shared_ptr<Model> pOutModel, const FbxNode* pfbxNode);
+	void ExportNode(std::shared_ptr<Model> pOutModel, FbxNode* pfbxNode);
 
-	void ExportMesh(std::shared_ptr<ModelNode> pOutModelNode, const FbxNode* pfbxNode);
-	void ExportMaterial(std::shared_ptr<ModelNode> pOutModelNode, const FbxNode* pfbxNode);
+	void ExportMesh(std::shared_ptr<ModelNode> pOutModelNode, FbxMesh* pfbxMesh);
+	void ExportMaterial(std::shared_ptr<ModelNode> pOutModelNode, FbxNode* pfbxNode);
 
 
 #pragma endregion FBX_TO_MODEL
