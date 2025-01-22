@@ -17,7 +17,7 @@ struct ModelNode
 	std::unique_ptr<Transform> pTransform;
 	std::unique_ptr<Material> pMaterial;
 
-	UINT uiParentIndex = -1;
+	int parentIndex = -1;	// -1 means Root is Parent
 	std::vector<UINT> uiChildrenIndices = {};
 };
 
@@ -35,6 +35,9 @@ public:
 
 	void AddModelNode(std::shared_ptr<ModelNode> pNode) { m_pModelNodes.push_back(pNode); }
 	std::shared_ptr<ModelNode>& GetModelNode(UINT index) { return m_pModelNodes[index]; }
+
+public:
+	static void UpdateChildsInModelNodes(std::vector<std::shared_ptr<ModelNode>>& pModelNodes);
 
 private:
 	std::vector<std::shared_ptr<ModelNode>> m_pModelNodes = {};

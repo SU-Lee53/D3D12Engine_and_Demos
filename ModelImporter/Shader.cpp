@@ -18,7 +18,7 @@ BOOL Shader::Initialize(const std::wstring& wstrfilePath, const std::string& wst
 	ComPtr<ID3DBlob> pError;
 
 	string strVSVersion = "vs_5_0"s;
-	string strPSVersion = "vs_5_0"s;
+	string strPSVersion = "ps_5_0"s;
 
 	const UINT compileFlag = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
 

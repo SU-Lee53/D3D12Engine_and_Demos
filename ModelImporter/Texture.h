@@ -12,6 +12,8 @@ public:
 private:
 	BOOL LoadFromFile(const std::wstring& wstrPath);
 
+	BOOL CreateErrorTexture(DirectX::TexMetadata& texMetaData);
+
 public:
 	ComPtr<ID3D11ShaderResourceView>& GetComPtr() { return m_pSRV; }
 	ComPtr<ID3D11Texture2D> GetTexture2D();
@@ -25,6 +27,7 @@ private:
 	XMFLOAT2 m_v2Size = { 0.f,0.f };
 	DirectX::ScratchImage m_Image;
 
+	BOOL m_bIsErrorTexture = FALSE;
 
 };
 

@@ -43,7 +43,7 @@ public:
 	void ExportModelInSceneToModel(std::shared_ptr<Model> pOutModel);
 
 private:
-	void ExportNode(std::shared_ptr<Model> pOutModel, FbxNode* pfbxNode);
+	void ExportNode(std::shared_ptr<Model> pOutModel, FbxNode* pfbxNode, int uiParentIndex);
 
 	void ExportMesh(std::shared_ptr<ModelNode> pOutModelNode, FbxMesh* pfbxMesh);
 	void ExportMaterial(std::shared_ptr<ModelNode> pOutModelNode, FbxNode* pfbxNode);

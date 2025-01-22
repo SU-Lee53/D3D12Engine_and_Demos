@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Importer.h"
 #include "Model.h"
+#include <filesystem>
 
 using namespace std;
 using namespace std::literals;
@@ -1003,7 +1004,6 @@ void FbxLoader::PrintMeshInfo(FbxMesh* pfbxMesh, const char* cstrNodeName)
 		}
 		*/
 
-
 		ImGui::TreePop();
 	}
 
@@ -1023,8 +1023,88 @@ void FbxLoader::PrintSurfaceMaterialInfo(FbxNode* pfbxNode, const char* cstrNode
 				{
 					FbxSurfaceMaterial* pfbxSurfaceMaterial = pfbxNode->GetMaterial(i);
 
-					if(pfbxSurfaceMaterial)
-						PrintMaterialPropertyInfoAll(pfbxSurfaceMaterial, cstrNodeName);
+					if (pfbxSurfaceMaterial)
+					{
+						if (ImGui::TreeNode("All Properties"))
+						{
+							PrintMaterialPropertyInfoAll(pfbxSurfaceMaterial, cstrNodeName);
+
+							ImGui::TreePop();
+						}
+
+						if (ImGui::TreeNode("Basic Properties"))
+						{
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sShadingModel, cstrNodeName);
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sMultiLayer, cstrNodeName);
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sEmissive, cstrNodeName);
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sEmissiveFactor, cstrNodeName);
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sAmbient, cstrNodeName);
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sAmbientFactor, cstrNodeName);
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sDiffuse, cstrNodeName);
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sDiffuseFactor, cstrNodeName);
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sSpecular, cstrNodeName);
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sSpecularFactor, cstrNodeName);
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sShininess, cstrNodeName);
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sBump, cstrNodeName);
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sNormalMap, cstrNodeName);
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sBumpFactor, cstrNodeName);
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sTransparentColor, cstrNodeName);
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sTransparencyFactor, cstrNodeName);
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sReflection, cstrNodeName);
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sReflectionFactor, cstrNodeName);
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sDisplacementColor, cstrNodeName);
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sDisplacementFactor, cstrNodeName);
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sVectorDisplacementColor, cstrNodeName);
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sVectorDisplacementFactor, cstrNodeName);
+
+							ImGui::TreePop();
+						}
+						
+						// PBR Materials
+						if (ImGui::TreeNode("PBR Properties"))
+						{
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sDiffuse, cstrNodeName);				// sDiffuse				== Base Color/albedo
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sReflectionFactor, cstrNodeName);	// sReflectionFactor	== Metallic
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sShininess, cstrNodeName);			// sShininess			== Roughness
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sNormalMap, cstrNodeName);			// sNormalMap			== NormalMap
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sDisplacementColor, cstrNodeName);	// sDisplacementColor	== Height/Displacement
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sEmissive, cstrNodeName);			// sEmissive			== Emission
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sEmissiveFactor, cstrNodeName);
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sTransparencyFactor, cstrNodeName);	// sTransparencyFactor	== Transparency/Opacity
+							ImGui::Text("AO is not supported");
+							ImGui::TreePop();
+						}
+						
+						// Texture Materials
+						if (ImGui::TreeNode("Possible Texture Properties"))
+						{
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sDiffuse, cstrNodeName);
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sAmbient, cstrNodeName);
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sSpecular, cstrNodeName);
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sReflection, cstrNodeName);
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sEmissive, cstrNodeName);
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sNormalMap, cstrNodeName);
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sBump, cstrNodeName);
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sDisplacementColor, cstrNodeName);
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sTransparentColor, cstrNodeName);
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sShininess, cstrNodeName);
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sReflectionFactor, cstrNodeName);
+							ImGui::TreePop();
+						}
+
+						if (ImGui::TreeNode("Our Target Properties"))
+						{
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sDiffuse, cstrNodeName);				// AlbedoColor
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sEmissive, cstrNodeName);			// EmissiveColor
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sSpecular, cstrNodeName);			// SpecularColor
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sSpecularFactor, cstrNodeName);		// SpecularHighlight
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sReflection, cstrNodeName);			// Glossiness?
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sReflectionFactor, cstrNodeName);	// Metallic?
+							PrintMaterialPropertyInfo(pfbxSurfaceMaterial, FbxSurfaceMaterial::sShininess, cstrNodeName);			// Roughness? -> (1.0 - Roughness) = Smoothness?
+							ImGui::TreePop();
+						}
+
+					}
 
 					ImGui::TreePop();
 				}
@@ -1143,7 +1223,15 @@ void FbxLoader::PrintMaterialPropertyInfo(FbxSurfaceMaterial* pfbxSurfaceMateria
 			break;
 		}
 
-		ImGui::Text("</%s>", cstrPropertyName);
+		BOOL bHasTexure = IsTexture(pfbxSurfaceMaterial, prop.GetName());
+		bHasTexure ? ImGui::TextColored(ImVec4(1.f, 0.f, 0.f, 1.f), "\tHas File Texture Texture") : ImGui::Text("This is Not Texture");
+		if (bHasTexure)
+		{
+			PrintTextureInfo(pfbxSurfaceMaterial, prop.GetName());
+		}
+
+		ImGui::Text("</%s>\n", prop.GetName());
+
 	}
 	else
 	{
@@ -1257,7 +1345,7 @@ void FbxLoader::PrintMaterialPropertyInfoAll(FbxSurfaceMaterial* pfbxSurfaceMate
 		}
 
 		BOOL bHasTexure = IsTexture(pfbxSurfaceMaterial, prop.GetName());
-		ImGui::Text("\tIs Texture : %s", bHasTexure ? "True" : "False");
+		bHasTexure ? ImGui::TextColored(ImVec4(1.f, 0.f, 0.f, 1.f), "\tHas File Texture Texture") : ImGui::Text("This is Not Texture");
 		if (bHasTexure)
 		{
 			PrintTextureInfo(pfbxSurfaceMaterial, prop.GetName());
@@ -1363,11 +1451,13 @@ void FbxLoader::ExportModelInSceneToModel(std::shared_ptr<Model> pOutModel)
 	if (m_rpfbxRootNode)
 	{
 		for (int i = 0; i < m_rpfbxRootNode->GetChildCount(); i++)
-			ExportNode(pOutModel, m_rpfbxRootNode->GetChild(i));
+			ExportNode(pOutModel, m_rpfbxRootNode->GetChild(i), -1);
 	}
+
+	Model::UpdateChildsInModelNodes(pOutModel->GetModelNodes());
 }
 
-void FbxLoader::ExportNode(std::shared_ptr<Model> pOutModel, FbxNode* pfbxNode)
+void FbxLoader::ExportNode(std::shared_ptr<Model> pOutModel, FbxNode* pfbxNode, int uiParentIndex)
 {
 	shared_ptr<ModelNode> pModelNode = make_shared<ModelNode>();
 
@@ -1384,11 +1474,13 @@ void FbxLoader::ExportNode(std::shared_ptr<Model> pOutModel, FbxNode* pfbxNode)
 	ExportMesh(pModelNode, pfbxNode->GetMesh());
 	ExportMaterial(pModelNode, pfbxNode);
 
+	pModelNode->parentIndex = uiParentIndex;
 	pOutModel->AddModelNode(pModelNode);
 
+	UINT uiCurrentNodeIndex = pOutModel->GetModelNodes().size() - 1;
 	for (int i = 0; i < pfbxNode->GetChildCount(); i++)
 	{
-		ExportNode(pOutModel, pfbxNode->GetChild(i));
+		ExportNode(pOutModel, pfbxNode->GetChild(i), uiCurrentNodeIndex);
 	}
 }
 
@@ -1660,6 +1752,78 @@ void FbxLoader::ExportMesh(std::shared_ptr<ModelNode> pOutModelNode, FbxMesh* pf
 
 void FbxLoader::ExportMaterial(std::shared_ptr<ModelNode> pOutModelNode, FbxNode* pfbxNode)
 {
+	FbxSurfaceMaterial* pfbxSurfaceMaterial = pfbxNode->GetMaterial(0);
+	MaterialData materialData = {};
+
+	// This time, We only export Phong shading variables
+	// Phong shading variables : Diffuse, Specular, Ambient, Emissive
+
+	if (pfbxSurfaceMaterial)
+	{
+		// Diffuse (+ Texture)
+		FbxProperty pfbxDiffuseProp = pfbxSurfaceMaterial->FindProperty(FbxSurfaceMaterial::sDiffuse);
+		wstring wstrDiffuseTexturePath = L"";
+		if (pfbxDiffuseProp.IsValid())
+		{
+			FbxColor fbxDiffuseColor = pfbxDiffuseProp.Get<FbxColor>();
+			materialData.diffuseColor = XMFLOAT4(fbxDiffuseColor.mRed, fbxDiffuseColor.mGreen, fbxDiffuseColor.mBlue, fbxDiffuseColor.mAlpha);
+
+			if (IsTexture(pfbxSurfaceMaterial, FbxSurfaceMaterial::sDiffuse))
+			{
+				FbxTexture* pfbxTexture = pfbxDiffuseProp.GetSrcObject<FbxTexture>();
+				FbxFileTexture* pfbxFileTexture = FbxCast<FbxFileTexture>(pfbxTexture);
+
+				string strTexturePath = pfbxFileTexture->GetFileName();
+				filesystem::path fsTexturePath(strTexturePath);
+				wstrDiffuseTexturePath = fsTexturePath.wstring();
+			}
+		}
+		else
+		{
+			materialData.diffuseColor = XMFLOAT4(0.f, 0.f, 0.f, 0.f);
+		}
+
+		// Specular
+		FbxProperty pfbxSpecularProp = pfbxSurfaceMaterial->FindProperty(FbxSurfaceMaterial::sSpecular);
+		if (pfbxSpecularProp.IsValid())
+		{
+			FbxColor fbxSpecularColor = pfbxSpecularProp.Get<FbxColor>();
+			materialData.specularColor = XMFLOAT4(fbxSpecularColor.mRed, fbxSpecularColor.mGreen, fbxSpecularColor.mBlue, fbxSpecularColor.mAlpha);
+		}
+		else
+		{
+			materialData.specularColor = XMFLOAT4(0.f, 0.f, 0.f, 0.f);
+		}
+
+		// Ambient
+		FbxProperty pfbxAmbientProp = pfbxSurfaceMaterial->FindProperty(FbxSurfaceMaterial::sAmbient);
+		if (pfbxAmbientProp.IsValid())
+		{
+			FbxColor fbxAmbientColor = pfbxAmbientProp.Get<FbxColor>();
+			materialData.ambientColor = XMFLOAT4(fbxAmbientColor.mRed, fbxAmbientColor.mGreen, fbxAmbientColor.mBlue, fbxAmbientColor.mAlpha);
+		}
+		else
+		{
+			materialData.ambientColor = XMFLOAT4(0.f, 0.f, 0.f, 0.f);
+		}
+
+		// Emissive
+		FbxProperty pfbxEmissiveProp = pfbxSurfaceMaterial->FindProperty(FbxSurfaceMaterial::sEmissive);
+		if (pfbxEmissiveProp.IsValid())
+		{
+			FbxColor fbxEmissiveColor = pfbxEmissiveProp.Get<FbxColor>();
+			materialData.emissiveColor = XMFLOAT4(fbxEmissiveColor.mRed, fbxEmissiveColor.mGreen, fbxEmissiveColor.mBlue, fbxEmissiveColor.mAlpha);
+		}
+		else
+		{
+			materialData.emissiveColor = XMFLOAT4(0.f, 0.f, 0.f, 0.f);
+		}
+
+
+		pOutModelNode->pMaterial->Initialize(wstrDiffuseTexturePath);
+		pOutModelNode->pMaterial->SetMaterialData(materialData);
+	}
+
 }
 
 void FbxLoader::CleanUp()
