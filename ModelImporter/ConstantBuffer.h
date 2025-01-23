@@ -33,6 +33,7 @@ public:
 		::memcpy(m_d3dSubresource.pData, &data, sizeof(data));
 	}
 
+	ComPtr<ID3D11Buffer>& GetBuffer() { return m_pBuffer; }
 
 private:
 	ComPtr<ID3D11Buffer>		m_pBuffer = nullptr;

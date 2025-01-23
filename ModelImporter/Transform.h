@@ -1,5 +1,11 @@
 #pragma once
 
+struct CB_TRANSFORM
+{
+	XMMATRIX matLocal;
+	XMMATRIX matWorld;
+};
+
 class Transform
 {
 public:

@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Shader.h"
-
+#include "VertexBuffer.h"
 using namespace std;
 
 Shader::Shader()
@@ -59,12 +59,22 @@ BOOL Shader::Initialize(const std::wstring& wstrfilePath, const std::string& wst
 	if (FAILED(DEVICE->CreateVertexShader(pVSByteCode->GetBufferPointer(), pVSByteCode->GetBufferSize(), nullptr, m_pVertexShader.GetAddressOf())))
 	{
 		__debugbreak();
+		return FALSE;
 	}
 
 	// Create Pixel Shader
 	if (FAILED(DEVICE->CreatePixelShader(pPSByteCode->GetBufferPointer(), pPSByteCode->GetBufferSize(), nullptr, m_pPixelShader.GetAddressOf())))
 	{
 		__debugbreak();
+		return FALSE;
+	}
+
+	// Input Layout
+	const int count = VertexType::descs.size();
+	if (FAILED(DEVICE->CreateInputLayout(VertexType::descs.data(), count, pVSByteCode->GetBufferPointer(), pVSByteCode->GetBufferSize(), m_pInputLayout.GetAddressOf())))
+	{
+		__debugbreak();
+		return FALSE;
 	}
 
 	return TRUE;

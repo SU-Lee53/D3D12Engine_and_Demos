@@ -14,7 +14,9 @@ public:
 
 private:
 	std::unique_ptr<FbxLoader> m_pImporter = nullptr;
-	std::shared_ptr<class Model> model;
+	std::shared_ptr<class Model> m_pModel;
+
+	std::shared_ptr<class Camera> m_pCamera = nullptr;
 
 };
 

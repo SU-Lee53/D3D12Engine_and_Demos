@@ -30,7 +30,7 @@ public:
 public:
 	BOOL Initialize();
 
-	void Render();
+	void Render(std::shared_ptr<class Camera> pCamera);
 
 public:
 	std::vector<std::shared_ptr<ModelNode>>& GetModelNodes() { return m_pModelNodes; }

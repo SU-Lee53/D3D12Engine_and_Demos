@@ -26,18 +26,18 @@ Camera::~Camera()
 BOOL Camera::Initialize()
 {
 	// Get Camera Forward
-	XMMATRIX world = CreateWorldMatrix(m_vCamPosition, m_vCamRotation);
+	XMMATRIX world = CreateWorldMatrix();
 	XMFLOAT3 camForward;
-	XMStoreFloat3(&camForward, world.r[3]);
+	XMStoreFloat3(&camForward, world.r[2]);
 
 	m_vCamEYE = m_vCamPosition;
 	m_vCamAT = XMFLOAT3(m_vCamEYE.x + camForward.x, m_vCamEYE.y + camForward.y, m_vCamEYE.z + camForward.z);
-	XMStoreFloat3(&m_vCamUP, world.r[2]);
+	XMStoreFloat3(&m_vCamUP, world.r[1]);
 
 	return SetCamera(m_vCamEYE, m_vCamAT, m_vCamUP);
 }
 
-XMMATRIX CreateWorldMatrix(const XMFLOAT3& pos, const XMFLOAT3& rot)
+XMMATRIX Camera::CreateWorldMatrix()
 {
 	// S * R * T
 	// Scale
@@ -45,13 +45,13 @@ XMMATRIX CreateWorldMatrix(const XMFLOAT3& pos, const XMFLOAT3& rot)
 	XMMATRIX matScale = XMMatrixScalingFromVector(vScale);
 
 	// Rotation
-	XMMATRIX matRotX = XMMatrixRotationX(rot.x);
-	XMMATRIX matRotY = XMMatrixRotationY(rot.y);
-	XMMATRIX matRotZ = XMMatrixRotationZ(rot.z);
+	XMMATRIX matRotX = XMMatrixRotationX(m_vCamRotation.x);
+	XMMATRIX matRotY = XMMatrixRotationY(m_vCamRotation.y);
+	XMMATRIX matRotZ = XMMatrixRotationZ(m_vCamRotation.z);
 	XMMATRIX matRotation = XMMatrixMultiply(XMMatrixMultiply(matRotX, matRotY), matRotZ);
 
 	// Translation
-	XMVECTOR vPos{ pos.x, pos.y, pos.z };
+	XMVECTOR vPos{ m_vCamPosition.x, m_vCamPosition.y, m_vCamPosition.z };
 	XMMATRIX matTranslation = XMMatrixTranslationFromVector(vPos);
 
 	XMMATRIX ret = XMMatrixIdentity();
@@ -66,7 +66,7 @@ BOOL Camera::Update()
 	if (m_bViewUpdated)
 	{
 		// Get Camera Forward
-		XMMATRIX world = CreateWorldMatrix(m_vCamPosition, m_vCamRotation);
+		XMMATRIX world = CreateWorldMatrix();
 		XMFLOAT3 camForward;
 		XMStoreFloat3(&camForward, world.r[3]);
 
@@ -84,6 +84,8 @@ BOOL Camera::Update()
 		m_bProjUpdated = FALSE;
 	}
 
+
+	return TRUE;
 }
 
 void Camera::Resize(DWORD dwWidth, DWORD dwHeight)

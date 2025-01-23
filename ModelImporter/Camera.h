@@ -2,6 +2,12 @@
 
 class Transform;
 
+struct CB_CAMERA
+{
+    XMMATRIX matView;
+    XMMATRIX matProj;
+};
+
 class Camera
 {
 public:
@@ -24,8 +30,14 @@ public:
     void SetNear(float fNear);
     void SetFar(float fFar);
 
+    XMMATRIX GetViewMatrix() { return m_matView; }
+    XMMATRIX GetProjectionMatrix() { return m_matProjection; }
+
 private:
     BOOL SetCamera(const XMFLOAT3& camEYE, const XMFLOAT3& camAT, const XMFLOAT3& camUP);
+
+private:
+    XMMATRIX CreateWorldMatrix();
 
 private:
     XMFLOAT3 m_vCamPosition;
