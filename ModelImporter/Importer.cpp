@@ -66,7 +66,6 @@ void FbxLoader::PrintTabs()
 
 void FbxLoader::ProcessNode(FbxNode* pfbxNode, const char* cstrNodeName)
 {
-	const char* pStrcstrNodeName = pfbxNode->GetName();
 	FbxDouble3 fbxvTranslation = pfbxNode->LclTranslation.Get();
 	FbxDouble3 fbxvRotation = pfbxNode->LclRotation.Get();
 	FbxDouble3 fbxvScaling = pfbxNode->LclScaling.Get();
@@ -79,7 +78,7 @@ void FbxLoader::ProcessNode(FbxNode* pfbxNode, const char* cstrNodeName)
 
 	ImGui::Text(
 		"< Node name = '%s' Translation = '(%f, %f, %f)' Rotation = '(%f, %f, %f)' Scaling = '(%f, %f, %f)' >",
-		pStrcstrNodeName,
+		cstrNodeName,
 		fbxvTranslation[0], fbxvTranslation[1], fbxvTranslation[2],
 		fbxvRotation[0], fbxvRotation[1], fbxvRotation[2],
 		fbxvScaling[0], fbxvScaling[1], fbxvScaling[2]
@@ -1459,23 +1458,36 @@ void FbxLoader::ExportModelInSceneToModel(std::shared_ptr<Model> pOutModel)
 
 void FbxLoader::ExportNode(std::shared_ptr<Model> pOutModel, FbxNode* pfbxNode, int uiParentIndex)
 {
-	shared_ptr<ModelNode> pModelNode = make_shared<ModelNode>();
+	FbxNodeAttribute* fbxAttribute = pfbxNode->GetNodeAttributeByIndex(0);
+	FbxNodeAttribute::EType fbxeType = fbxAttribute->GetAttributeType();
 
-	// Transform
-	FbxDouble3 fbxvTranslation = pfbxNode->LclTranslation.Get();
-	FbxDouble3 fbxvRotation = pfbxNode->LclRotation.Get();
-	FbxDouble3 fbxvScaling = pfbxNode->LclScaling.Get();
+	if (fbxeType == FbxNodeAttribute::eMesh)
+	{
+		shared_ptr<ModelNode> pModelNode = make_shared<ModelNode>();
 
-	pModelNode->pTransform->SetLocalPosition(XMFLOAT3(fbxvTranslation[0], fbxvTranslation[1], fbxvTranslation[2]));
-	pModelNode->pTransform->SetLocalRotation(XMFLOAT3(fbxvRotation[0], fbxvRotation[1], fbxvRotation[2]));
-	pModelNode->pTransform->SetLocalScale(XMFLOAT3(fbxvScaling[0], fbxvScaling[1], fbxvScaling[2]));
+		// Transform
+		FbxDouble3 fbxvTranslation = pfbxNode->LclTranslation.Get();
+		FbxDouble3 fbxvRotation = pfbxNode->LclRotation.Get();
+		FbxDouble3 fbxvScaling = pfbxNode->LclScaling.Get();
 
-	// Mesh, Material
-	ExportMesh(pModelNode, pfbxNode->GetMesh());
-	ExportMaterial(pModelNode, pfbxNode);
+		pModelNode->pTransform->SetLocalPosition(XMFLOAT3(fbxvTranslation[0], fbxvTranslation[1], fbxvTranslation[2]));
+		pModelNode->pTransform->SetLocalRotation(XMFLOAT3(fbxvRotation[0], fbxvRotation[1], fbxvRotation[2]));
+		pModelNode->pTransform->SetLocalScale(XMFLOAT3(fbxvScaling[0], fbxvScaling[1], fbxvScaling[2]));
 
-	pModelNode->parentIndex = uiParentIndex;
-	pOutModel->AddModelNode(pModelNode);
+		// Mesh, Material
+		if (pfbxNode->GetMesh())
+		{
+			ExportMesh(pModelNode, pfbxNode->GetMesh());
+		}
+
+		if (pfbxNode->GetMaterial(0))
+		{
+			ExportMaterial(pModelNode, pfbxNode);
+		}
+
+		pModelNode->parentIndex = uiParentIndex;
+		pOutModel->AddModelNode(pModelNode);
+	}
 
 	UINT uiCurrentNodeIndex = pOutModel->GetModelNodes().size() - 1;
 	for (int i = 0; i < pfbxNode->GetChildCount(); i++)

@@ -14,8 +14,7 @@ public:
 
 private:
 	std::unique_ptr<FbxLoader> m_pImporter = nullptr;
-
-	BOOL m_bShown = FALSE;
+	std::shared_ptr<class Model> model;
 
 };
 

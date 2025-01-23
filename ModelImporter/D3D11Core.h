@@ -23,6 +23,9 @@ public:
 
 	HWND GetHwnd() { return m_hWnd; }
 
+	UINT GetScreenWidth() { return m_uiScreenWidth; }
+	UINT GetScreenHeight() { return m_uiScreenHeight; }
+
 private:
 	ComPtr<ID3D11Device> m_pDevice = nullptr;
 	ComPtr<ID3D11DeviceContext> m_pDeviceContext = nullptr;

@@ -20,8 +20,8 @@ void Application::Initialize()
 
 	m_pImporter->LoadFBXFile("../fbx/Gunship.fbx");
 
-	shared_ptr<Model> m = make_shared<Model>();
-	m_pImporter->ExportModelInSceneToModel(m);
+	model = make_shared<Model>();
+	m_pImporter->ExportModelInSceneToModel(model);
 
 }
 

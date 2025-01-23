@@ -213,9 +213,6 @@
     <ClInclude Include="Descriptor.h">
       <Filter>Renderer\Pool\Descriptor</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Types</Filter>
-    </ClInclude>
     <ClInclude Include="CB_types.h">
       <Filter>Types</Filter>
     </ClInclude>
@@ -227,6 +224,9 @@
     </ClInclude>
     <ClInclude Include="..\ModelImporter\define.h">
       <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Renderer\Camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

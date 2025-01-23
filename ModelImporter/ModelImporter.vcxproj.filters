@@ -19,17 +19,11 @@
     <Filter Include="Headers\etc">
       <UniqueIdentifier>{80b4c66a-0cd4-407e-9624-5c9093969c32}</UniqueIdentifier>
     </Filter>
-    <Filter Include="D3D11Renderer\Entry">
-      <UniqueIdentifier>{2bd20593-2acc-424a-b7d8-45c5ea0f0eb7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="D3D11Renderer\ImGUI">
       <UniqueIdentifier>{92cce53b-26d1-482d-9fd9-9f10cd095531}</UniqueIdentifier>
     </Filter>
     <Filter Include="D3D11Renderer\Managers">
       <UniqueIdentifier>{c4754b4e-f057-4c33-94c9-90ff3a35a58e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="D3D11Renderer\App">
-      <UniqueIdentifier>{aa9c6905-4122-4778-accf-96c7756806b4}</UniqueIdentifier>
     </Filter>
     <Filter Include="D3D11Renderer\Model">
       <UniqueIdentifier>{d642a8fd-e245-48f2-acd1-031e7b723324}</UniqueIdentifier>
@@ -52,6 +46,18 @@
     <Filter Include="D3D11Renderer\Shader">
       <UniqueIdentifier>{b80affbf-7e22-4ff4-ad36-935f7196ab9e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="App">
+      <UniqueIdentifier>{aa9c6905-4122-4778-accf-96c7756806b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entry">
+      <UniqueIdentifier>{2bd20593-2acc-424a-b7d8-45c5ea0f0eb7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="D3D11Renderer\ConstantBuffer">
+      <UniqueIdentifier>{fa49c2ad-08cc-4c23-b0d5-f2eca52223ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="D3D11Renderer\Camera">
+      <UniqueIdentifier>{a7c7cb2e-2e31-4d37-b5b5-bb385681c8db}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -70,7 +76,7 @@
       <Filter>D3D11Renderer\Core</Filter>
     </ClInclude>
     <ClInclude Include="ModelImporter.h">
-      <Filter>D3D11Renderer\Entry</Filter>
+      <Filter>Entry</Filter>
     </ClInclude>
     <ClInclude Include="ImGuiManager.h">
       <Filter>D3D11Renderer\Managers</Filter>
@@ -106,7 +112,7 @@
       <Filter>Importer</Filter>
     </ClInclude>
     <ClInclude Include="Application.h">
-      <Filter>D3D11Renderer\App</Filter>
+      <Filter>App</Filter>
     </ClInclude>
     <ClInclude Include="Model.h">
       <Filter>D3D11Renderer\Model</Filter>
@@ -132,6 +138,10 @@
     <ClInclude Include="Material.h">
       <Filter>D3D11Renderer\Model\Components</Filter>
     </ClInclude>
+    <ClInclude Include="ConstantBuffer.h">
+      <Filter>D3D11Renderer\ConstantBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="ModelImporter.ico">
@@ -149,7 +159,7 @@
       <Filter>D3D11Renderer\Core</Filter>
     </ClCompile>
     <ClCompile Include="ModelImporter.cpp">
-      <Filter>D3D11Renderer\Entry</Filter>
+      <Filter>Entry</Filter>
     </ClCompile>
     <ClCompile Include="ImGuiManager.cpp">
       <Filter>D3D11Renderer\Managers</Filter>
@@ -179,7 +189,7 @@
       <Filter>Importer</Filter>
     </ClCompile>
     <ClCompile Include="Application.cpp">
-      <Filter>D3D11Renderer\App</Filter>
+      <Filter>App</Filter>
     </ClCompile>
     <ClCompile Include="Model.cpp">
       <Filter>D3D11Renderer\Model</Filter>
@@ -205,6 +215,10 @@
     <ClCompile Include="Material.cpp">
       <Filter>D3D11Renderer\Model\Components</Filter>
     </ClCompile>
+    <ClCompile Include="ConstantBuffer.cpp">
+      <Filter>D3D11Renderer\ConstantBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ModelImporter.rc">

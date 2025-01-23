@@ -30,6 +30,8 @@ public:
 public:
 	BOOL Initialize();
 
+	void Render();
+
 public:
 	std::vector<std::shared_ptr<ModelNode>>& GetModelNodes() { return m_pModelNodes; }
 
