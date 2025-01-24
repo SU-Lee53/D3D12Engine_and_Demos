@@ -23,3 +23,4 @@ public:										\
 #define DC				GET_SINGLE(D3D11Core).GetDeviceContext()
 
 #define GUI				GET_SINGLE(ImGuiManager)
+#define INPUT			GET_SINGLE(InputManager)

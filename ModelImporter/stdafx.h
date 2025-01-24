@@ -88,10 +88,11 @@ using namespace Microsoft::WRL;
 
 // headers
 #include "define.h"
+#include "CB_types.h"
 
 // Cores
 #include "D3D11Core.h"
 
 // Managers
-//#include "InputManager.h"
+#include "InputManager.h"
 #include "ImGuiManager.h"

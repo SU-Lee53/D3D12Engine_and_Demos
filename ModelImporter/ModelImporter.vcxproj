@@ -145,6 +145,7 @@
   <ItemGroup>
     <ClInclude Include="Application.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="CB_types.h" />
     <ClInclude Include="ConstantBuffer.h" />
     <ClInclude Include="D3D11Core.h" />
     <ClInclude Include="define.h" />
@@ -160,6 +161,7 @@
     <ClInclude Include="Importer.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="IndexBuffer.h" />
+    <ClInclude Include="InputManager.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
@@ -201,6 +203,7 @@
     </ClCompile>
     <ClCompile Include="Importer.cpp" />
     <ClCompile Include="IndexBuffer.cpp" />
+    <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Model.cpp" />

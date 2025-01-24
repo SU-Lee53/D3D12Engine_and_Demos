@@ -11,6 +11,7 @@ public:
 public:
 	void Initialize();
 	void Update();
+	void Render();
 
 private:
 	std::unique_ptr<FbxLoader> m_pImporter = nullptr;

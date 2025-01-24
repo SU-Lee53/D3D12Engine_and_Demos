@@ -2,7 +2,7 @@
 
 struct VertexType
 {
-	XMFLOAT4 Position = { 0,0,0,0 };
+	XMFLOAT3 Position = { 0,0,0 };
 	XMFLOAT4 Color = { 0,0,0,0 };
 	XMFLOAT2 TexCoord = { 0,0 };
 	XMFLOAT3 Normal = { 0,0,0 };

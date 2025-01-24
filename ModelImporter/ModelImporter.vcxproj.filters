@@ -141,7 +141,13 @@
     <ClInclude Include="ConstantBuffer.h">
       <Filter>D3D11Renderer\ConstantBuffer</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Camera.h">
+      <Filter>D3D11Renderer\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="CB_types.h">
+      <Filter>D3D11Renderer\ConstantBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="InputManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="ModelImporter.ico">
@@ -218,7 +224,10 @@
     <ClCompile Include="ConstantBuffer.cpp">
       <Filter>D3D11Renderer\ConstantBuffer</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Camera.cpp">
+      <Filter>D3D11Renderer\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="InputManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ModelImporter.rc">

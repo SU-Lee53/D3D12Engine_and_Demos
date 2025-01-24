@@ -4,8 +4,8 @@ template <typename T>
 class ConstantBuffer
 {
 public:
-	ConstantBuffer();
-	~ConstantBuffer();
+	ConstantBuffer() {}
+	~ConstantBuffer() {}
 
 public:
 	BOOL Initialize()
@@ -16,7 +16,7 @@ public:
 		desc.ByteWidth = sizeof(T);
 		desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
-		if (FAILED(DEVICE->CreateBuffer(&desc, nullptr, _buffer.GetAddressOf())))
+		if (FAILED(DEVICE->CreateBuffer(&desc, nullptr, m_pBuffer.GetAddressOf())))
 		{
 			__debugbreak();
 			return FALSE;
@@ -25,6 +25,8 @@ public:
 		// Keep Constant Buffer to map
 		// map - unmap is not efficient
 		::memset(&m_d3dSubresource, 0, sizeof(m_d3dSubresource));
+		DC->Map(m_pBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &m_d3dSubresource);
+
 		return TRUE;
 	}
 

@@ -4,7 +4,7 @@ class ImGuiManager
 	DECLARE_SINGLE(ImGuiManager);
 
 public:
-	void Init();
+	void Initialize();
 	void Update();
 	void Render();
 	

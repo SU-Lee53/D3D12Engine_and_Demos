@@ -2,11 +2,6 @@
 
 class Transform;
 
-struct CB_CAMERA
-{
-    XMMATRIX matView;
-    XMMATRIX matProj;
-};
 
 class Camera
 {
@@ -23,21 +18,24 @@ public:
 public:
     void SetPosition(const XMFLOAT3& pos);
     void SetRotation(const XMFLOAT3& rot);
-
+    
     void SetFovY(float fFovY);
     void SetAspect(float fWidth, float fHeight);
     void SetAspectRatio(float fRatio);
     void SetNear(float fNear);
     void SetFar(float fFar);
 
-    XMMATRIX GetViewMatrix() { return m_matView; }
-    XMMATRIX GetProjectionMatrix() { return m_matProjection; }
+    XMFLOAT3 GetPosition() { return m_vCamPosition; }
+    XMFLOAT3 GetRotation() { return m_vCamRotation; }
+
+    XMFLOAT4X4 GetViewMatrix() { return m_matView; }
+    XMFLOAT4X4 GetProjectionMatrix() { return m_matProjection; }
 
 private:
     BOOL SetCamera(const XMFLOAT3& camEYE, const XMFLOAT3& camAT, const XMFLOAT3& camUP);
 
 private:
-    XMMATRIX CreateWorldMatrix();
+    XMFLOAT4X4 CreateWorldMatrix();
 
 private:
     XMFLOAT3 m_vCamPosition;
@@ -53,8 +51,8 @@ private:
     float m_fNear           = 0.f;
     float m_fFar            = 0.f;
 
-    XMMATRIX m_matView;
-    XMMATRIX m_matProjection;
+    XMFLOAT4X4 m_matView;
+    XMFLOAT4X4 m_matProjection;
 
     BOOL m_bViewUpdated = FALSE;
     BOOL m_bProjUpdated = FALSE;

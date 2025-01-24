@@ -14,8 +14,8 @@ Camera::Camera()
 	m_vCamAT = XMFLOAT3(0.f, 0.f, 0.f);
 	m_vCamUP = XMFLOAT3(0.f, 0.f, 0.f);
 
-	m_matView = XMMatrixIdentity();
-	m_matProjection = XMMatrixIdentity();
+	XMStoreFloat4x4(&m_matView, XMMatrixIdentity());
+	XMStoreFloat4x4(&m_matProjection, XMMatrixIdentity());
 }
 
 Camera::~Camera()
@@ -26,19 +26,34 @@ Camera::~Camera()
 BOOL Camera::Initialize()
 {
 	// Get Camera Forward
-	XMMATRIX world = CreateWorldMatrix();
-	XMFLOAT3 camForward;
-	XMStoreFloat3(&camForward, world.r[2]);
+	XMFLOAT4X4 worldStore = CreateWorldMatrix();
+	XMMATRIX world = XMLoadFloat4x4(&worldStore);
+	XMVECTOR camForward = world.r[2];
 
+	// EYE
 	m_vCamEYE = m_vCamPosition;
-	m_vCamAT = XMFLOAT3(m_vCamEYE.x + camForward.x, m_vCamEYE.y + camForward.y, m_vCamEYE.z + camForward.z);
-	XMStoreFloat3(&m_vCamUP, world.r[1]);
+
+	// AT
+	XMVECTOR CamEYE = XMLoadFloat3(&m_vCamEYE);
+	XMVECTOR CamAT = XMVectorAdd(CamEYE, camForward);
+
+	// UP
+	XMVECTOR CamUP = world.r[1];
+
+	XMStoreFloat3(&m_vCamEYE, CamEYE);
+	XMStoreFloat3(&m_vCamAT, CamAT);
+	XMStoreFloat3(&m_vCamUP, CamUP);
 
 	return SetCamera(m_vCamEYE, m_vCamAT, m_vCamUP);
 }
 
-XMMATRIX Camera::CreateWorldMatrix()
+XMFLOAT4X4 Camera::CreateWorldMatrix()
 {
+	// Load XMVECTOR
+	XMVECTOR CamEYE = XMLoadFloat3(&m_vCamEYE);
+	XMVECTOR CamAT = XMLoadFloat3(&m_vCamAT);
+	XMVECTOR CamUP = XMLoadFloat3(&m_vCamUP);
+
 	// S * R * T
 	// Scale
 	XMVECTOR vScale{ 1.f, 1.f, 1.f };
@@ -54,9 +69,12 @@ XMMATRIX Camera::CreateWorldMatrix()
 	XMVECTOR vPos{ m_vCamPosition.x, m_vCamPosition.y, m_vCamPosition.z };
 	XMMATRIX matTranslation = XMMatrixTranslationFromVector(vPos);
 
-	XMMATRIX ret = XMMatrixIdentity();
-	ret = XMMatrixMultiply(matScale, matRotation);
-	ret = XMMatrixMultiply(ret, matTranslation);
+	XMMATRIX retMatrix = XMMatrixIdentity();
+	retMatrix = XMMatrixMultiply(matScale, matRotation);
+	retMatrix = XMMatrixMultiply(retMatrix, matTranslation);
+
+	XMFLOAT4X4 ret;
+	XMStoreFloat4x4(&ret, retMatrix);
 
 	return ret;
 }
@@ -66,21 +84,29 @@ BOOL Camera::Update()
 	if (m_bViewUpdated)
 	{
 		// Get Camera Forward
-		XMMATRIX world = CreateWorldMatrix();
-		XMFLOAT3 camForward;
-		XMStoreFloat3(&camForward, world.r[3]);
+		XMFLOAT4X4 worldStore = CreateWorldMatrix();
+		XMMATRIX world = XMLoadFloat4x4(&worldStore);
+		XMVECTOR camForward = world.r[2];
 
+		// EYE
 		m_vCamEYE = m_vCamPosition;
-		m_vCamAT = XMFLOAT3(m_vCamEYE.x + camForward.x, m_vCamEYE.y + camForward.y, m_vCamEYE.z + camForward.z);
-		XMStoreFloat3(&m_vCamUP, world.r[2]);
 
-		m_matView = XMMatrixLookAtLH(XMLoadFloat3(&m_vCamEYE), XMLoadFloat3(&m_vCamAT), XMLoadFloat3(&m_vCamUP));
+		// AT
+		XMVECTOR CamEYE = XMLoadFloat3(&m_vCamEYE);
+		XMVECTOR CamAT = XMVectorAdd(CamEYE, camForward);
+
+		// UP
+		XMVECTOR CamUP = world.r[1];
+
+		XMMATRIX xmMatView = XMMatrixLookAtLH(CamEYE, CamAT, CamUP);
+		XMStoreFloat4x4(&m_matView, xmMatView);
 		m_bViewUpdated = FALSE;
 	}
 
 	if (m_bProjUpdated)
 	{
-		m_matProjection = XMMatrixPerspectiveFovLH(m_ffovY, m_fAspectRatio, m_fNear, m_fFar);
+		XMMATRIX xmMatProj = XMMatrixPerspectiveFovLH(m_ffovY, m_fAspectRatio, m_fNear, m_fFar);
+		XMStoreFloat4x4(&m_matProjection, xmMatProj);
 		m_bProjUpdated = FALSE;
 	}
 
@@ -96,7 +122,10 @@ void Camera::Resize(DWORD dwWidth, DWORD dwHeight)
 
 void Camera::SetPosition(const XMFLOAT3& pos)
 {
-	if (m_vCamPosition.x != pos.x || m_vCamPosition.y != pos.y || m_vCamPosition.z != pos.z)
+	XMVECTOR xmPosOrigin = XMLoadFloat3(&m_vCamPosition);
+	XMVECTOR xmPos = XMLoadFloat3(&pos);
+
+	if (!XMVector3Equal(xmPosOrigin, xmPos))
 	{
 		m_vCamPosition = pos;
 		m_bViewUpdated = TRUE;
@@ -105,7 +134,10 @@ void Camera::SetPosition(const XMFLOAT3& pos)
 
 void Camera::SetRotation(const XMFLOAT3& rot)
 {
-	if (m_vCamRotation.x != rot.x || m_vCamRotation.y != rot.y || m_vCamRotation.z != rot.z)
+	XMVECTOR xmRotOrigin = XMLoadFloat3(&m_vCamRotation);
+	XMVECTOR xmRot = XMLoadFloat3(&rot);
+	
+	if (!XMVector3Equal(xmRotOrigin, xmRot))
 	{
 		m_vCamRotation = rot;
 		m_bViewUpdated = TRUE;
@@ -156,7 +188,13 @@ void Camera::SetFar(float fFar)
 
 BOOL Camera::SetCamera(const XMFLOAT3& camEYE, const XMFLOAT3& camAT, const XMFLOAT3& camUP)
 {
-	m_matView = XMMatrixLookAtLH(XMLoadFloat3(&camEYE), XMLoadFloat3(&camAT), XMLoadFloat3(&camUP));
+	// XMVECTOR Load
+	XMVECTOR xmCamEYE = XMLoadFloat3(&camEYE);
+	XMVECTOR xmCamAT = XMLoadFloat3(&camAT);
+	XMVECTOR xmCamUP = XMLoadFloat3(&camUP);
+
+	XMMATRIX xmMatView = XMMatrixLookAtLH(xmCamEYE, xmCamAT, xmCamUP);
+	XMStoreFloat4x4(&m_matView, xmMatView);
 
 	m_ffovY = XM_PIDIV4;
 
@@ -164,7 +202,8 @@ BOOL Camera::SetCamera(const XMFLOAT3& camEYE, const XMFLOAT3& camAT, const XMFL
 	m_fNear = 0.1f;
 	m_fFar = 1000.f;
 
-	m_matProjection = XMMatrixPerspectiveFovLH(m_ffovY, m_fAspectRatio, m_fNear, m_fFar);
+	XMMATRIX xmMatProj = XMMatrixPerspectiveFovLH(m_ffovY, m_fAspectRatio, m_fNear, m_fFar);
+	XMStoreFloat4x4(&m_matProjection, xmMatProj);
 
 	return TRUE;
 }

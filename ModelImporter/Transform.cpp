@@ -3,9 +3,8 @@
 
 Transform::Transform()
 {
-	m_matLocal = XMMatrixIdentity();
-	m_matWorld = XMMatrixIdentity();
-
+	XMStoreFloat4x4(&m_matLocal, XMMatrixIdentity());
+	XMStoreFloat4x4(&m_matWorld, XMMatrixIdentity());
 }
 
 Transform::~Transform()
@@ -31,8 +30,10 @@ BOOL Transform::Update()
 
 		XMMATRIX matTranslation = XMMatrixTranslationFromVector(XMLoadFloat3(&m_vLocalPosition));
 
-		m_matLocal = XMMatrixMultiply(matScale, matRotation);
-		m_matLocal = XMMatrixMultiply(m_matWorld, matTranslation);
+		XMMATRIX xmLocal = XMMatrixIdentity();
+		xmLocal = XMMatrixMultiply(matScale, matRotation);
+		xmLocal = XMMatrixMultiply(xmLocal, matTranslation);
+		XMStoreFloat4x4(&m_matLocal, xmLocal);
 
 		m_bLocalUpdated = FALSE;
 	}
@@ -48,8 +49,10 @@ BOOL Transform::Update()
 
 		XMMATRIX matTranslation = XMMatrixTranslationFromVector(XMLoadFloat3(&m_vWorldPosition));
 
-		m_matWorld = XMMatrixMultiply(matScale, matRotation);
-		m_matWorld = XMMatrixMultiply(m_matWorld, matTranslation);
+		XMMATRIX xmWorld = XMMatrixIdentity();
+		xmWorld = XMMatrixMultiply(matScale, matRotation);
+		xmWorld = XMMatrixMultiply(xmWorld, matTranslation);
+		XMStoreFloat4x4(&m_matWorld, xmWorld);
 
 		m_bWorldUpdated = FALSE;
 	}

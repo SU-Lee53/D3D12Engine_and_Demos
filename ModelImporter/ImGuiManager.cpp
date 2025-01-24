@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "ImGuiManager.h"
 
-void ImGuiManager::Init()
+void ImGuiManager::Initialize()
 {
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();

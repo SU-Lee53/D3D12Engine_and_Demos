@@ -1528,7 +1528,7 @@ void FbxLoader::ExportMesh(std::shared_ptr<ModelNode> pOutModelNode, FbxMesh* pf
 
 		// Vertex
 		FbxVector4 position = pfbxMesh->GetControlPointAt(i);
-		vtx.Position = XMFLOAT4(position[0], position[1], position[2], position[3]);
+		vtx.Position = XMFLOAT3(position[0], position[1], position[2]);
 
 		// UV, Normal, BiNormal, Tangent
 		int nUVElements = pfbxMesh->GetElementUVCount();

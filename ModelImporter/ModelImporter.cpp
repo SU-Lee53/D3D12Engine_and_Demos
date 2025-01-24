@@ -52,7 +52,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     {
         CORE.Initialize(g_hWnd, g_uiWindowWidth, g_uiWindowHeight);
-        GUI.Init();
+        GUI.Initialize();
+        INPUT.Initialize();
 
         g_pApp = std::make_shared<Application>();
         g_pApp->Initialize();
@@ -210,6 +211,7 @@ void Update()
 {
     // Manager
     GUI.Update();
+    INPUT.Update();
 
     g_pApp->Update();
 }
@@ -219,6 +221,7 @@ void Render()
     CORE.RenderBegin();
     {
         GUI.Render();
+        g_pApp->Render();
     }
 
     CORE.RenderEnd();

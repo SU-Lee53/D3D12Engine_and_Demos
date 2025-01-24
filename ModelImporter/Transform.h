@@ -1,11 +1,5 @@
 #pragma once
 
-struct CB_TRANSFORM
-{
-	XMMATRIX matLocal;
-	XMMATRIX matWorld;
-};
-
 class Transform
 {
 public:
@@ -22,14 +16,26 @@ public:
 	XMFLOAT3 GetLocalPosition() { return m_vLocalPosition; }
 	XMFLOAT3 GetLocalScale() { return m_vLocalRotation; }
 	XMFLOAT3 GetLocalRotation() { return m_vLocalScale; }
-	XMMATRIX GetLocalMatrix() { return m_matLocal; }
-	XMMATRIX GetLocalMatrixTransposed() { return XMMatrixTranspose(m_matLocal); }
+	XMFLOAT4X4 GetLocalMatrix() { return m_matLocal; }
+	XMFLOAT4X4 GetLocalMatrixTransposed() 
+	{ 
+		XMMATRIX xmLocalTransposed = XMMatrixTranspose(XMLoadFloat4x4(&m_matLocal)); 
+		XMFLOAT4X4 ret;
+		XMStoreFloat4x4(&ret, xmLocalTransposed);
+		return ret;
+	}
 
 	XMFLOAT3 GetWorldPosition() { return m_vWorldPosition; }
 	XMFLOAT3 GetWorldScale() { return m_vWorldRotation; }
 	XMFLOAT3 GetWorldRotation() { return m_vWorldScale; }
-	XMMATRIX GetWorldMatrix() { return m_matWorld; }
-	XMMATRIX GetWorldMatrixTransposed() { return XMMatrixTranspose(m_matWorld); }
+	XMFLOAT4X4 GetWorldMatrix() { return m_matWorld; }
+	XMFLOAT4X4 GetWorldMatrixTransposed()
+	{
+		XMMATRIX xmWorldTransposed = XMMatrixTranspose(XMLoadFloat4x4(&m_matWorld));
+		XMFLOAT4X4 ret;
+		XMStoreFloat4x4(&ret, xmWorldTransposed);
+		return ret;
+	}
 
 public:
 	// Setter
@@ -43,16 +49,16 @@ public:
 
 private:
 	// Local Transform
-	XMFLOAT3 m_vLocalPosition	= { 0.f, 0.f, 0.f };
-	XMFLOAT3 m_vLocalRotation	= { 0.f, 0.f, 0.f };
-	XMFLOAT3 m_vLocalScale		= { 1.f, 1.f, 1.f };
-	XMMATRIX m_matLocal;
+	XMFLOAT3	m_vLocalPosition = { 0.f, 0.f, 0.f };
+	XMFLOAT3	m_vLocalRotation = { 0.f, 0.f, 0.f };
+	XMFLOAT3	m_vLocalScale = { 1.f, 1.f, 1.f };
+	XMFLOAT4X4	m_matLocal;
 
 	// World Transform
-	XMFLOAT3 m_vWorldPosition	= { 0.f, 0.f, 0.f };
-	XMFLOAT3 m_vWorldRotation	= { 0.f, 0.f, 0.f };
-	XMFLOAT3 m_vWorldScale		= { 1.f, 1.f, 1.f };
-	XMMATRIX m_matWorld;
+	XMFLOAT3	m_vWorldPosition = { 0.f, 0.f, 0.f };
+	XMFLOAT3	m_vWorldRotation = { 0.f, 0.f, 0.f };
+	XMFLOAT3	m_vWorldScale = { 1.f, 1.f, 1.f };
+	XMFLOAT4X4	m_matWorld;
 
 	BOOL m_bLocalUpdated = FALSE;
 	BOOL m_bWorldUpdated = FALSE;

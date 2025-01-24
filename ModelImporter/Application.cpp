@@ -36,4 +36,30 @@ void Application::Update()
 		m_pImporter->ShowFBXNodeToImGui();
 	}
 	ImGui::End();
+
+	XMFLOAT3 pos = m_pCamera->GetPosition();
+	if (INPUT.GetButton(KEY_TYPE::W))
+	{
+		pos.z += 1.0f;
+	}
+	if (INPUT.GetButton(KEY_TYPE::S))
+	{
+		pos.z -= 1.0f;
+	}
+	if (INPUT.GetButton(KEY_TYPE::D))
+	{
+		pos.x += 1.0f;
+	}
+	if (INPUT.GetButton(KEY_TYPE::A))
+	{
+		pos.x -= 1.0f;
+	}
+
+	m_pCamera->SetPosition(pos);
+	m_pCamera->Update();
+}
+
+void Application::Render()
+{
+	m_pModel->Render(m_pCamera);
 }

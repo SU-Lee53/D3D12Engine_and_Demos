@@ -20,6 +20,10 @@ BOOL D3D11Core::Initialize(HWND hWnd, UINT windowWidth, UINT windowHeight)
 	m_ScissorRect.right = m_uiScreenWidth;
 	m_ScissorRect.bottom = m_uiScreenHeight;
 
+	CreateDefaultRasterizerState();
+	CreateDefaultBlendState();
+	CreateDefaultSamplerState();
+
 	return TRUE;
 }
 
@@ -119,6 +123,79 @@ BOOL D3D11Core::CreateDSV()
 		HR_ASSERT(hr);
 	}
 
+	return TRUE;
+}
+
+BOOL D3D11Core::CreateDefaultRasterizerState()
+{
+	D3D11_RASTERIZER_DESC desc = CD3D11_RASTERIZER_DESC(D3D11_DEFAULT);
+	desc.FillMode = D3D11_FILL_WIREFRAME;
+	desc.MultisampleEnable = TRUE;
+
+	if (FAILED(DEVICE->CreateRasterizerState(&desc, m_pRasterizerStateDefault.GetAddressOf())))
+	{
+		__debugbreak();
+		return FALSE;
+	}
+	return TRUE;
+}
+
+BOOL D3D11Core::CreateDefaultBlendState()
+{
+	D3D11_RENDER_TARGET_BLEND_DESC rtBlendDesc = {};
+	::ZeroMemory(&rtBlendDesc, sizeof(rtBlendDesc));
+	{
+		rtBlendDesc.BlendEnable = TRUE;
+		rtBlendDesc.SrcBlend = D3D11_BLEND_SRC_ALPHA;
+		rtBlendDesc.DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+		rtBlendDesc.BlendOp = D3D11_BLEND_OP_ADD;
+		rtBlendDesc.SrcBlendAlpha = D3D11_BLEND_ONE;
+		rtBlendDesc.DestBlendAlpha = D3D11_BLEND_ZERO;
+		rtBlendDesc.BlendOpAlpha = D3D11_BLEND_OP_ADD;
+		rtBlendDesc.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+	}
+
+	D3D11_BLEND_DESC desc = {};
+	::ZeroMemory(&desc, sizeof(desc));
+	{
+		desc.AlphaToCoverageEnable = TRUE;
+		desc.IndependentBlendEnable = TRUE;
+		desc.RenderTarget[0] = rtBlendDesc;
+	}
+
+	if (FAILED(DEVICE->CreateBlendState(&desc, m_pBlendStateDefault.GetAddressOf())))
+	{
+		__debugbreak();
+		return FALSE;
+	}
+	return TRUE;
+}
+
+BOOL D3D11Core::CreateDefaultSamplerState()
+{
+	D3D11_SAMPLER_DESC desc = {};
+	::ZeroMemory(&desc, sizeof(desc));
+	{
+		desc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+		desc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+		desc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+		desc.BorderColor[0] = 1;	// R 
+		desc.BorderColor[1] = 0;	// G
+		desc.BorderColor[2] = 0;	// B
+		desc.BorderColor[3] = 1;	// A
+		desc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
+		desc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+		desc.MaxAnisotropy = 16;
+		desc.MaxLOD = FLT_MAX;
+		desc.MinLOD = FLT_MAX;
+		desc.MipLODBias = 0.0f;
+	}
+
+	if (FAILED(DEVICE->CreateSamplerState(&desc, m_pSamplerStateDefault.GetAddressOf())))
+	{
+		__debugbreak();
+		return FALSE;
+	}
 	return TRUE;
 }
 
