@@ -1465,6 +1465,9 @@ void FbxLoader::ExportNode(std::shared_ptr<Model> pOutModel, FbxNode* pfbxNode, 
 	{
 		shared_ptr<ModelNode> pModelNode = make_shared<ModelNode>();
 
+		// Name
+		pModelNode->strName = pfbxNode->GetName();
+
 		// Transform
 		FbxDouble3 fbxvTranslation = pfbxNode->LclTranslation.Get();
 		FbxDouble3 fbxvRotation = pfbxNode->LclRotation.Get();
@@ -1785,9 +1788,16 @@ void FbxLoader::ExportMaterial(std::shared_ptr<ModelNode> pOutModelNode, FbxNode
 				FbxTexture* pfbxTexture = pfbxDiffuseProp.GetSrcObject<FbxTexture>();
 				FbxFileTexture* pfbxFileTexture = FbxCast<FbxFileTexture>(pfbxTexture);
 
-				string strTexturePath = pfbxFileTexture->GetFileName();
-				filesystem::path fsTexturePath(strTexturePath);
-				wstrDiffuseTexturePath = fsTexturePath.wstring();
+				try
+				{
+					string strTexturePath = pfbxFileTexture->GetFileName();
+					filesystem::path fsTexturePath(strTexturePath);
+					wstrDiffuseTexturePath = fsTexturePath.wstring();
+				}
+				catch (::exception e)
+				{
+					wstrDiffuseTexturePath = L"";	// Error Texture
+				}
 			}
 		}
 		else

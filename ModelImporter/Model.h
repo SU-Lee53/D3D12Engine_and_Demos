@@ -13,6 +13,8 @@ struct ModelNode
 		pMaterial = std::make_unique<Material>();
 	}
 
+	std::string strName;
+
 	std::unique_ptr<Mesh> pMesh;
 	std::unique_ptr<Transform> pTransform;
 	std::unique_ptr<Material> pMaterial;
@@ -30,6 +32,7 @@ public:
 public:
 	BOOL Initialize();
 
+	void Update();
 	void Render(std::shared_ptr<class Camera> pCamera);
 
 public:
@@ -40,6 +43,11 @@ public:
 
 public:
 	static void UpdateChildsInModelNodes(std::vector<std::shared_ptr<ModelNode>>& pModelNodes);
+
+public:
+	void TranslateModel(const XMFLOAT3& pos);
+	void RotateModel(const XMFLOAT3& rot);
+	void ScaleModel(const XMFLOAT3& scale);
 
 private:
 	std::vector<std::shared_ptr<ModelNode>> m_pModelNodes = {};

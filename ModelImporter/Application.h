@@ -18,6 +18,9 @@ private:
 	std::shared_ptr<class Model> m_pModel;
 
 	std::shared_ptr<class Camera> m_pCamera = nullptr;
+	float m_fMouseDeltaX = 0.f;
+	float m_fMouseDeltaY = 0.f;
+	POINT m_MousePoint;
 
 };
 

@@ -31,6 +31,38 @@ public:
     XMFLOAT4X4 GetViewMatrix() { return m_matView; }
     XMFLOAT4X4 GetProjectionMatrix() { return m_matProjection; }
 
+    XMFLOAT3 GetCameraFront()
+    {
+        XMFLOAT3 ret;
+        XMMATRIX xmWorld = XMLoadFloat4x4(&m_matCamWorld);
+        XMStoreFloat3(&ret, xmWorld.r[2]);
+        return ret;
+    }
+
+    XMFLOAT3 GetCameraRight()
+    {
+        XMFLOAT3 ret;
+        XMMATRIX xmWorld = XMLoadFloat4x4(&m_matCamWorld);
+        XMStoreFloat3(&ret, xmWorld.r[0]);
+        return ret;
+    }
+
+    XMFLOAT3 GetCameraUp()
+    {
+        XMFLOAT3 ret;
+        XMMATRIX xmWorld = XMLoadFloat4x4(&m_matCamWorld);
+        XMStoreFloat3(&ret, xmWorld.r[1]);
+        return ret;
+    }
+
+    void DecomposeCameraUVN(XMFLOAT3& outFront, XMFLOAT3& outRight, XMFLOAT3& outUp)
+    {
+        XMMATRIX xmWorld = XMLoadFloat4x4(&m_matCamWorld);
+        XMStoreFloat3(&outFront, xmWorld.r[2]); // Front is in 3rd row
+        XMStoreFloat3(&outRight, xmWorld.r[0]); // Right is in 1st row
+        XMStoreFloat3(&outUp, xmWorld.r[1]); // UP is in 2nd row
+    }
+
 private:
     BOOL SetCamera(const XMFLOAT3& camEYE, const XMFLOAT3& camAT, const XMFLOAT3& camUP);
 
@@ -38,8 +70,9 @@ private:
     XMFLOAT4X4 CreateWorldMatrix();
 
 private:
-    XMFLOAT3 m_vCamPosition;
-    XMFLOAT3 m_vCamRotation;
+    XMFLOAT3    m_vCamPosition;
+    XMFLOAT3    m_vCamRotation;
+    XMFLOAT4X4  m_matCamWorld;
 
     // Camera Parameters Cache
     XMFLOAT3 m_vCamEYE;

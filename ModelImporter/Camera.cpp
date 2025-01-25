@@ -26,8 +26,8 @@ Camera::~Camera()
 BOOL Camera::Initialize()
 {
 	// Get Camera Forward
-	XMFLOAT4X4 worldStore = CreateWorldMatrix();
-	XMMATRIX world = XMLoadFloat4x4(&worldStore);
+	m_matCamWorld = CreateWorldMatrix();
+	XMMATRIX world = XMLoadFloat4x4(&m_matCamWorld);
 	XMVECTOR camForward = world.r[2];
 
 	// EYE
@@ -84,8 +84,8 @@ BOOL Camera::Update()
 	if (m_bViewUpdated)
 	{
 		// Get Camera Forward
-		XMFLOAT4X4 worldStore = CreateWorldMatrix();
-		XMMATRIX world = XMLoadFloat4x4(&worldStore);
+		m_matCamWorld = CreateWorldMatrix();
+		XMMATRIX world = XMLoadFloat4x4(&m_matCamWorld);
 		XMVECTOR camForward = world.r[2];
 
 		// EYE

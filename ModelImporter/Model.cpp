@@ -18,6 +18,14 @@ BOOL Model::Initialize()
 	return TRUE;
 }
 
+void Model::Update()
+{
+	for (const auto& node : m_pModelNodes)
+	{
+		node->pTransform->Update();
+	}
+}
+
 void Model::Render(shared_ptr<Camera> pCamera)
 {
 	// What we need
@@ -48,6 +56,8 @@ void Model::Render(shared_ptr<Camera> pCamera)
 			XMStoreFloat4x4(&cameraData.matProj, XMMatrixTranspose(XMLoadFloat4x4(&pCamera->GetProjectionMatrix())));
 		}
 		cbCamera->PushData(cameraData);
+
+		DC->PSSetShaderResources(0, 1, node->pMaterial->GetTexture()->GetComPtr().GetAddressOf());
 
 		DC->IASetInputLayout(node->pMaterial->GetShader()->GetInputLayout().Get());
 		DC->VSSetShader(node->pMaterial->GetShader()->GetVertexShader().Get(), nullptr, 0);
@@ -88,4 +98,28 @@ void Model::UpdateChildsInModelNodes(std::vector<std::shared_ptr<ModelNode>>& pM
 		}
 	}
 
+}
+
+void Model::TranslateModel(const XMFLOAT3& pos)
+{
+	for (const auto& node : m_pModelNodes)
+	{
+		node->pTransform->SetWorldPosition(pos);
+	}
+}
+
+void Model::RotateModel(const XMFLOAT3& rot)
+{
+	for (const auto& node : m_pModelNodes)
+	{
+		node->pTransform->SetWorldRotation(rot);
+	}
+}
+
+void Model::ScaleModel(const XMFLOAT3& scale)
+{
+	for (const auto& node : m_pModelNodes)
+	{
+		node->pTransform->SetWorldScale(scale);
+	}
 }

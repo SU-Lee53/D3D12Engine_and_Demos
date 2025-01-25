@@ -220,9 +220,10 @@ void Render()
 {
     CORE.RenderBegin();
     {
-        GUI.Render();
         g_pApp->Render();
+        GUI.Render();
     }
 
     CORE.RenderEnd();
+
 }

@@ -68,13 +68,13 @@ void Transform::SetLocalPosition(const XMFLOAT3& pos)
 
 void Transform::SetLocalScale(const XMFLOAT3& scale)
 {
-	m_vLocalRotation = scale;
+	m_vLocalScale = scale;
 	m_bLocalUpdated = TRUE;
 }
 
 void Transform::SetLocalRotation(const XMFLOAT3& rot)
 {
-	m_vLocalScale = rot;
+	m_vLocalRotation = rot;
 	m_bLocalUpdated = TRUE;
 }
 
@@ -86,12 +86,12 @@ void Transform::SetWorldPosition(const XMFLOAT3& pos)
 
 void Transform::SetWorldScale(const XMFLOAT3& scale)
 {
-	m_vWorldRotation = scale;
+	m_vWorldScale = scale;
 	m_bWorldUpdated = TRUE;
 }
 
 void Transform::SetWorldRotation(const XMFLOAT3& rot)
 {
-	m_vWorldScale = rot;
+	m_vWorldRotation = rot;
 	m_bWorldUpdated = TRUE;
 }
