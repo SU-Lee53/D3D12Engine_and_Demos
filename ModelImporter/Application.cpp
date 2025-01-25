@@ -31,9 +31,23 @@ void Application::Initialize()
 
 void Application::Update()
 {
+
 	if (ImGui::Begin("Node"))
 	{
-		m_pImporter->ShowFBXNodeToImGui();
+		if (ImGui::BeginTabBar("Importer", ImGuiTabBarFlags_None))
+		{
+			if (ImGui::BeginTabItem("Importer"))
+			{
+				m_pImporter->ShowFBXNodeToImGui();
+				ImGui::EndTabItem();
+			}
+			if (ImGui::BeginTabItem("Model"))
+			{
+				m_pModel->PrintInfoToImGui();
+				ImGui::EndTabItem();
+			}
+			ImGui::EndTabBar();
+		}
 	}
 	ImGui::End();
 

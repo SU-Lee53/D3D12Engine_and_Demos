@@ -24,22 +24,26 @@ public:
 
 		// Keep Constant Buffer to map
 		// map - unmap is not efficient
-		::memset(&m_d3dSubresource, 0, sizeof(m_d3dSubresource));
-		DC->Map(m_pBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &m_d3dSubresource);
 
 		return TRUE;
 	}
 
 	void PushData(const T& data)
 	{
-		::memcpy(m_d3dSubresource.pData, &data, sizeof(data));
+		D3D11_MAPPED_SUBRESOURCE subResource;
+		memset(&subResource, 0, sizeof(subResource));
+
+		DC->Map(m_pBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &subResource);
+		{
+			memcpy(subResource.pData, &data, sizeof(data));
+		}
+		DC->Unmap(m_pBuffer.Get(), 0);
 	}
 
 	ComPtr<ID3D11Buffer>& GetBuffer() { return m_pBuffer; }
 
 private:
 	ComPtr<ID3D11Buffer>		m_pBuffer = nullptr;
-	D3D11_MAPPED_SUBRESOURCE	m_d3dSubresource = {};
 
 
 };

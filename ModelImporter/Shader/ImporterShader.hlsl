@@ -31,6 +31,11 @@ cbuffer CameraData : register(b1)
     matrix matProj;
 };
 
+cbuffer ColorData : register(b2)
+{
+    float4 ShowColor;
+};
+
 Texture2D diffuseMap : register(t0);
 SamplerState samplerDiffuse : register(s0);
 
@@ -51,5 +56,5 @@ PSInput VSMain(VSInput input)
 
 float4 PSMain(PSInput input) : SV_TARGET
 {
-    return diffuseMap.Sample(samplerDiffuse, input.texCoord);
+    return ShowColor;
 }

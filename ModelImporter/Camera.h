@@ -30,6 +30,22 @@ public:
 
     XMFLOAT4X4 GetViewMatrix() { return m_matView; }
     XMFLOAT4X4 GetProjectionMatrix() { return m_matProjection; }
+    
+    XMFLOAT4X4 GetViewMatrixTransposed()
+    {
+        XMMATRIX xmViewTransposed = XMMatrixTranspose(XMLoadFloat4x4(&m_matView));
+        XMFLOAT4X4 ret;
+        XMStoreFloat4x4(&ret, xmViewTransposed);
+        return ret;
+    }
+
+    XMFLOAT4X4 GetProjectionMatrixTransposed()
+    {
+        XMMATRIX xmProjTransposed = XMMatrixTranspose(XMLoadFloat4x4(&m_matProjection));
+        XMFLOAT4X4 ret;
+        XMStoreFloat4x4(&ret, xmProjTransposed);
+        return ret;
+    }
 
     XMFLOAT3 GetCameraFront()
     {

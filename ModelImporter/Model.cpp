@@ -36,26 +36,38 @@ void Model::Render(shared_ptr<Camera> pCamera)
 
 	unique_ptr<ConstantBuffer<CB_TRANSFORM>> cbTransform = make_unique<ConstantBuffer<CB_TRANSFORM>>();
 	unique_ptr<ConstantBuffer<CB_CAMERA>> cbCamera = make_unique<ConstantBuffer<CB_CAMERA>>();
+	unique_ptr<ConstantBuffer<XMFLOAT4>> cbShowColor = make_unique<ConstantBuffer<XMFLOAT4>>();
+
 	cbTransform->Initialize();
 	cbCamera->Initialize();
+	cbShowColor->Initialize();
 
-	for (const auto& node : m_pModelNodes)
+	for (UINT i = 0; i < m_pModelNodes.size(); i++)
 	{
+		shared_ptr<ModelNode>& node = m_pModelNodes[i];
+
 		CB_TRANSFORM transformData = {};
 		::ZeroMemory(&transformData, sizeof(transformData));
 		{
-			XMStoreFloat4x4(&transformData.matLocal, XMMatrixTranspose(XMLoadFloat4x4(&node->pTransform->GetLocalMatrix())));
-			XMStoreFloat4x4(&transformData.matWorld, XMMatrixTranspose(XMLoadFloat4x4(&node->pTransform->GetWorldMatrix())));
+			transformData.matLocal = node->pTransform->GetLocalMatrixTransposed();
+			transformData.matWorld = node->pTransform->GetWorldMatrixTransposed();
 		}
 		cbTransform->PushData(transformData);
 
 		CB_CAMERA cameraData = {};
 		::ZeroMemory(&cameraData, sizeof(cameraData));
 		{
-			XMStoreFloat4x4(&cameraData.matView, XMMatrixTranspose(XMLoadFloat4x4(&pCamera->GetViewMatrix())));
-			XMStoreFloat4x4(&cameraData.matProj, XMMatrixTranspose(XMLoadFloat4x4(&pCamera->GetProjectionMatrix())));
+			cameraData.matView = pCamera->GetViewMatrixTransposed();
+			cameraData.matProj = pCamera->GetProjectionMatrixTransposed();
 		}
 		cbCamera->PushData(cameraData);
+
+		XMFLOAT4 ShowColor = XMFLOAT4(1.f, 0.f, 0.f, 1.f);
+		if (i == m_ItemSelected)
+		{
+			ShowColor = XMFLOAT4(0.f, 1.f, 0.f, 1.f);
+		}
+		cbShowColor->PushData(ShowColor);
 
 		DC->PSSetShaderResources(0, 1, node->pMaterial->GetTexture()->GetComPtr().GetAddressOf());
 
@@ -75,6 +87,7 @@ void Model::Render(shared_ptr<Camera> pCamera)
 
 		DC->VSSetConstantBuffers(0, 1, cbTransform->GetBuffer().GetAddressOf());
 		DC->VSSetConstantBuffers(1, 1, cbCamera->GetBuffer().GetAddressOf());
+		DC->PSSetConstantBuffers(2, 1, cbShowColor->GetBuffer().GetAddressOf());
 
 		// PSSetSamplers
 		DC->PSSetSamplers(0, 1, CORE.GetDefaultSamplerState().GetAddressOf());
@@ -122,4 +135,82 @@ void Model::ScaleModel(const XMFLOAT3& scale)
 	{
 		node->pTransform->SetWorldScale(scale);
 	}
+}
+
+void Model::PrintInfoToImGui()
+{
+	if (ImGui::BeginListBox("ModelNodes"))
+	{
+		for (int i = 0; i < m_pModelNodes.size(); i++)
+		{
+			const bool bSelected = (m_ItemSelected == i);
+			if (ImGui::Selectable(m_pModelNodes[i]->strName.c_str(), bSelected))
+				m_ItemSelected = i;
+
+			if (m_ItemHighlighted && ImGui::IsItemHovered())
+				m_ItemHighlightedIndex = i;
+
+			if (bSelected)
+				ImGui::SetItemDefaultFocus();
+		}
+
+		ImGui::EndListBox();
+	}
+
+	// Transform Manipulator
+	shared_ptr<ModelNode> pSelectedNode = m_pModelNodes[m_ItemSelected];
+
+	if (ImGui::BeginTabBar("Transform", ImGuiTabBarFlags_None))
+	{
+		if (ImGui::BeginTabItem("World"))
+		{
+			XMFLOAT3 pos = pSelectedNode->pTransform->GetWorldPosition();
+			XMFLOAT3 rot = pSelectedNode->pTransform->GetWorldRotation();
+			XMFLOAT3 scale = pSelectedNode->pTransform->GetWorldScale();
+
+			XMVECTOR xmPos = XMLoadFloat3(&pos);
+			XMVECTOR xmRot = XMLoadFloat3(&rot);
+			XMVECTOR xmScale = XMLoadFloat3(&scale);
+
+			ImGui::DragFloat("pos.x", &xmPos.m128_f32[0], 0.01f, -100.f, 100.f);
+			ImGui::DragFloat("pos.y", &xmPos.m128_f32[1], 0.01f, -100.f, 100.f);
+			ImGui::DragFloat("pos.z", &xmPos.m128_f32[2], 0.01f, -100.f, 100.f);
+
+			ImGui::DragFloat("rot.x", &xmRot.m128_f32[0], 0.01f, -360.f, 360.f);
+			ImGui::DragFloat("rot.y", &xmRot.m128_f32[1], 0.01f, -360.f, 360.f);
+			ImGui::DragFloat("rot.z", &xmRot.m128_f32[2], 0.01f, -360.f, 360.f);
+
+			ImGui::DragFloat("scale.x", &xmScale.m128_f32[0], 0.01f, 0.f, 10.f);
+			ImGui::DragFloat("scale.y", &xmScale.m128_f32[1], 0.01f, 0.f, 10.f);
+			ImGui::DragFloat("scale.z", &xmScale.m128_f32[2], 0.01f, 0.f, 10.f);
+
+			XMStoreFloat3(&pos, xmPos);
+			XMStoreFloat3(&rot, xmRot);
+			XMStoreFloat3(&scale, xmScale);
+
+			pSelectedNode->pTransform->SetWorldPosition(pos);
+			pSelectedNode->pTransform->SetWorldRotation(rot);
+			pSelectedNode->pTransform->SetWorldScale(scale);
+
+			ImGui::EndTabItem();
+		}
+		
+		if (ImGui::BeginTabItem("Local"))
+		{
+			XMFLOAT3 pos = pSelectedNode->pTransform->GetLocalPosition();
+			XMFLOAT3 rot = pSelectedNode->pTransform->GetLocalRotation();
+			XMFLOAT3 scale = pSelectedNode->pTransform->GetLocalScale();
+
+			ImGui::Text("Local Transforms");
+			ImGui::Text("Translation : (%f, %f, %f)", pos.x, pos.y, pos.z);
+			ImGui::Text("Rotation : (%f, %f, %f)", rot.x, rot.y, rot.z);
+			ImGui::Text("Scale : (%f, %f, %f)", scale.x, scale.y, scale.z);
+
+			ImGui::EndTabItem();
+		}
+
+		ImGui::EndTabBar();
+	}
+
+
 }

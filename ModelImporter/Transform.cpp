@@ -62,36 +62,72 @@ BOOL Transform::Update()
 
 void Transform::SetLocalPosition(const XMFLOAT3& pos)
 {
-	m_vLocalPosition = pos;
-	m_bLocalUpdated = TRUE;
+	XMVECTOR xmPosOrigin = XMLoadFloat3(&m_vLocalPosition);
+	XMVECTOR xmPosNew = XMLoadFloat3(&pos);
+
+	if(!XMVector3Equal(xmPosOrigin, xmPosNew))
+	{
+		m_vLocalPosition = pos;
+		m_bLocalUpdated = TRUE;
+	}
 }
 
 void Transform::SetLocalScale(const XMFLOAT3& scale)
 {
-	m_vLocalScale = scale;
-	m_bLocalUpdated = TRUE;
+	XMVECTOR xmScaleOrigin = XMLoadFloat3(&m_vLocalScale);
+	XMVECTOR xmScaleNew = XMLoadFloat3(&scale);
+
+	if (!XMVector3Equal(xmScaleOrigin, xmScaleNew))
+	{
+		m_vLocalScale = scale;
+		m_bLocalUpdated = TRUE;
+	}
 }
 
 void Transform::SetLocalRotation(const XMFLOAT3& rot)
 {
-	m_vLocalRotation = rot;
-	m_bLocalUpdated = TRUE;
+	XMVECTOR xmRotationOrigin = XMLoadFloat3(&m_vLocalRotation);
+	XMVECTOR xmRotationNew = XMLoadFloat3(&rot);
+
+	if (!XMVector3Equal(xmRotationOrigin, xmRotationNew))
+	{
+		m_vLocalRotation = rot;
+		m_bLocalUpdated = TRUE;
+	}
 }
 
 void Transform::SetWorldPosition(const XMFLOAT3& pos)
 {
-	m_vWorldPosition = pos;
-	m_bWorldUpdated = TRUE;
+	XMVECTOR xmPosOrigin = XMLoadFloat3(&m_vWorldPosition);
+	XMVECTOR xmPosNew = XMLoadFloat3(&pos);
+
+	if (!XMVector3Equal(xmPosOrigin, xmPosNew))
+	{
+		m_vWorldPosition = pos;
+		m_bWorldUpdated = TRUE;
+	}
 }
 
 void Transform::SetWorldScale(const XMFLOAT3& scale)
 {
-	m_vWorldScale = scale;
-	m_bWorldUpdated = TRUE;
+	XMVECTOR xmScaleOrigin = XMLoadFloat3(&m_vWorldScale);
+	XMVECTOR xmScaleNew = XMLoadFloat3(&scale);
+
+	if (!XMVector3Equal(xmScaleOrigin, xmScaleNew))
+	{
+		m_vWorldScale = scale;
+		m_bWorldUpdated = TRUE;
+	}
 }
 
 void Transform::SetWorldRotation(const XMFLOAT3& rot)
 {
-	m_vWorldRotation = rot;
-	m_bWorldUpdated = TRUE;
+	XMVECTOR xmRotationOrigin = XMLoadFloat3(&m_vWorldRotation);
+	XMVECTOR xmRotationNew = XMLoadFloat3(&rot);
+
+	if (!XMVector3Equal(xmRotationOrigin, xmRotationNew))
+	{
+		m_vWorldRotation = rot;
+		m_bWorldUpdated = TRUE;
+	}
 }

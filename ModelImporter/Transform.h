@@ -14,8 +14,8 @@ public:
 public:
 	// Getter
 	XMFLOAT3 GetLocalPosition() { return m_vLocalPosition; }
-	XMFLOAT3 GetLocalScale() { return m_vLocalRotation; }
-	XMFLOAT3 GetLocalRotation() { return m_vLocalScale; }
+	XMFLOAT3 GetLocalScale() { return m_vLocalScale; }
+	XMFLOAT3 GetLocalRotation() { return m_vLocalRotation; }
 	XMFLOAT4X4 GetLocalMatrix() { return m_matLocal; }
 	XMFLOAT4X4 GetLocalMatrixTransposed() 
 	{ 
@@ -26,8 +26,8 @@ public:
 	}
 
 	XMFLOAT3 GetWorldPosition() { return m_vWorldPosition; }
-	XMFLOAT3 GetWorldScale() { return m_vWorldRotation; }
-	XMFLOAT3 GetWorldRotation() { return m_vWorldScale; }
+	XMFLOAT3 GetWorldScale() { return m_vWorldScale; }
+	XMFLOAT3 GetWorldRotation() { return m_vWorldRotation; }
 	XMFLOAT4X4 GetWorldMatrix() { return m_matWorld; }
 	XMFLOAT4X4 GetWorldMatrixTransposed()
 	{

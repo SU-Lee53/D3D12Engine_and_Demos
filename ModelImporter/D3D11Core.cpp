@@ -129,7 +129,7 @@ BOOL D3D11Core::CreateDSV()
 BOOL D3D11Core::CreateDefaultRasterizerState()
 {
 	D3D11_RASTERIZER_DESC desc = CD3D11_RASTERIZER_DESC(D3D11_DEFAULT);
-	//desc.FillMode = D3D11_FILL_WIREFRAME;
+	desc.FillMode = D3D11_FILL_WIREFRAME;
 	desc.MultisampleEnable = TRUE;
 
 	if (FAILED(DEVICE->CreateRasterizerState(&desc, m_pRasterizerStateDefault.GetAddressOf())))

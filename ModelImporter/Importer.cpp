@@ -2,6 +2,7 @@
 #include "Importer.h"
 #include "Model.h"
 #include <filesystem>
+#include <algorithm>
 
 using namespace std;
 using namespace std::literals;
@@ -1466,7 +1467,26 @@ void FbxLoader::ExportNode(std::shared_ptr<Model> pOutModel, FbxNode* pfbxNode, 
 		shared_ptr<ModelNode> pModelNode = make_shared<ModelNode>();
 
 		// Name
-		pModelNode->strName = pfbxNode->GetName();
+		// if Same name found in ModelNodes -> Set Number
+		vector<shared_ptr<ModelNode>>& modelNodes = pOutModel->GetModelNodes();
+		string strNodeName = pfbxNode->GetName();
+		int nameCount = 0;
+		::for_each(modelNodes.begin(), modelNodes.end(), 
+			[&nameCount, strNodeName](shared_ptr<ModelNode>& node)
+			{
+				if (node->strName.find(strNodeName) != decltype(node->strName)::npos)
+					nameCount++;
+			}
+		);
+
+		if(nameCount == 0)
+		{
+			pModelNode->strName = pfbxNode->GetName();
+		}
+		else
+		{
+			pModelNode->strName = pfbxNode->GetName() + " ("s + ::to_string(nameCount + 1) + ")"s;
+		}
 
 		// Transform
 		FbxDouble3 fbxvTranslation = pfbxNode->LclTranslation.Get();
