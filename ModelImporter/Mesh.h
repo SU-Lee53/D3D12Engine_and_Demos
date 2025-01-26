@@ -19,6 +19,15 @@ private:
 	std::unique_ptr<VertexBuffer> m_upVertexBuffer;
 	std::unique_ptr<IndexBuffer> m_upIndexBuffer;
 
+public:
+	friend std::ostream& operator<<(std::ostream& os, const Mesh& mesh)
+	{
+		os << "<Mesh>" << std::endl;
+		os << *mesh.m_upVertexBuffer << std::endl;
+		os << *mesh.m_upIndexBuffer << std::endl;
+		os << "</Mesh>" << std::endl;
 
+		return os;
+	}
 };
 

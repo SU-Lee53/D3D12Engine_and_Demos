@@ -63,6 +63,27 @@ private:
 	BOOL m_bLocalUpdated = FALSE;
 	BOOL m_bWorldUpdated = FALSE;
 
+public:
+	friend std::ostream& operator<<(std::ostream& os, const Transform& transform)
+	{
+		// Export Order : Position - Rotation - Scale
+		os << "<Transform>" << std::endl;
 
+		os << "<Local>" << std::endl;
+		os.write(reinterpret_cast<const char*>(&transform.m_vLocalPosition), sizeof(transform.m_vLocalPosition));
+		os.write(reinterpret_cast<const char*>(&transform.m_vLocalRotation), sizeof(transform.m_vLocalRotation));
+		os.write(reinterpret_cast<const char*>(&transform.m_vLocalScale), sizeof(transform.m_vLocalScale));
+		os << "</Local>" << std::endl;
+		
+		os << "<World>" << std::endl;
+		os.write(reinterpret_cast<const char*>(&transform.m_vWorldPosition), sizeof(transform.m_vWorldPosition));
+		os.write(reinterpret_cast<const char*>(&transform.m_vWorldRotation), sizeof(transform.m_vWorldRotation));
+		os.write(reinterpret_cast<const char*>(&transform.m_vWorldScale), sizeof(transform.m_vWorldScale));
+		os << "</World>" << std::endl;
+
+		os << "</Transform>" << std::endl;
+
+		return os;
+	}
 };
 

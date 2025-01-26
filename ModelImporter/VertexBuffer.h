@@ -23,7 +23,17 @@ struct VertexBuffer
 	
 	BOOL Initialize(const std::vector<VertexType> vertices);
 
+	friend std::ostream& operator<<(std::ostream& os, const VertexBuffer& buf)
+	{
+		os << "<Vertex>" << std::endl;
+		for (const auto& vtx : buf.m_Vertices)
+		{
+			os.write(reinterpret_cast<const char*>(&vtx), sizeof(vtx));
+		}
+		os << "</Vertex>" << std::endl;
 
+		return os;
+	}
 
 };
 

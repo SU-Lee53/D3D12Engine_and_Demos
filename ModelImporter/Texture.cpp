@@ -20,6 +20,8 @@ BOOL Texture::Initialize(const std::wstring& wstrPath)
 
 BOOL Texture::LoadFromFile(const std::wstring& wstrPath)
 {
+	m_strFilePath = string(wstrPath.begin(), wstrPath.end());
+
 	DirectX::TexMetadata texMetaData;
 
 	if (!wstrPath.empty())

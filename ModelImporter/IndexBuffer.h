@@ -11,5 +11,18 @@ struct IndexBuffer
 
 
 	BOOL Initialize(const std::vector<UINT> indices);
+
+
+	friend std::ostream& operator<<(std::ostream& os, const IndexBuffer& buf)
+	{
+		os << "<Index>" << std::endl;
+		for (const auto& idx : buf.m_Indices)
+		{
+			os.write(reinterpret_cast<const char*>(&idx), sizeof(idx));
+		}
+		os << "</Index>" << std::endl;
+
+		return os;
+	}
 };
 

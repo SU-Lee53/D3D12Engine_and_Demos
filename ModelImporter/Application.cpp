@@ -21,12 +21,13 @@ void Application::Initialize()
 
 	m_pImporter = make_unique<FbxLoader>();
 	m_pImporter->Initialize();
-
 	m_pImporter->LoadFBXFile("../fbx/Gunship.fbx");
 
 	m_pModel = make_shared<Model>();
 	m_pImporter->ExportModelInSceneToModel(m_pModel);
-	//m_pModel->ScaleModel(XMFLOAT3(0.01f, 0.01f, 0.01f));
+	m_pModel->ScaleModel(XMFLOAT3(0.01f, 0.01f, 0.01f));
+
+	m_pModel->ExportModelToBinary();
 }
 
 void Application::Update()

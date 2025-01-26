@@ -13,6 +13,31 @@ struct MaterialData
 	XMFLOAT4 specularColor;
 	XMFLOAT4 emissiveColor;
 	XMFLOAT4 ambientColor;
+
+	friend std::ostream& operator<<(std::ostream& os, const MaterialData& data)
+	{
+		os << "<Color Data>" << std::endl;
+
+		os << "<Diffuse>" << std::endl;
+		os.write(reinterpret_cast<const char*>(&data.diffuseColor), sizeof(data.diffuseColor));
+		os << "</Diffuse>" << std::endl;
+
+		os << "<Specular>" << std::endl;
+		os.write(reinterpret_cast<const char*>(&data.specularColor), sizeof(data.specularColor));
+		os << "</Specular>" << std::endl;
+
+		os << "<Emissive>" << std::endl;
+		os.write(reinterpret_cast<const char*>(&data.emissiveColor), sizeof(data.emissiveColor));
+		os << "</Emissive>" << std::endl;
+
+		os << "<Ambient>:" << std::endl;
+		os.write(reinterpret_cast<const char*>(&data.ambientColor), sizeof(data.ambientColor));
+		os << "</Ambient>:" << std::endl;
+
+		os << "</Color Data>" << std::endl;
+
+		return os;
+	}
 };
 
 class Material
@@ -37,6 +62,14 @@ private:
 
 	MaterialData m_MaterialData;
 
-
+	// This can be extend near future
+	// Right now(01.26.2025), Export MaterialData, Texture(path)
+	friend std::ostream& operator<<(std::ostream& os, const Material& material)
+	{
+		os << "<Material>" << std::endl;
+		os << material.m_MaterialData;
+		os << *material.m_pDiffuseTexture;
+		return os;
+	}
 };
 

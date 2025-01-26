@@ -1448,6 +1448,10 @@ BOOL FbxLoader::IsTexture(FbxSurfaceMaterial* pfbxSurfaceMaterial, const char* c
 
 void FbxLoader::ExportModelInSceneToModel(std::shared_ptr<Model> pOutModel)
 {
+	// Set Model Name
+	std::filesystem::path p(m_strFilename);
+	pOutModel->SetName(p.stem().string());
+
 	if (m_rpfbxRootNode)
 	{
 		for (int i = 0; i < m_rpfbxRootNode->GetChildCount(); i++)
@@ -1455,6 +1459,20 @@ void FbxLoader::ExportModelInSceneToModel(std::shared_ptr<Model> pOutModel)
 	}
 
 	Model::UpdateChildsInModelNodes(pOutModel->GetModelNodes());
+}
+
+XMFLOAT4X4 FbxMatrixToXMFLOAT4X4(const FbxAMatrix& fbxMatrix)
+{
+	float data[16];
+	for (UINT i = 0; i < 4; i++)
+	{
+		for (UINT j = 0; j < 4; j++)
+		{
+			data[(i * 4) + j] = fbxMatrix.Get(i, j);
+		}
+	}
+
+	return XMFLOAT4X4(data);
 }
 
 void FbxLoader::ExportNode(std::shared_ptr<Model> pOutModel, FbxNode* pfbxNode, int uiParentIndex)
@@ -1489,13 +1507,48 @@ void FbxLoader::ExportNode(std::shared_ptr<Model> pOutModel, FbxNode* pfbxNode, 
 		}
 
 		// Transform
+		FbxAMatrix fbxLocalMatrix = pfbxNode->EvaluateLocalTransform();
 		FbxDouble3 fbxvTranslation = pfbxNode->LclTranslation.Get();
 		FbxDouble3 fbxvRotation = pfbxNode->LclRotation.Get();
 		FbxDouble3 fbxvScaling = pfbxNode->LclScaling.Get();
 
-		pModelNode->pTransform->SetLocalPosition(XMFLOAT3(fbxvTranslation[0], fbxvTranslation[1], fbxvTranslation[2]));
-		pModelNode->pTransform->SetLocalRotation(XMFLOAT3(fbxvRotation[0], fbxvRotation[1], fbxvRotation[2]));
-		pModelNode->pTransform->SetLocalScale(XMFLOAT3(fbxvScaling[0], fbxvScaling[1], fbxvScaling[2]));
+		XMFLOAT4X4 localMatrix = FbxMatrixToXMFLOAT4X4(fbxLocalMatrix);
+		XMMATRIX xmLocalMatrix = XMLoadFloat4x4(&localMatrix);
+		XMVECTOR xmLocalPos, xmLocalQuat, xmLocalScale;
+		
+		XMMatrixDecompose(&xmLocalScale, &xmLocalQuat, &xmLocalPos, xmLocalMatrix);
+		
+		// Quaternion to euler
+		XMMATRIX LocalQuatMat = XMMatrixRotationQuaternion(xmLocalQuat);
+
+		float sy = -LocalQuatMat.r[2].m128_f32[0]; // _31
+		float cy = ::sqrtf(1.0f - ::powf(sy, 2));
+
+		float pitch, yaw, roll;
+		if (cy > 1e-6f)	// cos(y) != 0
+		{
+			pitch = ::atan2f(LocalQuatMat.r[2].m128_f32[1], LocalQuatMat.r[2].m128_f32[2]);	// atan2(_32, _33);
+			yaw = ::asinf(sy);	// asin(_31)
+			roll = ::atan2f(LocalQuatMat.r[1].m128_f32[0], LocalQuatMat.r[0].m128_f32[0]);	// atan2(_21, _11);
+		}
+		else	// cos(y) == 0 (gimbal lock)
+		{
+			pitch = ::atan2f(-LocalQuatMat.r[1].m128_f32[2], LocalQuatMat.r[1].m128_f32[1]); // atan2(-m23, m22)
+			yaw = ::asinf(sy); // asin(-m31)
+			roll = 0.0f;
+		}
+
+		XMFLOAT3 localPos;
+		XMFLOAT3 localRot;
+		XMFLOAT3 localScale;
+
+		XMStoreFloat3(&localPos, xmLocalPos);		// LocalPos
+		localRot = XMFLOAT3(XMConvertToDegrees(pitch), XMConvertToDegrees(yaw), XMConvertToDegrees(roll));		// LocalRotation
+		XMStoreFloat3(&localScale, xmLocalScale);	// LocalScale
+
+		pModelNode->pTransform->SetLocalPosition(localPos);
+		pModelNode->pTransform->SetLocalRotation(localRot);
+		pModelNode->pTransform->SetLocalScale(localScale);
 
 		// Mesh, Material
 		if (pfbxNode->GetMesh())

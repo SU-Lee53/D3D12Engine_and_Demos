@@ -13,6 +13,38 @@ struct ModelNode
 		pMaterial = std::make_unique<Material>();
 	}
 
+	friend std::ostream& operator<<(std::ostream& os, const ModelNode& node)
+	{
+		os << "<Node>" << std::endl;
+
+		os << "<Frame Name>" << std::endl;
+		os << node.strName << std::endl;
+		os << "</Frame Name>" << std::endl;
+		
+		os << "<Parent Index>" << std::endl;
+		os.write(reinterpret_cast<const char*>(&node.parentIndex), sizeof(node.parentIndex));
+		os << "</Parent Index>" << std::endl;
+
+		os << "<Children Count>" << std::endl;
+		size_t nChildrens = node.uiChildrenIndices.size();
+		os.write(reinterpret_cast<const char*>(&nChildrens), sizeof(nChildrens));
+		os << "</Children Count>" << std::endl;
+		
+		os << "<Children Index>" << std::endl; 
+		for (const UINT& idx : node.uiChildrenIndices)
+		{
+			os.write(reinterpret_cast<const char*>(&idx), sizeof(idx));
+		}
+		os << "</Children Index>" << std::endl;
+
+		os << *node.pTransform;
+		os << *node.pMesh;
+		os << *node.pMaterial;
+
+		os << "</Node>" << std::endl;
+		return os;
+	}
+
 	std::string strName;
 
 	std::unique_ptr<Mesh> pMesh;
@@ -50,9 +82,17 @@ public:
 	void ScaleModel(const XMFLOAT3& scale);
 
 public:
+	void ExportModelToBinary();
+
+public:
 	void PrintInfoToImGui();
 
+public:
+	void SetName(const std::string& name) { m_strName = name; }
+	std::string GetName() { return m_strName; }
+
 private:
+	std::string m_strName = "";
 	std::vector<std::shared_ptr<ModelNode>> m_pModelNodes = {};
 
 	// ImGui Variables

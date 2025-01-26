@@ -28,6 +28,19 @@ private:
 	DirectX::ScratchImage m_Image;
 
 	BOOL m_bIsErrorTexture = FALSE;
+	std::string m_strFilePath = "";
+
+public:
+	friend std::ostream& operator<<(std::ostream& os, const Texture& tex)
+	{
+		os << "<Texture>" << std::endl;
+		os << "<Texture Path>" << std::endl;
+		os << tex.m_strFilePath << std::endl;
+		os << "</Texture Path>" << std::endl;
+		os << "</Texture>" << std::endl;
+
+		return os;
+	}
 
 };
 

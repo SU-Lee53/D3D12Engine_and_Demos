@@ -2,6 +2,9 @@
 #include "Model.h"
 #include "ConstantBuffer.h"
 #include "Camera.h"
+#include <filesystem>
+#include <fstream>
+#include <sstream>
 
 using namespace std;
 
@@ -135,6 +138,41 @@ void Model::ScaleModel(const XMFLOAT3& scale)
 	{
 		node->pTransform->SetWorldScale(scale);
 	}
+}
+
+void Model::ExportModelToBinary()
+{
+	filesystem::path exportPath("../Models/Binaries/");
+	if (!filesystem::exists(exportPath))
+	{
+		filesystem::create_directories(exportPath);
+	}
+
+	std::string exportName = exportPath.string() + m_strName + ".bin"s;
+	fstream fs;
+	fs.open(exportName, ios::out | ios::binary);
+
+	if (!fs.is_open()) __debugbreak();
+	if (!fs.good()) __debugbreak();
+
+	fs << "<Model>" << std::endl;
+
+	fs << "<Model Name>" << std::endl;
+	fs << m_strName << std::endl;
+	fs << "</Model Name>" << std::endl;
+
+	fs << "<Node Count>" << std::endl;
+	size_t nNodes = m_pModelNodes.size();
+	fs.write(reinterpret_cast<const char*>(&nNodes), sizeof(nNodes));
+	fs << "</Node Count>" << std::endl;
+
+	for (const auto& node : m_pModelNodes)
+	{
+		fs << *node;
+	}
+
+	fs << "</Model>" << std::endl;
+
 }
 
 void Model::PrintInfoToImGui()

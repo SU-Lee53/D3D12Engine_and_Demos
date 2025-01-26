@@ -39,7 +39,6 @@ cbuffer ColorData : register(b2)
 Texture2D diffuseMap : register(t0);
 SamplerState samplerDiffuse : register(s0);
 
-
 PSInput VSMain(VSInput input)
 {
     PSInput result = (PSInput) 0;
