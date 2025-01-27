@@ -43,9 +43,6 @@
     <Filter Include="Renderer\Managers">
       <UniqueIdentifier>{a19fff12-a99c-4d65-96b6-8742324b2936}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Shader">
-      <UniqueIdentifier>{52ba3b40-6de9-4397-9bbd-4b11b2966fc8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Renderer\DirectXTex">
       <UniqueIdentifier>{7618deeb-8b4d-487e-b559-e50132a13a3c}</UniqueIdentifier>
     </Filter>
@@ -94,20 +91,29 @@
     <Filter Include="Game\Demos\Easy">
       <UniqueIdentifier>{942167d2-04d9-405e-bcca-ae187ef50ecf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Demos\Easy\BasicForwardRender">
+    <Filter Include="Game\Demos\Easy\Hierarchy Model">
+      <UniqueIdentifier>{212730a2-d4cc-4b30-8fb3-903e59ac5850}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos\Easy\Hierarchy Model\App">
+      <UniqueIdentifier>{3f48eb6d-166c-4b40-ac64-d2439611bd70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos\Easy\Hierarchy Model\Render Resources">
+      <UniqueIdentifier>{1f8e5b30-cacf-4bc0-b20d-97b1e03ea7c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos\Easy\Basic Forward Render">
       <UniqueIdentifier>{2afe6b7a-d7df-4814-90e0-771fc2fd18a7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Demos\Easy\BasicForwardRender\App">
+    <Filter Include="Game\Demos\Easy\Basic Forward Render\App">
       <UniqueIdentifier>{ff82f672-35f9-4aee-91a9-d64d49d5859b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Demos\Easy\BasicForwardRender\Render Resources">
+    <Filter Include="Game\Demos\Easy\Basic Forward Render\Render Resources">
       <UniqueIdentifier>{3470798c-b9a4-4505-b2e8-8c2866f155e4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Demos\Easy\Skybox">
-      <UniqueIdentifier>{1a1ea299-4ed8-4998-a373-09c41ec9d3ce}</UniqueIdentifier>
+    <Filter Include="Game\Demos\Easy\Basic Forward Render\Shader">
+      <UniqueIdentifier>{d2df76da-60eb-4c57-b612-4cf9ae2e1a29}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Demos\Easy\DirectionalLight">
-      <UniqueIdentifier>{b6376d27-7ac6-4444-82fa-f3c4e9f29989}</UniqueIdentifier>
+    <Filter Include="Game\Demos\Easy\Hierarchy Model\Shader">
+      <UniqueIdentifier>{93b509e6-31b7-41bd-9ce2-2e6456eeae20}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -217,16 +223,22 @@
       <Filter>Types</Filter>
     </ClInclude>
     <ClInclude Include="BasicForwardRenderDemo.h">
-      <Filter>Game\Demos\Easy\BasicForwardRender\App</Filter>
+      <Filter>Game\Demos\Easy\Basic Forward Render\App</Filter>
     </ClInclude>
     <ClInclude Include="BasicForwardRenderResources.h">
-      <Filter>Game\Demos\Easy\BasicForwardRender\Render Resources</Filter>
+      <Filter>Game\Demos\Easy\Basic Forward Render\Render Resources</Filter>
     </ClInclude>
     <ClInclude Include="..\ModelImporter\define.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Renderer\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="HierarchyModelDemo.h">
+      <Filter>Game\Demos\Easy\Hierarchy Model\App</Filter>
+    </ClInclude>
+    <ClInclude Include="HierarchyModelResource.h">
+      <Filter>Game\Demos\Easy\Hierarchy Model\Render Resources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -334,10 +346,16 @@
       <Filter>Types</Filter>
     </ClCompile>
     <ClCompile Include="BasicForwardRenderDemo.cpp">
-      <Filter>Game\Demos\Easy\BasicForwardRender\App</Filter>
+      <Filter>Game\Demos\Easy\Basic Forward Render\App</Filter>
     </ClCompile>
     <ClCompile Include="BasicForwardRenderResources.cpp">
-      <Filter>Game\Demos\Easy\BasicForwardRender\Render Resources</Filter>
+      <Filter>Game\Demos\Easy\Basic Forward Render\Render Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="HierarchyModelDemo.cpp">
+      <Filter>Game\Demos\Easy\Hierarchy Model\App</Filter>
+    </ClCompile>
+    <ClCompile Include="HierarchyModelResource.cpp">
+      <Filter>Game\Demos\Easy\Hierarchy Model\Render Resources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -350,11 +368,14 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="..\Shader\test.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
+    <Text Include="prefix_notation.md" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="prefix_notation.md" />
+    <FxCompile Include="..\Shader\test.hlsl">
+      <Filter>Game\Demos\Easy\Basic Forward Render\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shader\HierarchyModel.hlsl">
+      <Filter>Game\Demos\Easy\Hierarchy Model\Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

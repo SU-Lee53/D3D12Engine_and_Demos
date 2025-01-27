@@ -29,7 +29,8 @@ void Application::Initialize()
 
 	m_pLoadedFromBinaries = make_shared<Model>();
 	m_pLoadedFromBinaries->Initialize();
-	m_pLoadedFromBinaries->ImportModelFromBinary("../Models/Binaries/Gunship.bin");
+	m_pLoadedFromBinaries->ImportModelFromBinary("../Models/Binaries/Hummer.bin");
+	m_pLoadedFromBinaries->ScaleModel(XMFLOAT3(0.1f, 0.1f, 0.1f));
 }
 
 void Application::Update()
@@ -47,12 +48,23 @@ void Application::Update()
 
 			if (ImGui::BeginTabItem("Model"))
 			{
-				if (ImGui::Button("Export to binary"))
+				if (ImGui::Button(m_bShowWhat ? "fbx"s.c_str() : "bin"s.c_str()))
 				{
-					m_pLoadedFromImporter->ExportModelToBinary();
+					m_bShowWhat = m_bShowWhat ? FALSE : TRUE;
 				}
 
-				m_pLoadedFromImporter->PrintInfoToImGui();
+				std::shared_ptr<Model> target = m_bShowWhat ? m_pLoadedFromImporter : m_pLoadedFromBinaries;
+
+				if (m_bShowWhat)
+				{
+					ImGui::SameLine();
+					if (ImGui::Button("Export to binary"))
+					{
+						m_pLoadedFromImporter->ExportModelToBinary();
+					}
+				}
+
+				target->PrintInfoToImGui();
 				ImGui::EndTabItem();
 			}
 
@@ -61,18 +73,9 @@ void Application::Update()
 	}
 	ImGui::End();
 
-
-	if (ImGui::Begin("Target"))
-	{
-		if (ImGui::Button(m_bShowWhat ? "fbx"s.c_str() : "bin"s.c_str()))
-		{
-			m_bShowWhat = m_bShowWhat ? FALSE : TRUE;
-		}
-	}
-	ImGui::End();
-
 	// Model
 	m_pLoadedFromImporter->Update();
+	m_pLoadedFromBinaries->Update();
 
 	// Cam
 	{

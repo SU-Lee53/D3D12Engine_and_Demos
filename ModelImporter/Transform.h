@@ -10,7 +10,6 @@ public:
 	BOOL Initialize();
 	BOOL Update();
 
-
 public:
 	// Getter
 	XMFLOAT3 GetLocalPosition() { return m_vLocalPosition; }

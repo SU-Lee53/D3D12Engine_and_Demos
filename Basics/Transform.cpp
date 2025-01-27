@@ -4,55 +4,131 @@
 
 Transform::Transform()
 {
+	XMStoreFloat4x4(&m_matLocal, XMMatrixIdentity());
+	XMStoreFloat4x4(&m_matWorld, XMMatrixIdentity());
 }
 
 Transform::~Transform()
 {
+
 }
 
 BOOL Transform::Initialize()
 {
-	return 0;
+	return TRUE;
 }
 
-void Transform::Update()
+BOOL Transform::Update()
 {
-	if (m_bUpdated)
+	if (m_bLocalUpdated)
 	{
-		// S * R * T
-		// Scale
-		Matrix matScale = XMMatrixScalingFromVector(m_vScale);
+		XMMATRIX matScale = XMMatrixScalingFromVector(XMLoadFloat3(&m_vLocalScale));
 
-		// Rotation
-		Matrix matRotX = XMMatrixRotationX(m_vRotation.x);
-		Matrix matRotY = XMMatrixRotationY(m_vRotation.y);
-		Matrix matRotZ = XMMatrixRotationZ(m_vRotation.z);
-		Matrix matRotation = XMMatrixMultiply(XMMatrixMultiply(matRotX, matRotY), matRotZ);
+		XMMATRIX matRotX = XMMatrixRotationX(m_vLocalRotation.x);
+		XMMATRIX matRotY = XMMatrixRotationY(m_vLocalRotation.y);
+		XMMATRIX matRotZ = XMMatrixRotationZ(m_vLocalRotation.z);
+		XMMATRIX matRotation = XMMatrixMultiply(XMMatrixMultiply(matRotX, matRotY), matRotZ);
 
-		// Translation
-		Matrix matTranslation = XMMatrixTranslationFromVector(m_vPos);
+		XMMATRIX matTranslation = XMMatrixTranslationFromVector(XMLoadFloat3(&m_vLocalPos));
 
-		m_matWorld = XMMatrixMultiply(matScale, matRotation);
-		m_matWorld = XMMatrixMultiply(m_matWorld, matTranslation);
-		
-		m_bUpdated = FALSE;
+		XMMATRIX xmLocal = XMMatrixIdentity();
+		xmLocal = XMMatrixMultiply(matScale, matRotation);
+		xmLocal = XMMatrixMultiply(xmLocal, matTranslation);
+		XMStoreFloat4x4(&m_matLocal, xmLocal);
+
+		m_bLocalUpdated = FALSE;
+	}
+
+	if (m_bWorldUpdated)
+	{
+		XMMATRIX matScale = XMMatrixScalingFromVector(XMLoadFloat3(&m_vWorldScale));
+
+		XMMATRIX matRotX = XMMatrixRotationX(m_vWorldRotation.x);
+		XMMATRIX matRotY = XMMatrixRotationY(m_vWorldRotation.y);
+		XMMATRIX matRotZ = XMMatrixRotationZ(m_vWorldRotation.z);
+		XMMATRIX matRotation = XMMatrixMultiply(XMMatrixMultiply(matRotX, matRotY), matRotZ);
+
+		XMMATRIX matTranslation = XMMatrixTranslationFromVector(XMLoadFloat3(&m_vWorldPos));
+
+		XMMATRIX xmWorld = XMMatrixIdentity();
+		xmWorld = XMMatrixMultiply(matScale, matRotation);
+		xmWorld = XMMatrixMultiply(xmWorld, matTranslation);
+		XMStoreFloat4x4(&m_matWorld, xmWorld);
+
+		m_bWorldUpdated = FALSE;
+	}
+
+	return TRUE;
+}
+
+void Transform::SetLocalPosition(const XMFLOAT3& pos)
+{
+	XMVECTOR xmPosOrigin = XMLoadFloat3(&m_vLocalPos);
+	XMVECTOR xmPosNew = XMLoadFloat3(&pos);
+
+	if (!XMVector3Equal(xmPosOrigin, xmPosNew))
+	{
+		m_vLocalPos = pos;
+		m_bLocalUpdated = TRUE;
 	}
 }
 
-void Transform::SetPosition(Vec3 pos)
+void Transform::SetLocalScale(const XMFLOAT3& scale)
 {
-	m_vPos = XMLoadFloat3(&pos);
-	m_bUpdated = TRUE;
+	XMVECTOR xmScaleOrigin = XMLoadFloat3(&m_vLocalScale);
+	XMVECTOR xmScaleNew = XMLoadFloat3(&scale);
+
+	if (!XMVector3Equal(xmScaleOrigin, xmScaleNew))
+	{
+		m_vLocalScale = scale;
+		m_bLocalUpdated = TRUE;
+	}
 }
 
-void Transform::SetScale(Vec3 scale)
+void Transform::SetLocalRotation(const XMFLOAT3& rot)
 {
-	m_vScale = XMLoadFloat3(&scale);
-	m_bUpdated = TRUE;
+	XMVECTOR xmRotationOrigin = XMLoadFloat3(&m_vLocalRotation);
+	XMVECTOR xmRotationNew = XMLoadFloat3(&rot);
+
+	if (!XMVector3Equal(xmRotationOrigin, xmRotationNew))
+	{
+		m_vLocalRotation = rot;
+		m_bLocalUpdated = TRUE;
+	}
 }
 
-void Transform::SetRotation(Vec3 rot)
+void Transform::SetWorldPosition(const XMFLOAT3& pos)
 {
-	m_vRotation = XMLoadFloat3(&rot);
-	m_bUpdated = TRUE;
+	XMVECTOR xmPosOrigin = XMLoadFloat3(&m_vWorldPos);
+	XMVECTOR xmPosNew = XMLoadFloat3(&pos);
+
+	if (!XMVector3Equal(xmPosOrigin, xmPosNew))
+	{
+		m_vWorldPos = pos;
+		m_bWorldUpdated = TRUE;
+	}
+}
+
+void Transform::SetWorldScale(const XMFLOAT3& scale)
+{
+	XMVECTOR xmScaleOrigin = XMLoadFloat3(&m_vWorldScale);
+	XMVECTOR xmScaleNew = XMLoadFloat3(&scale);
+
+	if (!XMVector3Equal(xmScaleOrigin, xmScaleNew))
+	{
+		m_vWorldScale = scale;
+		m_bWorldUpdated = TRUE;
+	}
+}
+
+void Transform::SetWorldRotation(const XMFLOAT3& rot)
+{
+	XMVECTOR xmRotationOrigin = XMLoadFloat3(&m_vWorldRotation);
+	XMVECTOR xmRotationNew = XMLoadFloat3(&rot);
+
+	if (!XMVector3Equal(xmRotationOrigin, xmRotationNew))
+	{
+		m_vWorldRotation = rot;
+		m_bWorldUpdated = TRUE;
+	}
 }

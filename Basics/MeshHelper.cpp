@@ -3,7 +3,7 @@
 
 using namespace std;
 
-void MeshHelper::CreateBoxMesh(vector<VertexType>& vtx, vector<UINT>& idx)
+void MeshHelper::CreateBoxMesh(vector<BasicVertexType>& vtx, vector<UINT>& idx)
 {
 	float fx = 0.5f;
 	float fy = 0.5f;
@@ -21,15 +21,15 @@ void MeshHelper::CreateBoxMesh(vector<VertexType>& vtx, vector<UINT>& idx)
 	Vec4 c7 = DirectX::Colors::White;
 
 	// Front 
-	vtx[0] = DefaultInput(Input{}, Vec3{ -fx, +fy, -fz }, c0, Vec2{ 0.f, 1.f });
-	vtx[1] = DefaultInput(Input{}, Vec3{ +fx, +fy, -fz }, c1, Vec2{ 0.f, 1.f });
-	vtx[2] = DefaultInput(Input{}, Vec3{ +fx, +fy, +fz }, c2, Vec2{ 0.f, 1.f });
-	vtx[3] = DefaultInput(Input{}, Vec3{ -fx, +fy, +fz }, c3, Vec2{ 0.f, 1.f });
+	vtx[0] = BasicInput(Input{}, Vec3{ -fx, +fy, -fz }, c0, Vec2{ 0.f, 1.f });
+	vtx[1] = BasicInput(Input{}, Vec3{ +fx, +fy, -fz }, c1, Vec2{ 0.f, 1.f });
+	vtx[2] = BasicInput(Input{}, Vec3{ +fx, +fy, +fz }, c2, Vec2{ 0.f, 1.f });
+	vtx[3] = BasicInput(Input{}, Vec3{ -fx, +fy, +fz }, c3, Vec2{ 0.f, 1.f });
 	// Back
-	vtx[4] = DefaultInput(Input{}, Vec3{ -fx, -fy, -fz }, c4, Vec2{ 1.0f, 1.0f });
-	vtx[5] = DefaultInput(Input{}, Vec3{ +fx, -fy, -fz }, c5, Vec2{ 0.0f, 1.0f });
-	vtx[6] = DefaultInput(Input{}, Vec3{ +fx, -fy, +fz }, c6, Vec2{ 0.0f, 0.0f });
-	vtx[7] = DefaultInput(Input{}, Vec3{ -fx, -fy, +fz }, c7, Vec2{ 1.0f, 0.0f });
+	vtx[4] = BasicInput(Input{}, Vec3{ -fx, -fy, -fz }, c4, Vec2{ 1.0f, 1.0f });
+	vtx[5] = BasicInput(Input{}, Vec3{ +fx, -fy, -fz }, c5, Vec2{ 0.0f, 1.0f });
+	vtx[6] = BasicInput(Input{}, Vec3{ +fx, -fy, +fz }, c6, Vec2{ 0.0f, 0.0f });
+	vtx[7] = BasicInput(Input{}, Vec3{ -fx, -fy, +fz }, c7, Vec2{ 1.0f, 0.0f });
 
 	idx.resize(36);
 

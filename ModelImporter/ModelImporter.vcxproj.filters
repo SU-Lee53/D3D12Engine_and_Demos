@@ -147,7 +147,9 @@
     <ClInclude Include="CB_types.h">
       <Filter>D3D11Renderer\ConstantBuffer</Filter>
     </ClInclude>
-    <ClInclude Include="InputManager.h" />
+    <ClInclude Include="InputManager.h">
+      <Filter>D3D11Renderer\Managers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="ModelImporter.ico">
@@ -227,7 +229,9 @@
     <ClCompile Include="Camera.cpp">
       <Filter>D3D11Renderer\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="InputManager.cpp">
+      <Filter>D3D11Renderer\Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ModelImporter.rc">

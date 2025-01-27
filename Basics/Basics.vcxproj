@@ -149,6 +149,8 @@
     <ClInclude Include="CB_types.h" />
     <ClInclude Include="ConstantBuffer.h" />
     <ClInclude Include="Descriptor.h" />
+    <ClInclude Include="HierarchyModelDemo.h" />
+    <ClInclude Include="HierarchyModelResource.h" />
     <ClInclude Include="HR_helper.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
@@ -188,6 +190,8 @@
     <ClCompile Include="CB_types.cpp" />
     <ClCompile Include="ConstantBuffer.cpp" />
     <ClCompile Include="Descriptor.cpp" />
+    <ClCompile Include="HierarchyModelDemo.cpp" />
+    <ClCompile Include="HierarchyModelResource.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshHelper.cpp" />
@@ -233,6 +237,7 @@
     <None Include="SimpleMath.inl" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="..\Shader\HierarchyModel.hlsl" />
     <FxCompile Include="..\Shader\test.hlsl" />
   </ItemGroup>
   <ItemGroup>

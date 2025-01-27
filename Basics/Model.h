@@ -18,7 +18,7 @@ private:
 
 
 private:
-	std::shared_ptr<Mesh<VertexType>> m_pMesh = nullptr;
+	std::shared_ptr<Mesh<BasicVertexType>> m_pMesh = nullptr;
 	std::shared_ptr<Material> m_pMaterial = nullptr;
 };
 

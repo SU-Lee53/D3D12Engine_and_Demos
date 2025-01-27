@@ -68,7 +68,7 @@ BOOL BasicForwardPipeline::Initialize(shared_ptr<RootSignature> rootSignature)
 	auto ps = SHADER.GetShader<PixelShader>("testPS");
 
 	{
-		m_Desc.InputLayout = { DefaultInput::descs.data(), (UINT)DefaultInput::descs.size() };
+		m_Desc.InputLayout = { BasicInput::descs.data(), (UINT)BasicInput::descs.size() };
 		m_Desc.VS = CD3DX12_SHADER_BYTECODE(vs->GetBlob()->GetBufferPointer(), vs->GetBlob()->GetBufferSize());
 		m_Desc.PS = CD3DX12_SHADER_BYTECODE(ps->GetBlob()->GetBufferPointer(), ps->GetBlob()->GetBufferSize());
 		m_Desc.pRootSignature = rootSignature->Get();
@@ -139,7 +139,7 @@ void ForwardRender::Render()
 	auto owner = m_wpOwner.lock();
 
 	shared_ptr<Transform> pTransform = owner->GetTransform();
-	shared_ptr<Mesh<VertexType>> pMesh = owner->GetMesh();
+	shared_ptr<Mesh<BasicVertexType>> pMesh = owner->GetMesh();
 	VertexBuffer& refVertexBuffer = pMesh->GetBuffer()->vertexBuffer;
 	IndexBuffer& refIndexBuffer = pMesh->GetBuffer()->indexBuffer;
 
@@ -147,7 +147,9 @@ void ForwardRender::Render()
 	// TODO2 : Render!!!!!!!! 
 
 	// 1. Write data in Constant Buffer
-	m_upTransformCBuffer->PushData(pTransform->GetTransformCBData());
+	CBTranformData data;
+	data.matWorld = pTransform->GetWorldMatrixTransposed();
+	m_upTransformCBuffer->PushData(data);
 	m_upCameraCBuffer->PushData(CORE.GetMainCameraCBData());
 
 	// 2. Get Descriptor from DescriptorHeap(m_upDescriptorHeap)
@@ -186,16 +188,16 @@ BOOL BasicForwardObject::Initialize()
 	BOOL bResult = FALSE;
 	bResult = InitRenderMethod();
 
-	vector<VertexType> vtx;
+	vector<BasicVertexType> vtx;
 	vector<UINT> idx;
 
 	MeshHelper::CreateBoxMesh(vtx, idx);
-	m_pMesh = make_shared<Mesh<VertexType>>();
+	m_pMesh = make_shared<Mesh<BasicVertexType>>();
 	bResult = m_pMesh->Initialize(vtx, idx);
 
 	m_pTransform = make_shared<Transform>();
 	m_pTransform->Initialize();
-	m_pTransform->SetPosition(Vec3(0.f, 0.f, 5.f));
+	m_pTransform->SetWorldPosition(Vec3(0.f, 0.f, 5.f));
 
 	return bResult;
 }

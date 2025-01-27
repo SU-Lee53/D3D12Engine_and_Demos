@@ -16,11 +16,23 @@ public:
 public:
     CBCameraData GetCameraCBData()
     {
-        return CBCameraData{ XMMatrixTranspose(m_matView), XMMatrixTranspose(m_matProjection) };
+        XMMATRIX xmMatView = XMLoadFloat4x4(&m_matView);
+        XMMATRIX xmMatProj = XMLoadFloat4x4(&m_matProjection);
+
+        xmMatView = XMMatrixTranspose(xmMatView);
+        xmMatProj = XMMatrixTranspose(xmMatProj);
+
+        XMFLOAT4X4 viewTransposed;
+        XMFLOAT4X4 projTransposed;
+
+        XMStoreFloat4x4(&viewTransposed, xmMatView);
+        XMStoreFloat4x4(&projTransposed, xmMatProj);
+
+        return CBCameraData{ viewTransposed, projTransposed };
     }
 
-    void SetPosition(const Vec3& pos);
-    void SetRotation(const Vec3& rot);
+    void SetPosition(const XMFLOAT3& pos);
+    void SetRotation(const XMFLOAT3& rot);
 
     void SetFovY(float fFovY);
     void SetAspect(float fWidth, float fHeight);
@@ -31,23 +43,23 @@ public:
     std::shared_ptr<Transform> GetTransform() { return m_pTransform; }
 
 private:
-    BOOL SetCamera(const Vec3& camEYE, const Vec3& camAT, const Vec3& camUP);
+    BOOL SetCamera(const XMFLOAT3& camEYE, const XMFLOAT3& camAT, const XMFLOAT3& camUP);
 
 private:
     std::shared_ptr<Transform> m_pTransform = nullptr;
 
     // Camera Parameters Cache
-    Vec3 m_vCamEYE = Vec3::Zero;
-    Vec3 m_vCamAT = Vec3::Zero;
-    Vec3 m_vCamUP = Vec3::Zero;
+    XMFLOAT3 m_vCamEYE;
+    XMFLOAT3 m_vCamAT;
+    XMFLOAT3 m_vCamUP;
 
     float m_ffovY = 0.f;
     float m_fAspectRatio = 0.f;
     float m_fNear = 0.f;
     float m_fFar = 0.f;
 
-    Matrix m_matView        = Matrix::Identity;
-    Matrix m_matProjection  = Matrix::Identity;
+    XMFLOAT4X4 m_matView        = Matrix::Identity;
+    XMFLOAT4X4 m_matProjection  = Matrix::Identity;
 
     BOOL m_bViewUpdated = FALSE;
     BOOL m_bProjUpdated = FALSE;

@@ -14,8 +14,8 @@ void BasicForwardRenderDemo::Initialize()
 
 void BasicForwardRenderDemo::Update()
 {
-	Vec3 pos = CORE.GetMainCamera()->GetTransform()->GetPosition();
-	Vec3 rot = m_pObj->GetTransform()->GetRotation();
+	Vec3 pos = CORE.GetMainCamera()->GetTransform()->GetWorldPosition();
+	Vec3 rot = m_pObj->GetTransform()->GetWorldRotation();
 
 	if (INPUT.GetButton(KEY_TYPE::W))
 	{
@@ -68,7 +68,7 @@ void BasicForwardRenderDemo::Update()
 	}
 
 	CORE.GetMainCamera()->SetPosition(pos);
-	m_pObj->GetTransform()->SetRotation(rot);
+	m_pObj->GetTransform()->SetWorldRotation(rot);
 
 	m_pObj->Update();
 

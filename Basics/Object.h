@@ -16,7 +16,7 @@ public:
 
 public:
 	std::shared_ptr<Transform>& GetTransform() { return m_pTransform; }
-	std::shared_ptr<Mesh<VertexType>>& GetMesh() { return m_pMesh; }
+	std::shared_ptr<Mesh<BasicVertexType>>& GetMesh() { return m_pMesh; }
 
 
 protected:
@@ -24,7 +24,7 @@ protected:
 
 	// TODO : add mesh(model), material, etc...
 	//std::shared_ptr<Model> m_pModel;	-> for future
-	std::shared_ptr<Mesh<VertexType>> m_pMesh = nullptr;
+	std::shared_ptr<Mesh<BasicVertexType>> m_pMesh = nullptr;
 	std::shared_ptr<RenderMethod> m_pRenderMethod = nullptr;
 
 
