@@ -23,11 +23,35 @@ public:
 	friend std::ostream& operator<<(std::ostream& os, const Mesh& mesh)
 	{
 		os << "<Mesh>" << std::endl;
-		os << *mesh.m_upVertexBuffer << std::endl;
-		os << *mesh.m_upIndexBuffer << std::endl;
+		os << *mesh.m_upVertexBuffer;
+		os << *mesh.m_upIndexBuffer;
 		os << "</Mesh>" << std::endl;
 
 		return os;
 	}
+
+	friend std::istream& operator>>(std::istream& is, Mesh& mesh)
+	{
+		std::string read;
+		while (read != "</Mesh>")
+		{
+			std::getline(is, read);
+
+			if (read == "<Vertex Data>")
+			{
+				mesh.m_upVertexBuffer = std::make_unique<VertexBuffer>();
+				is >> *mesh.m_upVertexBuffer;
+			}
+
+			if (read == "<Index Data>")
+			{
+				mesh.m_upIndexBuffer = std::make_unique<IndexBuffer>();
+				is >> *mesh.m_upIndexBuffer;
+			}
+		}
+
+		return is;
+	}
+
 };
 

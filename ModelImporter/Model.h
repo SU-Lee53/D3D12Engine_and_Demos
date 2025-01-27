@@ -23,11 +23,13 @@ struct ModelNode
 		
 		os << "<Parent Index>" << std::endl;
 		os.write(reinterpret_cast<const char*>(&node.parentIndex), sizeof(node.parentIndex));
+		os << std::endl;
 		os << "</Parent Index>" << std::endl;
 
 		os << "<Children Count>" << std::endl;
 		size_t nChildrens = node.uiChildrenIndices.size();
 		os.write(reinterpret_cast<const char*>(&nChildrens), sizeof(nChildrens));
+		os << std::endl;
 		os << "</Children Count>" << std::endl;
 		
 		os << "<Children Index>" << std::endl; 
@@ -35,6 +37,7 @@ struct ModelNode
 		{
 			os.write(reinterpret_cast<const char*>(&idx), sizeof(idx));
 		}
+		os << std::endl;
 		os << "</Children Index>" << std::endl;
 
 		os << *node.pTransform;
@@ -43,6 +46,55 @@ struct ModelNode
 
 		os << "</Node>" << std::endl;
 		return os;
+	}
+
+	friend std::istream& operator>>(std::istream& is, ModelNode& node)
+	{
+		std::string read;
+		while (read != "</Node>")
+		{
+			std::getline(is, read);
+
+			if (read == "<Frame Name>")
+			{
+				std::getline(is, node.strName);
+			}
+			
+			if (read == "<Parent Index>")
+			{
+				is.read(reinterpret_cast<char*>(&node.parentIndex), sizeof(node.parentIndex));
+			}
+
+			if (read == "<Children Count>")
+			{
+				size_t nChildren = 0;
+				is.read(reinterpret_cast<char*>(&nChildren), sizeof(nChildren));
+				node.uiChildrenIndices.resize(nChildren);
+			}
+			
+			if (read == "<Children Index>")
+			{
+				is.read(reinterpret_cast<char*>(node.uiChildrenIndices.data()), sizeof(node.uiChildrenIndices[0]) * node.uiChildrenIndices.size());
+			}
+
+			if (read == "<Transform>")
+			{
+				is >> *node.pTransform;
+			}
+
+			if (read == "<Mesh>")
+			{
+				is >> *node.pMesh;
+			}
+
+			if (read == "<Material>")
+			{
+				is >> *node.pMaterial;
+			}
+
+		}
+
+		return is;
 	}
 
 	std::string strName;
@@ -83,6 +135,7 @@ public:
 
 public:
 	void ExportModelToBinary();
+	void ImportModelFromBinary(std::string binaryFilePath);
 
 public:
 	void PrintInfoToImGui();

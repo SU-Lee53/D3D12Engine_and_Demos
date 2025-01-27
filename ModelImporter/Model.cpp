@@ -164,6 +164,7 @@ void Model::ExportModelToBinary()
 	fs << "<Node Count>" << std::endl;
 	size_t nNodes = m_pModelNodes.size();
 	fs.write(reinterpret_cast<const char*>(&nNodes), sizeof(nNodes));
+	fs << std::endl;
 	fs << "</Node Count>" << std::endl;
 
 	for (const auto& node : m_pModelNodes)
@@ -173,6 +174,42 @@ void Model::ExportModelToBinary()
 
 	fs << "</Model>" << std::endl;
 
+}
+
+void Model::ImportModelFromBinary(std::string binaryFilePath)
+{
+	fstream fs;
+	fs.open(binaryFilePath, ios::in | ios::binary);
+
+	if (!fs.is_open()) __debugbreak();
+	if (!fs.good()) __debugbreak();
+
+	string read;
+	UINT nodeIndex = 0;
+	while (read != "</Model>")
+	{
+		// TODO : READ
+		::getline(fs, read);
+
+		if (read == "<Model Name>")
+		{
+			::getline(fs, m_strName);
+		}
+
+		if (read == "<Node Count>")
+		{
+			size_t nNodes = 0;
+			fs.read(reinterpret_cast<char*>(&nNodes), sizeof(nNodes));
+			m_pModelNodes.resize(nNodes);
+		}
+
+		if (read == "<Node>")
+		{
+			shared_ptr<ModelNode> pModelNode = make_shared<ModelNode>();
+			fs >> *pModelNode;
+			m_pModelNodes[nodeIndex++] = pModelNode;
+		}
+	}
 }
 
 void Model::PrintInfoToImGui()

@@ -73,17 +73,49 @@ public:
 		os.write(reinterpret_cast<const char*>(&transform.m_vLocalPosition), sizeof(transform.m_vLocalPosition));
 		os.write(reinterpret_cast<const char*>(&transform.m_vLocalRotation), sizeof(transform.m_vLocalRotation));
 		os.write(reinterpret_cast<const char*>(&transform.m_vLocalScale), sizeof(transform.m_vLocalScale));
+		os << std::endl;
 		os << "</Local>" << std::endl;
 		
 		os << "<World>" << std::endl;
 		os.write(reinterpret_cast<const char*>(&transform.m_vWorldPosition), sizeof(transform.m_vWorldPosition));
 		os.write(reinterpret_cast<const char*>(&transform.m_vWorldRotation), sizeof(transform.m_vWorldRotation));
 		os.write(reinterpret_cast<const char*>(&transform.m_vWorldScale), sizeof(transform.m_vWorldScale));
+		os << std::endl;
 		os << "</World>" << std::endl;
 
 		os << "</Transform>" << std::endl;
 
 		return os;
 	}
+
+	friend std::istream& operator>>(std::istream& is, Transform& transform)
+	{
+		std::string read;
+		while (read != "</Transform>")
+		{
+			std::getline(is, read);
+			
+			if (read == "<Local>")
+			{
+				is.read(reinterpret_cast<char*>(&transform.m_vLocalPosition), sizeof(transform.m_vLocalPosition));
+				is.read(reinterpret_cast<char*>(&transform.m_vLocalRotation), sizeof(transform.m_vLocalRotation));
+				is.read(reinterpret_cast<char*>(&transform.m_vLocalScale), sizeof(transform.m_vLocalScale));
+				transform.m_bLocalUpdated = TRUE;
+			}
+		
+			if (read == "<World>")
+			{
+				is.read(reinterpret_cast<char*>(&transform.m_vWorldPosition), sizeof(transform.m_vWorldPosition));
+				is.read(reinterpret_cast<char*>(&transform.m_vWorldRotation), sizeof(transform.m_vWorldRotation));
+				is.read(reinterpret_cast<char*>(&transform.m_vWorldScale), sizeof(transform.m_vWorldScale));
+				transform.m_bWorldUpdated = TRUE;
+			}
+		}
+
+		transform.Update();
+
+		return is;
+	}
+
 };
 

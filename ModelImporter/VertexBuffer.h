@@ -25,14 +25,52 @@ struct VertexBuffer
 
 	friend std::ostream& operator<<(std::ostream& os, const VertexBuffer& buf)
 	{
-		os << "<Vertex>" << std::endl;
-		for (const auto& vtx : buf.m_Vertices)
+		os << "<Vertex Data>" << std::endl;
+
 		{
-			os.write(reinterpret_cast<const char*>(&vtx), sizeof(vtx));
+			os << "<Vertex Size>" << std::endl;
+			size_t nVertices = buf.m_Vertices.size();
+			os.write(reinterpret_cast<const char*>(&nVertices), sizeof(nVertices));
+			os << std::endl;
+			os << "</Vertex Size>" << std::endl;
+
+			os << "<Vertex>" << std::endl;
+			os.write(reinterpret_cast<const char*>(buf.m_Vertices.data()), sizeof(buf.m_Vertices[0]) * nVertices);
+			os << std::endl;
+			os << "\n</Vertex>" << std::endl;
 		}
-		os << "</Vertex>" << std::endl;
+
+		os << "</Vertex Data>" << std::endl;
 
 		return os;
+	}
+
+	friend std::istream& operator>>(std::istream& is, VertexBuffer& buf)
+	{
+		std::string read;
+		size_t nVertices = 0;
+		std::vector<VertexType> vtx = {};
+
+		while (read != "</Vertex>")
+		{
+			std::getline(is, read);
+
+			if (read == "<Vertex Size>")
+			{
+				is.read(reinterpret_cast<char*>(&nVertices), sizeof(nVertices));
+				vtx.resize(nVertices);
+			}
+
+			if (read == "<Vertex>")
+			{
+				is.read(reinterpret_cast<char*>(vtx.data()), sizeof(vtx[0]) * nVertices);
+			}
+
+		}
+
+		buf.Initialize(vtx);
+
+		return is;
 	}
 
 };

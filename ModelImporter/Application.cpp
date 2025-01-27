@@ -23,11 +23,13 @@ void Application::Initialize()
 	m_pImporter->Initialize();
 	m_pImporter->LoadFBXFile("../fbx/Gunship.fbx");
 
-	m_pModel = make_shared<Model>();
-	m_pImporter->ExportModelInSceneToModel(m_pModel);
-	m_pModel->ScaleModel(XMFLOAT3(0.01f, 0.01f, 0.01f));
+	m_pLoadedFromImporter = make_shared<Model>();
+	m_pImporter->ExportModelInSceneToModel(m_pLoadedFromImporter);
+	//m_pLoadedFromImporter->ScaleModel(XMFLOAT3(0.01f, 0.01f, 0.01f));
 
-	m_pModel->ExportModelToBinary();
+	m_pLoadedFromBinaries = make_shared<Model>();
+	m_pLoadedFromBinaries->Initialize();
+	m_pLoadedFromBinaries->ImportModelFromBinary("../Models/Binaries/Gunship.bin");
 }
 
 void Application::Update()
@@ -42,18 +44,35 @@ void Application::Update()
 				m_pImporter->ShowFBXNodeToImGui();
 				ImGui::EndTabItem();
 			}
+
 			if (ImGui::BeginTabItem("Model"))
 			{
-				m_pModel->PrintInfoToImGui();
+				if (ImGui::Button("Export to binary"))
+				{
+					m_pLoadedFromImporter->ExportModelToBinary();
+				}
+
+				m_pLoadedFromImporter->PrintInfoToImGui();
 				ImGui::EndTabItem();
 			}
+
 			ImGui::EndTabBar();
 		}
 	}
 	ImGui::End();
 
+
+	if (ImGui::Begin("Target"))
+	{
+		if (ImGui::Button(m_bShowWhat ? "fbx"s.c_str() : "bin"s.c_str()))
+		{
+			m_bShowWhat = m_bShowWhat ? FALSE : TRUE;
+		}
+	}
+	ImGui::End();
+
 	// Model
-	m_pModel->Update();
+	m_pLoadedFromImporter->Update();
 
 	// Cam
 	{
@@ -138,5 +157,12 @@ void Application::Update()
 
 void Application::Render()
 {
-	m_pModel->Render(m_pCamera);
+	if (m_bShowWhat)
+	{
+		m_pLoadedFromImporter->Render(m_pCamera);
+	}
+	else
+	{
+		m_pLoadedFromBinaries->Render(m_pCamera);
+	}
 }

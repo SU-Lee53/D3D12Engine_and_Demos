@@ -20,24 +20,59 @@ struct MaterialData
 
 		os << "<Diffuse>" << std::endl;
 		os.write(reinterpret_cast<const char*>(&data.diffuseColor), sizeof(data.diffuseColor));
+		os << std::endl;
 		os << "</Diffuse>" << std::endl;
-
+		
 		os << "<Specular>" << std::endl;
 		os.write(reinterpret_cast<const char*>(&data.specularColor), sizeof(data.specularColor));
+		os << std::endl;
 		os << "</Specular>" << std::endl;
-
+		
 		os << "<Emissive>" << std::endl;
 		os.write(reinterpret_cast<const char*>(&data.emissiveColor), sizeof(data.emissiveColor));
+		os << std::endl;
 		os << "</Emissive>" << std::endl;
-
-		os << "<Ambient>:" << std::endl;
+		
+		os << "<Ambient>" << std::endl;
 		os.write(reinterpret_cast<const char*>(&data.ambientColor), sizeof(data.ambientColor));
-		os << "</Ambient>:" << std::endl;
+		os << std::endl;
+		os << "</Ambient>" << std::endl;
+
+		//os.write(reinterpret_cast<const char*>(&data), sizeof(data));
 
 		os << "</Color Data>" << std::endl;
 
 		return os;
 	}
+
+	friend std::istream& operator>>(std::istream& is, MaterialData data)
+	{
+		std::string read;
+		while (read != "</Color Data>")
+		{
+			std::getline(is, read);
+			if (read == "<Diffuse>")
+			{
+				is.read(reinterpret_cast<char*>(&data.diffuseColor), sizeof(data.diffuseColor));
+			}
+			if (read == "<Specular>")
+			{
+				is.read(reinterpret_cast<char*>(&data.specularColor), sizeof(data.specularColor));
+			}
+			if (read == "<Emissive>")
+			{
+				is.read(reinterpret_cast<char*>(&data.emissiveColor), sizeof(data.emissiveColor));
+			}
+			if (read == "<Ambient>")
+			{
+				is.read(reinterpret_cast<char*>(&data.ambientColor), sizeof(data.ambientColor));
+			}
+		
+		}
+
+		return is;
+	}
+
 };
 
 class Material
@@ -69,7 +104,41 @@ private:
 		os << "<Material>" << std::endl;
 		os << material.m_MaterialData;
 		os << *material.m_pDiffuseTexture;
+		os << "</Material>" << std::endl;
 		return os;
 	}
+
+	friend std::istream& operator>>(std::istream& is, Material& material)
+	{
+		std::string read;
+		std::string strTexturePath;
+		while (read != "</Material>")
+		{
+			std::getline(is, read);
+			if (read == "<Color Data>")
+			{
+				is >> material.m_MaterialData;
+			}
+
+			if (read == "<Texture>")
+			{
+				while (read != "</Texture>")
+				{
+					std::getline(is, read);
+					if (read == "<Texture Path>")
+					{
+						std::getline(is, strTexturePath);
+					}
+				}
+			}
+		}
+
+		std::wstring wstrInitParameter(strTexturePath.begin(), strTexturePath.end());
+
+		material.Initialize(wstrInitParameter);
+
+		return is;
+	}
+
 };
 

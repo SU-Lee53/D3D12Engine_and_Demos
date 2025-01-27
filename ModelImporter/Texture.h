@@ -42,5 +42,20 @@ public:
 		return os;
 	}
 
+	friend std::istream& operator>>(std::istream& is, Texture& tex)
+	{
+		std::string read;
+		while (read != "</Texture>")
+		{
+			std::getline(is, read);
+			if (read == "<Texture Path>")
+			{
+				std::getline(is, tex.m_strFilePath);
+			}
+		}
+
+		return is;
+	}
+
 };
 
