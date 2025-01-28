@@ -154,6 +154,9 @@
     <Filter Include="Game\Demos\Level.0\Lambert Lighting\Shader">
       <UniqueIdentifier>{346dd4f4-893f-4710-874a-d4ac967b6638}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utils\ImGui">
+      <UniqueIdentifier>{8b601ed3-b6be-4414-8677-b302bc1e0283}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -267,9 +270,6 @@
     <ClInclude Include="BasicForwardRenderResources.h">
       <Filter>Game\Demos\Level.0\Basic Forward Render\Render Resources</Filter>
     </ClInclude>
-    <ClInclude Include="..\ModelImporter\define.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Renderer\Camera</Filter>
     </ClInclude>
@@ -284,6 +284,36 @@
     </ClInclude>
     <ClInclude Include="LambertResources.h">
       <Filter>Game\Demos\Level.0\Lambert Lighting\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuiManager.h">
+      <Filter>Renderer\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_internal.h">
+      <Filter>Utils\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imstb_rectpack.h">
+      <Filter>Utils\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imstb_textedit.h">
+      <Filter>Utils\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imstb_truetype.h">
+      <Filter>Utils\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imconfig.h">
+      <Filter>Utils\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui.h">
+      <Filter>Utils\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_impl_dx12.h">
+      <Filter>Utils\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_impl_win32.h">
+      <Filter>Utils\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="define.h">
+      <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -408,6 +438,30 @@
     <ClCompile Include="LambertResources.cpp">
       <Filter>Game\Demos\Level.0\Lambert Lighting\Resources</Filter>
     </ClCompile>
+    <ClCompile Include="ImGuiManager.cpp">
+      <Filter>Renderer\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_draw.cpp">
+      <Filter>Utils\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_tables.cpp">
+      <Filter>Utils\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_widgets.cpp">
+      <Filter>Utils\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui.cpp">
+      <Filter>Utils\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_demo.cpp">
+      <Filter>Utils\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_impl_win32.cpp">
+      <Filter>Utils\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_impl_dx12.cpp">
+      <Filter>Utils\ImGui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -420,6 +474,9 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="prefix_notation.md" />
+    <Text Include="ImGui\LICENSE.txt">
+      <Filter>Utils\ImGui</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Shader\test.hlsl">

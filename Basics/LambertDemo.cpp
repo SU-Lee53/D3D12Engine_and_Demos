@@ -31,6 +31,12 @@ void LambertDemo::Update()
 {
 	Camera& cam = *CORE.GetMainCamera();
 
+	if(ImGui::Begin("TEST"))
+	{
+		ImGui::Text("YES");
+	}
+	ImGui::End();
+
 	// Cam
 	{
 		XMVECTOR xmPos = XMLoadFloat3(&cam.GetPosition());

@@ -4,6 +4,8 @@
 #include "Camera.h"
 
 
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
 #pragma region Win32Callbacks
 WPARAM Game::Run(const GameDesc& desc)
 {
@@ -28,6 +30,7 @@ WPARAM Game::Run(const GameDesc& desc)
         TIME.Initialize();
         RENDER.Initialize();
         RESOURCE.Initialize();
+        GUI.Initialize();
 
         m_Desc.app->Initialize();
     }
@@ -61,6 +64,10 @@ WPARAM Game::Run(const GameDesc& desc)
         CORE.WaitForFenceValue(CORE.GetFenceValue(i));
     }
 
+    // ImGui Clean Up
+    ImGui_ImplDX12_Shutdown();
+    ImGui_ImplWin32_Shutdown();
+    ImGui::DestroyContext();
 
     return (int)msg.wParam;
 }
@@ -105,6 +112,9 @@ BOOL Game::InitInstance(int cmdShow)
 
 LRESULT Game::WndProc(HWND handle, UINT message, WPARAM wParam, LPARAM lParam)
 {
+    if (ImGui_ImplWin32_WndProcHandler(handle, message, wParam, lParam))
+        return true;
+
     switch (message)
     {
     case WM_SIZE: 
@@ -133,6 +143,7 @@ void Game::Update()
     // Update Managers
     INPUT.Update();
     TIME.Update();
+    GUI.Update();
 
     // Update Game Logic
     CORE.GetMainCamera()->Update();
@@ -145,10 +156,13 @@ void Game::Update()
 void Game::Render()
 {
     RENDER.RenderBegin();
+
     {
         m_Desc.app->Render();
+        RENDER.Render();
+        GUI.Render();
     }
-    RENDER.Render();
+
     RENDER.RenderEnd();
     RENDER.Present();
 }

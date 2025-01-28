@@ -142,17 +142,26 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\library\include\DirectXTex\DirectXTex.h" />
-    <ClInclude Include="..\ModelImporter\define.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="BasicForwardRenderDemo.h" />
     <ClInclude Include="BasicForwardRenderResources.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CB_types.h" />
     <ClInclude Include="ConstantBuffer.h" />
+    <ClInclude Include="define.h" />
     <ClInclude Include="Descriptor.h" />
     <ClInclude Include="HierarchyModelDemo.h" />
     <ClInclude Include="HierarchyModelResource.h" />
     <ClInclude Include="HR_helper.h" />
+    <ClInclude Include="ImGuiManager.h" />
+    <ClInclude Include="ImGui\imconfig.h" />
+    <ClInclude Include="ImGui\imgui.h" />
+    <ClInclude Include="ImGui\imgui_impl_dx12.h" />
+    <ClInclude Include="ImGui\imgui_impl_win32.h" />
+    <ClInclude Include="ImGui\imgui_internal.h" />
+    <ClInclude Include="ImGui\imstb_rectpack.h" />
+    <ClInclude Include="ImGui\imstb_textedit.h" />
+    <ClInclude Include="ImGui\imstb_truetype.h" />
     <ClInclude Include="LambertDemo.h" />
     <ClInclude Include="LambertResources.h" />
     <ClInclude Include="Material.h" />
@@ -195,6 +204,28 @@
     <ClCompile Include="Descriptor.cpp" />
     <ClCompile Include="HierarchyModelDemo.cpp" />
     <ClCompile Include="HierarchyModelResource.cpp" />
+    <ClCompile Include="ImGuiManager.cpp" />
+    <ClCompile Include="ImGui\imgui.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_demo.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_draw.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_impl_dx12.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_impl_win32.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_tables.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_widgets.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="LambertDemo.cpp" />
     <ClCompile Include="LambertResources.cpp" />
     <ClCompile Include="Material.cpp" />
@@ -247,6 +278,7 @@
     <FxCompile Include="..\Shader\test.hlsl" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="ImGui\LICENSE.txt" />
     <Text Include="prefix_notation.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

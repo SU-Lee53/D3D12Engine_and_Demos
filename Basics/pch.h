@@ -62,6 +62,12 @@ using namespace Microsoft::WRL;
 #include <concepts>
 using namespace std::literals;
 
+// ImGui
+
+#include "ImGui/imgui.h"
+#include "ImGui/imgui_impl_win32.h"
+#include "ImGui/imgui_impl_dx12.h"
+
 // Additional Headers
 #include "define.h"
 #include "Utils.h"
@@ -82,6 +88,7 @@ using namespace std::literals;
 #include "ShaderManager.h"
 #include "InputManager.h"
 #include "TimeManager.h"
+#include "ImGuiManager.h"
 
 // Object Components
 #include "Transform.h"
