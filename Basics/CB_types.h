@@ -9,4 +9,5 @@ struct CBCameraData
 {
     XMFLOAT4X4 matView;
     XMFLOAT4X4 matProj;
+    XMFLOAT3 CamPosition;
 };

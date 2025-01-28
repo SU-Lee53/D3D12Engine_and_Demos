@@ -12,6 +12,7 @@ cbuffer CameraData : register(b1)
 {
     matrix matView;
     matrix matProj;
+    float3 camPosition;
 }
 
 cbuffer MaterialData : register(b2)
@@ -25,7 +26,7 @@ cbuffer MaterialData : register(b2)
 cbuffer LambertLightData : register(b3)
 {
     float3 lightDir;
-    float3 lightColor;
+    float4 lightColor;
 }
 
 struct VSInput
@@ -58,9 +59,9 @@ PSInput VSMain(VSInput input)
     output.Pos = mul(worldPos, vp);
     output.WorldPos = worldPos.xyz;
     
-    output.Normal = mul(float4(input.Normal, 0.0f), matWorld).xyz;
-    output.BiNormal = mul(float4(input.BiNormal, 0.0f), matWorld).xyz;
-    output.Tangent = mul(float4(input.Tangent, 0.0f), matWorld).xyz;
+    output.Normal = mul(input.Normal, (float3x3)(matWorld));
+    output.BiNormal = mul(input.BiNormal, (float3x3)(matWorld));
+    output.Tangent = mul(input.Tangent, (float3x3)(matWorld));
     
     output.TexCoord = input.TexCoord;
     output.Color = input.Color;
@@ -75,6 +76,7 @@ float4 PSMain(PSInput input) : SV_TARGET
     
     float diffuseIntensity = max(0.0f, dot(N, L));
     
-    float3 diffuse = diffuseIntensity * lightColor * colorDiffuse.xyz;
+    float3 diffuse = diffuseIntensity * lightColor.xyz * colorDiffuse.rgb;
+    
     return float4(diffuse, 1.0f);
 }

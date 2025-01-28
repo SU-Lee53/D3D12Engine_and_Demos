@@ -53,3 +53,128 @@ void MeshHelper::CreateBoxMesh(vector<BasicVertexType>& vtx, vector<UINT>& idx)
 	idx[33] = 7; idx[34] = 4; idx[35] = 6;
 
 }
+
+void MeshHelper::CreateSphere(std::vector<VertexType>& vertices, std::vector<UINT>& indices)
+{
+
+	float radius = 0.5f; // Radius of Sphere
+	UINT stackCount = 20; // Column Divide
+	UINT sliceCount = 20; // Row Divide
+
+	// Vertices
+	VertexType v;
+
+	// North(Top)
+	v.Position = XMFLOAT3(0.0f, radius, 0.0f);
+	v.TexCoord = XMFLOAT2(0.5f, 0.0f);
+	v.Normal = v.Position;
+	XMStoreFloat3(&v.Normal, XMVector3Normalize(XMLoadFloat3(&v.Normal)));
+	v.Tangent = XMFLOAT3(1.0f, 0.0f, 0.0f);
+	XMStoreFloat3(&v.Tangent, XMVector3Normalize(XMLoadFloat3(&v.Tangent)));
+
+	XMVECTOR xmNormal = XMLoadFloat3(&v.Normal);
+	XMVECTOR xmTangent = XMLoadFloat3(&v.Tangent);
+	XMVECTOR xmBinormal = XMVector3Dot(xmNormal, xmTangent);
+	XMStoreFloat3(&v.BiNormal, xmBinormal);
+
+	vertices.push_back(v);
+
+	float stackAngle = XM_PI / stackCount;
+	float sliceAngle = XM_2PI / sliceCount;
+
+	float deltaU = 1.f / static_cast<float>(sliceCount);
+	float deltaV = 1.f / static_cast<float>(stackCount);
+
+	// Compute vertex for each ring
+	for (UINT y = 1; y <= stackCount - 1; ++y)
+	{
+		float phi = y * stackAngle;
+
+		// Vertex on ring
+		for (UINT x = 0; x <= sliceCount; ++x)
+		{
+			float theta = x * sliceAngle;
+			v.Position.x = radius * sinf(phi) * cosf(theta);
+			v.Position.y = radius * cosf(phi);
+			v.Position.z = radius * sinf(phi) * sinf(theta);
+
+			v.TexCoord = XMFLOAT2(deltaU * x, deltaV * y);
+
+			v.Normal = v.Position;
+			XMStoreFloat3(&v.Normal, XMVector3Normalize(XMLoadFloat3(&v.Normal)));
+
+			v.Tangent.x = -radius * sinf(phi) * sinf(theta);
+			v.Tangent.y = 0.0f;
+			v.Tangent.z = radius * sinf(phi) * cosf(theta);
+			XMStoreFloat3(&v.Tangent, XMVector3Normalize(XMLoadFloat3(&v.Tangent)));
+
+			xmNormal = XMLoadFloat3(&v.Normal);
+			xmTangent = XMLoadFloat3(&v.Tangent);
+			xmBinormal = XMVector3Dot(xmNormal, xmTangent);
+			XMStoreFloat3(&v.BiNormal, xmBinormal);
+
+			vertices.push_back(v);
+		}
+	}
+
+	// South(Bottom)
+	v.Position = XMFLOAT3(0.0f, -radius, 0.0f);
+	v.TexCoord = XMFLOAT2(0.5f, 0.0f);
+	v.Normal = v.Position;
+	XMStoreFloat3(&v.Normal, XMVector3Normalize(XMLoadFloat3(&v.Normal)));
+	v.Tangent = XMFLOAT3(1.0f, 0.0f, 0.0f);
+	XMStoreFloat3(&v.Tangent, XMVector3Normalize(XMLoadFloat3(&v.Tangent)));
+
+	xmNormal = XMLoadFloat3(&v.Normal);
+	xmTangent = XMLoadFloat3(&v.Tangent);
+	xmBinormal = XMVector3Dot(xmNormal, xmTangent);
+	XMStoreFloat3(&v.BiNormal, xmBinormal);
+
+	vertices.push_back(v);
+
+	// Indices
+	// North index
+	for (UINT i = 0; i <= sliceCount; ++i)
+	{
+		// [0]
+		//  |  \
+		// [i+1]-[i+2]
+		indices.push_back(0);
+		indices.push_back(i + 2);
+		indices.push_back(i + 1);
+	}
+
+	// Body index
+	UINT ringVertexCount = sliceCount + 1;
+	for (UINT y = 0; y < stackCount - 2; ++y)
+	{
+		for (UINT x = 0; x < sliceCount; ++x)
+		{
+			// [y, x]-[y, x+1]
+			//  |       /
+			// [y+1, x]
+			indices.push_back(1 + (y)*ringVertexCount + (x));
+			indices.push_back(1 + (y)*ringVertexCount + (x + 1));
+			indices.push_back(1 + (y + 1) * ringVertexCount + (x));
+			//          [y, x+1]
+			//         /      |
+			// [y+1, x]-[y+1,x+1]
+			indices.push_back(1 + (y + 1) * ringVertexCount + (x));
+			indices.push_back(1 + (y)*ringVertexCount + (x + 1));
+			indices.push_back(1 + (y + 1) * ringVertexCount + (x + 1));
+		}
+	}
+
+	// South
+	UINT bottomIndex = static_cast<UINT>(vertices.size()) - 1;
+	UINT lastRingStartIndex = bottomIndex - ringVertexCount;
+	for (UINT i = 0; i < sliceCount; ++i)
+	{
+		// [last+i]-[last+i+1]
+		// |        /
+		// [bottom]
+		indices.push_back(bottomIndex);
+		indices.push_back(lastRingStartIndex + i);
+		indices.push_back(lastRingStartIndex + i + 1);
+	}
+}

@@ -34,7 +34,7 @@ struct CBColorData
 struct CBLambertData
 {
 	XMFLOAT3 lightDir;
-	XMFLOAT3 lightColor;
+	XMFLOAT4 lightColor;
 };
 
 class LambertRender : public RenderMethod

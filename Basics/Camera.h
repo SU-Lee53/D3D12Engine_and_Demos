@@ -28,7 +28,7 @@ public:
         XMStoreFloat4x4(&viewTransposed, xmMatView);
         XMStoreFloat4x4(&projTransposed, xmMatProj);
 
-        return CBCameraData{ viewTransposed, projTransposed };
+        return CBCameraData{ viewTransposed, projTransposed, m_pTransform->GetWorldPosition()};
     }
 
     void SetPosition(const XMFLOAT3& pos);
@@ -74,5 +74,17 @@ private:
 
     BOOL m_bViewUpdated = FALSE;
     BOOL m_bProjUpdated = FALSE;
+
+private:
+    // Variable for move camera
+    float m_fRotY = 0.f;
+
+    // mouse
+    POINT m_MousePoint;
+    float m_fDeltaX = 0.f;
+    float m_fDeltaY = 0.f;
+
+    float m_sensitivity = 1.0f;
+
 };
 

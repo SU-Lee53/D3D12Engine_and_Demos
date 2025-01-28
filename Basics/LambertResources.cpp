@@ -4,6 +4,7 @@
 #include "Application.h"
 #include "LambertDemo.h"
 #include <fstream>
+#include "MeshHelper.h"
 
 using namespace std;
 
@@ -198,6 +199,20 @@ BOOL LambertObject::Initialize()
 {
 	m_upTransform = make_unique<Transform>();
 	m_upTransform->Initialize();
+
+	vector<VertexType> vtx;
+	vector<UINT> idx;
+
+	MeshHelper::CreateSphere(vtx, idx);
+
+	m_pModelNodes.resize(1);
+	m_pModelNodes[0] = make_shared<ModelNode>();
+	m_pModelNodes[0]->pMesh->Initialize(vtx, idx);
+	m_pModelNodes[0]->pTransform->Initialize();
+	m_pModelNodes[0]->pColorData->colorDiffuse = XMFLOAT4(1.f, 1.f, 1.f, 1.f);
+	m_pModelNodes[0]->pColorData->colorSpecular = XMFLOAT4(1.f, 1.f, 1.f, 1.f);
+	m_pModelNodes[0]->pColorData->colorAmbient = XMFLOAT4(1.f, 1.f, 1.f, 1.f);
+	m_pModelNodes[0]->pColorData->colorEmissive = XMFLOAT4(1.f, 1.f, 1.f, 1.f);
 
 	InitRenderMethod();
 
