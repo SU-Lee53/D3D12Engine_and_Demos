@@ -30,7 +30,8 @@ public:
 
 
 private:
-	// 괜한 ref count 문제 예방을 위해 저장은 CompileAndAddShader() 에서만 수행하도록 함
+	// To prevent ref count problem, Allocate Shader Object in Add functions
+	// This will make shaders ref count to 1 in shadermaps 
 	void AddVertexShader(const std::string& key, std::shared_ptr<VertexShader> shader);
 	void AddGeometryShader(const std::string& key, std::shared_ptr<GeometryShader> shader);
 	void AddHullShader(const std::string& key, std::shared_ptr<HullShader> shader);

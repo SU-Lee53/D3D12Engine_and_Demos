@@ -19,16 +19,16 @@ public:
 	void SetWorldScale(const XMFLOAT3& scale);
 	void SetWorldRotation(const XMFLOAT3& rot);
 
-	XMFLOAT3 GetLocalPosition() { return m_vLocalPos; }
-	XMFLOAT3 GetLocalRotation() { return m_vLocalRotation; }
-	XMFLOAT3 GetLocalScale() { return m_vLocalScale; }
+	XMFLOAT3 GetLocalPosition() const { return m_vLocalPos; }
+	XMFLOAT3 GetLocalRotation() const { return m_vLocalRotation; }
+	XMFLOAT3 GetLocalScale() const { return m_vLocalScale; }
 	
-	XMFLOAT3 GetWorldPosition() { return m_vWorldPos; }
-	XMFLOAT3 GetWorldRotation() { return m_vWorldRotation; }
-	XMFLOAT3 GetWorldScale() { return m_vWorldScale; }
+	XMFLOAT3 GetWorldPosition() const { return m_vWorldPos; }
+	XMFLOAT3 GetWorldRotation() const { return m_vWorldRotation; }
+	XMFLOAT3 GetWorldScale() const { return m_vWorldScale; }
 
-	XMFLOAT4X4 GetLocalMatrix() { return m_matLocal; }
-	XMFLOAT4X4 GetLocalMatrixTransposed()
+	XMFLOAT4X4 GetLocalMatrix() const { return m_matLocal; }
+	XMFLOAT4X4 GetLocalMatrixTransposed() const
 	{
 		XMMATRIX xmLocalTransposed = XMMatrixTranspose(XMLoadFloat4x4(&m_matLocal));
 		XMFLOAT4X4 ret;
@@ -36,8 +36,8 @@ public:
 		return ret;
 	}
 	
-	XMFLOAT4X4 GetWorldMatrix() { return m_matWorld; }
-	XMFLOAT4X4 GetWorldMatrixTransposed()
+	XMFLOAT4X4 GetWorldMatrix() const { return m_matWorld; }
+	XMFLOAT4X4 GetWorldMatrixTransposed() const
 	{
 		XMMATRIX xmWorldTransposed = XMMatrixTranspose(XMLoadFloat4x4(&m_matWorld));
 		XMFLOAT4X4 ret;
@@ -45,7 +45,7 @@ public:
 		return ret;
 	}
 
-	CBTranformData GetTransformCBData() = delete;
+	CBTransformData GetTransformCBData() = delete;
 
 public:
 	// Basis Getter : With some matrix magics

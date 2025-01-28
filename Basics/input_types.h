@@ -15,12 +15,14 @@ struct BasicInput : public Input
 
 struct DefaultInput
 {
-	Vec3 Position = { 0,0,0 };
-	Vec4 Color = { 0,0,0,0 };
-	Vec2 TexCoord = { 0,0 };
-	Vec3 Normal = { 0,0,0 };
-	Vec3 BiNormal = { 0,0,0 };
-	Vec3 Tangent = { 0,0,0 };
+	XMFLOAT3 Position = { 0,0,0 };
+	XMFLOAT4 Color = { 0,0,0,0 };
+	XMFLOAT2 TexCoord = { 0,0 };
+	XMFLOAT3 Normal = { 0,0,0 };
+	XMFLOAT3 BiNormal = { 0,0,0 };
+	XMFLOAT3 Tangent = { 0,0,0 };
+
+	static std::vector<D3D12_INPUT_ELEMENT_DESC> descs;
 };
 
 using BasicVertexType = BasicInput;

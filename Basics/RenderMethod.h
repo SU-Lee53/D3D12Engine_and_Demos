@@ -19,7 +19,7 @@ class RootSignature;
 class RenderMethod
 {
 public:
-	virtual void Initialize(std::shared_ptr<Object> owner) = 0;
+	virtual BOOL Initialize(std::shared_ptr<Object> owner) = 0;
 	virtual void Render() = 0;
 
 protected:

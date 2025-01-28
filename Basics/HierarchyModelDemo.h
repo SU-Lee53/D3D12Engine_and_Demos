@@ -10,10 +10,12 @@ public:
 private:
 	std::shared_ptr<Object> m_pObj;
 
+	float m_fRotY = 0.f;
+
 	// mouse
-	POINT _point;
-	float m_deltaX = 0.f;
-	float m_deltaY = 0.f;
+	POINT m_MousePoint;
+	float m_fDeltaX = 0.f;
+	float m_fDeltaY = 0.f;
 
 	float m_sensitivity = 1.0f;
 };

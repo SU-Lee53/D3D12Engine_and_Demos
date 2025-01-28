@@ -91,14 +91,14 @@ void RenderManager::Present()
 {
 	CORE.Fence();
 
-	// VSync ¼³Á¤
+	// Set VSync 
 	UINT uiSyncInterval;
 	UINT uiPresentFlags;
 
 	if (bVsync)
-		uiSyncInterval = 1;
+		uiSyncInterval = 1;	// VSync ON
 	else
-		uiSyncInterval = 0;
+		uiSyncInterval = 0;	// VSync OFF
 	
 	if (!uiSyncInterval)
 		uiPresentFlags = DXGI_PRESENT_ALLOW_TEARING;

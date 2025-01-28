@@ -6,12 +6,12 @@ private:
 	std::vector<CD3DX12_DESCRIPTOR_RANGE> DescriptorRanges;
 
 public:
-	void Resize(UINT size)
+	void Resize(size_t size)
 	{
 		DescriptorRanges.resize(size);
 	}
 
-	UINT Size() 
+	size_t Size()
 	{ 
 		return DescriptorRanges.size(); 
 	}
@@ -40,12 +40,12 @@ private:
 	std::vector<CD3DX12_ROOT_PARAMETER> RootParameters;
 
 public:
-	void Resize(UINT size)
+	void Resize(size_t size)
 	{
 		RootParameters.resize(size);
 	}
 
-	UINT Size() 
+	size_t Size()
 	{ 
 		return RootParameters.size(); 
 	}
@@ -73,11 +73,11 @@ private:
 	std::vector<D3D12_STATIC_SAMPLER_DESC> StaticSamplers;
 
 public:
-	void Resize(UINT size)
+	void Resize(size_t size)
 	{
 		StaticSamplers.resize(size);
 	}
-	UINT Size() 
+	size_t Size() 
 	{
 		return StaticSamplers.size();
 	}

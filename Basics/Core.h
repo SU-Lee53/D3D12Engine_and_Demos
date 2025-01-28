@@ -14,7 +14,6 @@ public:
 	void WaitForFenceValue(UINT64 ExpectedFenceValue);
 
 public:
-	// 빠른 시일 내에 렌더링부 분리
 	BOOL BeginRender();
 	BOOL EndRender();
 	BOOL Present();
@@ -65,8 +64,6 @@ private:
 
 	// Command Queue
 	ComPtr<ID3D12CommandQueue> m_pCommandQueue = nullptr;
-
-	// Command List 와 Allocator 는 추후 RenderManager 같은곳에 구현예정ㅇㅇ
 
 	// DXGI
 	D3D_FEATURE_LEVEL m_FeatureLevel = D3D_FEATURE_LEVEL_11_0;

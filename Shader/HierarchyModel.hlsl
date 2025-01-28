@@ -13,6 +13,14 @@ cbuffer CameraData : register(b1)
     matrix matProj;
 }
 
+cbuffer Material : register(b2)
+{
+    float4 colorDiffuse;
+    float4 colorSpecular;
+    float4 colorAmbient;
+    float4 colorEmissive;
+}
+
 struct VSInput
 {
     float4 Pos : POSITION;
@@ -31,7 +39,6 @@ PSInput VSMain(VSInput input)
 {
     PSInput result = (PSInput) 0;
     
-    
     matrix matViewProj = mul(matView, matProj); // view x proj
     matrix matWorldViewProj = mul(matWorld, matViewProj); // world x view x proj
     result.position = mul(input.Pos, matWorldViewProj); // pojtected vertex = vertex x world x view x proj
@@ -43,5 +50,5 @@ PSInput VSMain(VSInput input)
 
 float4 PSMain(PSInput input) : SV_TARGET
 {
-    return input.color;
+    return colorDiffuse;
 }

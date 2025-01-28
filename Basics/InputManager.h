@@ -89,7 +89,7 @@ private:
 	inline KEY_STATE GetState(KEY_TYPE key) { return _states[static_cast<UINT8>(key)]; }
 
 private:
-	HWND _hWnd;
+	HWND _hWnd = nullptr;
 	std::vector<KEY_STATE> _states;
 	POINT _mousePos = {};
 };

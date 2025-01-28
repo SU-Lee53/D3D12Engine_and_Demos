@@ -2,8 +2,8 @@
 
 struct GameDesc
 {
-	DWORD width;
-	DWORD height;
+	DWORD width = 0;
+	DWORD height = 0;
 	Color BackColor = Color{ 0.f,0.f,0.f,1.f };
 	std::wstring windowName = L"";
 	HINSTANCE hInstance = 0;

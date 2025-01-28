@@ -33,6 +33,9 @@ public:
 
     void SetPosition(const XMFLOAT3& pos);
     void SetRotation(const XMFLOAT3& rot);
+    
+    XMFLOAT3 GetPosition() { return m_pTransform->GetWorldPosition(); }
+    XMFLOAT3 GetRotation() { return m_pTransform->GetWorldRotation(); }
 
     void SetFovY(float fFovY);
     void SetAspect(float fWidth, float fHeight);
@@ -41,6 +44,14 @@ public:
     void SetFar(float fFar);
 
     std::shared_ptr<Transform> GetTransform() { return m_pTransform; }
+
+    void DecomposeCameraUVN(XMFLOAT3& outFront, XMFLOAT3& outRight, XMFLOAT3& outUp)
+    {
+        XMMATRIX xmWorld = XMLoadFloat4x4(&m_pTransform->GetWorldMatrix());
+        XMStoreFloat3(&outFront, xmWorld.r[2]); // Front is in 3rd row
+        XMStoreFloat3(&outRight, xmWorld.r[0]); // Right is in 1st row
+        XMStoreFloat3(&outUp, xmWorld.r[1]); // UP is in 2nd row
+    }
 
 private:
     BOOL SetCamera(const XMFLOAT3& camEYE, const XMFLOAT3& camAT, const XMFLOAT3& camUP);

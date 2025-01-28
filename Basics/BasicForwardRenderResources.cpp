@@ -100,7 +100,7 @@ BOOL BasicForwardPipeline::Initialize(shared_ptr<RootSignature> rootSignature)
 //    RenderMethod    //
 ////////////////////////
 
-void ForwardRender::Initialize(std::shared_ptr<Object> owner)
+BOOL ForwardRender::Initialize(std::shared_ptr<Object> owner)
 {
 	m_wpOwner = owner;
 
@@ -118,7 +118,7 @@ void ForwardRender::Initialize(std::shared_ptr<Object> owner)
 	m_Pipelines[0]->Initialize(m_RootSignatures[0]);
 
 	// Constant Buffers
-	m_upTransformCBuffer = make_unique<ConstantBuffer<CBTranformData>>();
+	m_upTransformCBuffer = make_unique<ConstantBuffer<CBTransformData>>();
 	m_upCameraCBuffer = make_unique<ConstantBuffer<CBCameraData>>();
 	m_upTransformCBuffer->Initialize();
 	m_upCameraCBuffer->Initialize();
@@ -130,6 +130,7 @@ void ForwardRender::Initialize(std::shared_ptr<Object> owner)
 	m_upDescriptorHeap = make_unique<DescriptorHeap>();
 	m_upDescriptorHeap->Initialize(m_HeapDesc);
 
+	return TRUE;
 }
 
 void ForwardRender::Render()
@@ -138,8 +139,10 @@ void ForwardRender::Render()
 
 	auto owner = m_wpOwner.lock();
 
-	shared_ptr<Transform> pTransform = owner->GetTransform();
-	shared_ptr<Mesh<BasicVertexType>> pMesh = owner->GetMesh();
+	shared_ptr<BasicForwardObject> forwardOwner = static_pointer_cast<BasicForwardObject>(owner);
+
+	shared_ptr<Transform> pTransform = forwardOwner->GetTransform();
+	shared_ptr<Mesh<BasicVertexType>> pMesh = forwardOwner->GetMesh();
 	VertexBuffer& refVertexBuffer = pMesh->GetBuffer()->vertexBuffer;
 	IndexBuffer& refIndexBuffer = pMesh->GetBuffer()->indexBuffer;
 
@@ -147,7 +150,7 @@ void ForwardRender::Render()
 	// TODO2 : Render!!!!!!!! 
 
 	// 1. Write data in Constant Buffer
-	CBTranformData data;
+	CBTransformData data;
 	data.matWorld = pTransform->GetWorldMatrixTransposed();
 	m_upTransformCBuffer->PushData(data);
 	m_upCameraCBuffer->PushData(CORE.GetMainCameraCBData());

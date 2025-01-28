@@ -1,6 +1,6 @@
 #pragma once
 
-struct CBTranformData
+struct CBTransformData
 {
     XMFLOAT4X4 matWorld;
 };
