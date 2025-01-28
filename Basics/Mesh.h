@@ -18,13 +18,13 @@ public:
 	void SetVertices(const std::vector<T>& vertices) { m_Vertices = vertices; }
 	void SetIndices(const std::vector<UINT>& indices) { m_Indices = indices; }
 
-	std::shared_ptr<MeshBuffer>& GetBuffer() { return m_pMeshBuffer; }
+	std::unique_ptr<MeshBuffer>& GetBuffer() { return m_pMeshBuffer; }
 
 	size_t GetVertexCount() { return m_Vertices.size(); }
 	size_t GetIndexCount() { return m_Indices.size(); }
 
 private:
-	std::shared_ptr<MeshBuffer> m_pMeshBuffer = nullptr;
+	std::unique_ptr<MeshBuffer> m_pMeshBuffer = nullptr;
 	
 	// Buffer Cache
 	std::vector<T> m_Vertices = {};
@@ -54,7 +54,7 @@ inline BOOL Mesh<T>::Initialize(const std::vector<T>& vertices, const std::vecto
 	m_Vertices = vertices;
 	m_Indices = indices;
 
-	m_pMeshBuffer = make_shared<MeshBuffer>();
+	m_pMeshBuffer = make_unique<MeshBuffer>();
 	ThrowIfFailed(RESOURCE.CreateVertexBuffer(vertices, m_pMeshBuffer->vertexBuffer));
 	ThrowIfFailed(RESOURCE.CreateIndexBuffer(indices, m_pMeshBuffer->indexBuffer));
 

@@ -88,32 +88,71 @@
     <Filter Include="Renderer\Pool\Descriptor">
       <UniqueIdentifier>{fbf38540-028a-42cf-99c0-144d4da07901}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Demos\Easy">
+    <Filter Include="Game\Demos\Level.0">
       <UniqueIdentifier>{942167d2-04d9-405e-bcca-ae187ef50ecf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Demos\Easy\Hierarchy Model">
+    <Filter Include="Game\Demos\Level.0\Hierarchy Model">
       <UniqueIdentifier>{212730a2-d4cc-4b30-8fb3-903e59ac5850}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Demos\Easy\Hierarchy Model\App">
+    <Filter Include="Game\Demos\Level.0\Hierarchy Model\App">
       <UniqueIdentifier>{3f48eb6d-166c-4b40-ac64-d2439611bd70}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Demos\Easy\Hierarchy Model\Render Resources">
+    <Filter Include="Game\Demos\Level.0\Hierarchy Model\Render Resources">
       <UniqueIdentifier>{1f8e5b30-cacf-4bc0-b20d-97b1e03ea7c1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Demos\Easy\Basic Forward Render">
+    <Filter Include="Game\Demos\Level.0\Hierarchy Model\Shader">
+      <UniqueIdentifier>{93b509e6-31b7-41bd-9ce2-2e6456eeae20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos\Level.0\Basic Forward Render">
       <UniqueIdentifier>{2afe6b7a-d7df-4814-90e0-771fc2fd18a7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Demos\Easy\Basic Forward Render\App">
+    <Filter Include="Game\Demos\Level.0\Basic Forward Render\App">
       <UniqueIdentifier>{ff82f672-35f9-4aee-91a9-d64d49d5859b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Demos\Easy\Basic Forward Render\Render Resources">
+    <Filter Include="Game\Demos\Level.0\Basic Forward Render\Render Resources">
       <UniqueIdentifier>{3470798c-b9a4-4505-b2e8-8c2866f155e4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Demos\Easy\Basic Forward Render\Shader">
+    <Filter Include="Game\Demos\Level.0\Basic Forward Render\Shader">
       <UniqueIdentifier>{d2df76da-60eb-4c57-b612-4cf9ae2e1a29}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Demos\Easy\Hierarchy Model\Shader">
-      <UniqueIdentifier>{93b509e6-31b7-41bd-9ce2-2e6456eeae20}</UniqueIdentifier>
+    <Filter Include="Game\Demos\Level.0\Lambert Lighting">
+      <UniqueIdentifier>{e89db0bf-cd68-4bcc-94bf-a12b8a80ccc8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos\Level.0\Blinn-Phong Lighting">
+      <UniqueIdentifier>{6c3599ee-594f-4fd2-8387-4ae481e66160}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos\Level.0\SpotLight">
+      <UniqueIdentifier>{c34e6630-e436-4d15-bc04-6c801c78e7db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos\Level.0\PointLight">
+      <UniqueIdentifier>{17bfc0da-acae-42fe-afdf-bc1a3a1bf55d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos\Level.1">
+      <UniqueIdentifier>{7495034c-e824-47cb-a806-6d7857f3e5fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos\Level.1\Shadow Mapping">
+      <UniqueIdentifier>{9abfcf62-ea75-41d2-9546-4e343264b4c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos\Level.1\Deferred Render">
+      <UniqueIdentifier>{298565e2-0407-4fc1-94aa-c7e5461ab2a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos\Level.1\Cube Mapping">
+      <UniqueIdentifier>{01fe53ef-bf4d-4c09-b5b9-9b4ce82c6dd9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos\Level.0\Terrain + Skybox">
+      <UniqueIdentifier>{78862c1c-091c-472e-8462-e3f3ccd169e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos\Level.0\Instancing">
+      <UniqueIdentifier>{483d83d1-c59e-4e23-bb2c-294d164ef2f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos\Level.0\Lambert Lighting\App">
+      <UniqueIdentifier>{1bb3283e-7f50-4c21-bb75-c5695ea473e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos\Level.0\Lambert Lighting\Resources">
+      <UniqueIdentifier>{0bdde914-fa94-4cae-9dde-f1e4101b3073}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos\Level.0\Lambert Lighting\Shader">
+      <UniqueIdentifier>{346dd4f4-893f-4710-874a-d4ac967b6638}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -223,10 +262,10 @@
       <Filter>Types</Filter>
     </ClInclude>
     <ClInclude Include="BasicForwardRenderDemo.h">
-      <Filter>Game\Demos\Easy\Basic Forward Render\App</Filter>
+      <Filter>Game\Demos\Level.0\Basic Forward Render\App</Filter>
     </ClInclude>
     <ClInclude Include="BasicForwardRenderResources.h">
-      <Filter>Game\Demos\Easy\Basic Forward Render\Render Resources</Filter>
+      <Filter>Game\Demos\Level.0\Basic Forward Render\Render Resources</Filter>
     </ClInclude>
     <ClInclude Include="..\ModelImporter\define.h">
       <Filter>Headers</Filter>
@@ -235,10 +274,16 @@
       <Filter>Renderer\Camera</Filter>
     </ClInclude>
     <ClInclude Include="HierarchyModelDemo.h">
-      <Filter>Game\Demos\Easy\Hierarchy Model\App</Filter>
+      <Filter>Game\Demos\Level.0\Hierarchy Model\App</Filter>
     </ClInclude>
     <ClInclude Include="HierarchyModelResource.h">
-      <Filter>Game\Demos\Easy\Hierarchy Model\Render Resources</Filter>
+      <Filter>Game\Demos\Level.0\Hierarchy Model\Render Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="LambertDemo.h">
+      <Filter>Game\Demos\Level.0\Lambert Lighting\App</Filter>
+    </ClInclude>
+    <ClInclude Include="LambertResources.h">
+      <Filter>Game\Demos\Level.0\Lambert Lighting\Resources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -346,16 +391,22 @@
       <Filter>Types</Filter>
     </ClCompile>
     <ClCompile Include="BasicForwardRenderDemo.cpp">
-      <Filter>Game\Demos\Easy\Basic Forward Render\App</Filter>
+      <Filter>Game\Demos\Level.0\Basic Forward Render\App</Filter>
     </ClCompile>
     <ClCompile Include="BasicForwardRenderResources.cpp">
-      <Filter>Game\Demos\Easy\Basic Forward Render\Render Resources</Filter>
+      <Filter>Game\Demos\Level.0\Basic Forward Render\Render Resources</Filter>
     </ClCompile>
     <ClCompile Include="HierarchyModelDemo.cpp">
-      <Filter>Game\Demos\Easy\Hierarchy Model\App</Filter>
+      <Filter>Game\Demos\Level.0\Hierarchy Model\App</Filter>
     </ClCompile>
     <ClCompile Include="HierarchyModelResource.cpp">
-      <Filter>Game\Demos\Easy\Hierarchy Model\Render Resources</Filter>
+      <Filter>Game\Demos\Level.0\Hierarchy Model\Render Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="LambertDemo.cpp">
+      <Filter>Game\Demos\Level.0\Lambert Lighting\App</Filter>
+    </ClCompile>
+    <ClCompile Include="LambertResources.cpp">
+      <Filter>Game\Demos\Level.0\Lambert Lighting\Resources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -372,10 +423,13 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Shader\test.hlsl">
-      <Filter>Game\Demos\Easy\Basic Forward Render\Shader</Filter>
+      <Filter>Game\Demos\Level.0\Basic Forward Render\Shader</Filter>
     </FxCompile>
     <FxCompile Include="..\Shader\HierarchyModel.hlsl">
-      <Filter>Game\Demos\Easy\Hierarchy Model\Shader</Filter>
+      <Filter>Game\Demos\Level.0\Hierarchy Model\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shader\LambertLight.hlsl">
+      <Filter>Game\Demos\Level.0\Lambert Lighting\Shader</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

@@ -111,6 +111,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -152,6 +153,8 @@
     <ClInclude Include="HierarchyModelDemo.h" />
     <ClInclude Include="HierarchyModelResource.h" />
     <ClInclude Include="HR_helper.h" />
+    <ClInclude Include="LambertDemo.h" />
+    <ClInclude Include="LambertResources.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshHelper.h" />
@@ -192,6 +195,8 @@
     <ClCompile Include="Descriptor.cpp" />
     <ClCompile Include="HierarchyModelDemo.cpp" />
     <ClCompile Include="HierarchyModelResource.cpp" />
+    <ClCompile Include="LambertDemo.cpp" />
+    <ClCompile Include="LambertResources.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshHelper.cpp" />
@@ -238,6 +243,7 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Shader\HierarchyModel.hlsl" />
+    <FxCompile Include="..\Shader\LambertLight.hlsl" />
     <FxCompile Include="..\Shader\test.hlsl" />
   </ItemGroup>
   <ItemGroup>

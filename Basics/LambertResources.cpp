@@ -1,16 +1,19 @@
 #include "pch.h"
-#include "HierarchyModelResource.h"
+#include "LambertResources.h"
 #include "Mesh.h"
+#include "Application.h"
+#include "LambertDemo.h"
 #include <fstream>
 
 using namespace std;
 
-BOOL HierarchyModelRootSignature::Initialize()
+BOOL LambertRootSignature::Initialize()
 {
-	m_DescriptorRange.Resize(3);
+	m_DescriptorRange.Resize(4);
 	m_DescriptorRange[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0);	// b0 : Transform Data
 	m_DescriptorRange[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 1);	// b1 : Camera Data
 	m_DescriptorRange[2].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 2);	// b2 : Color Data
+	m_DescriptorRange[3].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 3);	// b3 : Lambert Light Data
 
 	m_RootParameter.Resize(1);
 	m_RootParameter[0].InitAsDescriptorTable(m_DescriptorRange.Size(), m_DescriptorRange.Get(), D3D12_SHADER_VISIBILITY_ALL);
@@ -55,17 +58,17 @@ BOOL HierarchyModelRootSignature::Initialize()
 	return TRUE;
 }
 
-BOOL HierarchyModelPipeline::Initialize(std::shared_ptr<RootSignature> rootSignature)
+BOOL LambertPipeline::Initialize(std::shared_ptr<class RootSignature> rootSignature)
 {
-	SHADER.CompileAndAddShader<VertexShader>("HierarchyVS", L"../Shader/HierarchyModel.hlsl", "VSMain");
-	SHADER.CompileAndAddShader<PixelShader>("HierarchyPS", L"../Shader/HierarchyModel.hlsl", "PSMain");
+	SHADER.CompileAndAddShader<VertexShader>("LambertVS", L"../Shader/LambertLight.hlsl", "VSMain");
+	SHADER.CompileAndAddShader<PixelShader>("LambertPS", L"../Shader/LambertLight.hlsl", "PSMain");
 
-	VertexShader& vs = *SHADER.GetShader<VertexShader>("HierarchyVS");
-	PixelShader& ps = *SHADER.GetShader<PixelShader>("HierarchyPS");
+	VertexShader& vs = *SHADER.GetShader<VertexShader>("LambertVS");
+	PixelShader& ps = *SHADER.GetShader<PixelShader>("LambertPS");
 
 	// Set Pipeline State
 	{
-		m_Desc.InputLayout = { BasicInput::descs.data(), (UINT)BasicInput::descs.size() };
+		m_Desc.InputLayout = { VertexType::descs.data(), (UINT)VertexType::descs.size() };
 		m_Desc.VS = CD3DX12_SHADER_BYTECODE(vs.GetBlob()->GetBufferPointer(), vs.GetBlob()->GetBufferSize());
 		m_Desc.PS = CD3DX12_SHADER_BYTECODE(ps.GetBlob()->GetBufferPointer(), ps.GetBlob()->GetBufferSize());
 		m_Desc.pRootSignature = rootSignature->Get();
@@ -93,7 +96,7 @@ BOOL HierarchyModelPipeline::Initialize(std::shared_ptr<RootSignature> rootSigna
 	return TRUE;
 }
 
-BOOL HierarchyModelRender::Initialize(std::shared_ptr<Object> owner)
+BOOL LambertRender::Initialize(std::shared_ptr<Object> owner)
 {
 	m_wpOwner = owner;
 
@@ -102,21 +105,24 @@ BOOL HierarchyModelRender::Initialize(std::shared_ptr<Object> owner)
 
 	// Root Signature
 	m_RootSignatures.resize(m_dwPassCount);
-	m_RootSignatures[0] = make_shared<HierarchyModelRootSignature>();
+	m_RootSignatures[0] = make_shared<LambertRootSignature>();
 	m_RootSignatures[0]->Initialize();
 
 	// Pipeline
 	m_Pipelines.resize(m_dwPassCount);
-	m_Pipelines[0] = make_shared<HierarchyModelPipeline>();
+	m_Pipelines[0] = make_shared<LambertPipeline>();
 	m_Pipelines[0]->Initialize(m_RootSignatures[0]);
 
 	// Constant Buffers
 	m_upTransformCBuffer = make_unique<ConstantBuffer<CBModelTransformData>>();
 	m_upCameraCBuffer = make_unique<ConstantBuffer<CBCameraData>>();
 	m_upColorCBuffer = make_unique<ConstantBuffer<CBColorData>>();
+	m_upLambertCBuffer = make_unique<ConstantBuffer<CBLambertData>>();
+
 	m_upTransformCBuffer->Initialize();
 	m_upCameraCBuffer->Initialize();
 	m_upColorCBuffer->Initialize();
+	m_upLambertCBuffer->Initialize();
 
 	// Descriptor Heap
 	m_HeapDesc.NumDescriptors = DESCRIPTOR_COUNT_FOR_DRAW;
@@ -128,14 +134,13 @@ BOOL HierarchyModelRender::Initialize(std::shared_ptr<Object> owner)
 	return TRUE;
 }
 
-void HierarchyModelRender::Render()
+void LambertRender::Render()
 {
 	ComPtr<ID3D12GraphicsCommandList>& pCommandList = RENDER.GetCurrentCommandList();
 
-	auto owner = m_wpOwner.lock();
-	shared_ptr<HierarchyModelObject> originOwner = static_pointer_cast<HierarchyModelObject>(owner);
+	LambertObject& owner = *static_pointer_cast<LambertObject>(m_wpOwner.lock());
 
-	for (const auto& node : originOwner->m_pModelNodes)
+	for (const auto& node : owner.m_pModelNodes)
 	{
 		Transform& transform = *node->pTransform;
 		Mesh<VertexType>& mesh = *node->pMesh;
@@ -152,19 +157,25 @@ void HierarchyModelRender::Render()
 		m_upCameraCBuffer->PushData(CORE.GetMainCameraCBData());
 		m_upColorCBuffer->PushData(node->pColorData->GetMaterialCBData());
 
+		// Light Data is in Application(LambertDemo)
+		CBLambertData data = static_pointer_cast<LambertDemo>(GAME.GetGameDesc().app)->GetLambertLight()->GetLambertCBData();
+		m_upLambertCBuffer->PushData(data);
+
 		// 2. Get Descriptor from DescriptorHeap(m_upDescriptorHeap)
 		ComPtr<ID3D12DescriptorHeap> pDescriptorHeap = m_upDescriptorHeap->pDescriptorHeap;
 		Descriptor TransformDescriptorHandle = m_upDescriptorHeap->Alloc();
 		Descriptor CameraDescriptorHandle = m_upDescriptorHeap->Alloc();
 		Descriptor ColorDescriptorHandle = m_upDescriptorHeap->Alloc();
+		Descriptor LambertDescriptorHandle = m_upDescriptorHeap->Alloc();
 
 		// 3. Copy Constant Buffer Data to Descriptor
 		DEVICE->CopyDescriptorsSimple(1, TransformDescriptorHandle.cpuHandle, m_upTransformCBuffer->GetDescriptorHeap()->DescriptorHandleFromStart.cpuHandle, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 		DEVICE->CopyDescriptorsSimple(1, CameraDescriptorHandle.cpuHandle, m_upCameraCBuffer->GetDescriptorHeap()->DescriptorHandleFromStart.cpuHandle, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 		DEVICE->CopyDescriptorsSimple(1, ColorDescriptorHandle.cpuHandle, m_upColorCBuffer->GetDescriptorHeap()->DescriptorHandleFromStart.cpuHandle, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+		DEVICE->CopyDescriptorsSimple(1, LambertDescriptorHandle.cpuHandle, m_upLambertCBuffer->GetDescriptorHeap()->DescriptorHandleFromStart.cpuHandle, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
 		// Current pDescriptorHeap layout (Probably)
-		// | CBV(Transform): b0 | CBV(Camera): b1 | CBV(Color): b2 |
+		// | CBV(Transform): b0 | CBV(Camera): b1 | CBV(Color): b2 | CBV(Lambert): b3 |
 
 		pCommandList->SetGraphicsRootSignature(m_RootSignatures[0]->Get());
 		pCommandList->SetDescriptorHeaps(1, pDescriptorHeap.GetAddressOf());
@@ -181,13 +192,10 @@ void HierarchyModelRender::Render()
 		m_upDescriptorHeap->Reset();
 
 	}
-
 }
 
-BOOL HierarchyModelObject::Initialize()
+BOOL LambertObject::Initialize()
 {
-	//LoadFromBinaryFile(L"../Models/Binaries/Hummer.bin");
-
 	m_upTransform = make_unique<Transform>();
 	m_upTransform->Initialize();
 
@@ -196,7 +204,7 @@ BOOL HierarchyModelObject::Initialize()
 	return TRUE;
 }
 
-void HierarchyModelObject::Update()
+void LambertObject::Update()
 {
 	for (auto& node : m_pModelNodes)
 	{
@@ -207,20 +215,20 @@ void HierarchyModelObject::Update()
 	}
 }
 
-void HierarchyModelObject::Render()
+void LambertObject::Render()
 {
 	m_upRenderMethod->Render();
 }
 
-BOOL HierarchyModelObject::InitRenderMethod()
+BOOL LambertObject::InitRenderMethod()
 {
-	m_upRenderMethod = make_unique<HierarchyModelRender>();
+	m_upRenderMethod = make_unique<LambertRender>();
 	m_upRenderMethod->Initialize(shared_from_this());
 
 	return TRUE;
 }
 
-void HierarchyModelObject::LoadFromBinaryFile(std::wstring filePath)
+void LambertObject::LoadFromBinaryFile(std::wstring filePath)
 {
 	fstream fs;
 	fs.open(filePath, ios::in | ios::binary);
@@ -254,4 +262,6 @@ void HierarchyModelObject::LoadFromBinaryFile(std::wstring filePath)
 			m_pModelNodes[nodeIndex++] = pModelNode;
 		}
 	}
+
+	fs.close();
 }

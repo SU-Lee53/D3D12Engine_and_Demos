@@ -1,14 +1,16 @@
 #pragma once
 
+#pragma once
 
-class HierarchyModelRootSignature : public RootSignature
+
+class LambertRootSignature : public RootSignature
 {
 public:
 	virtual BOOL Initialize() override;
 
 };
 
-class HierarchyModelPipeline : public Pipeline
+class LambertPipeline : public Pipeline
 {
 public:
 	virtual BOOL Initialize(std::shared_ptr<class RootSignature> rootSignature) override;
@@ -29,8 +31,17 @@ struct CBColorData
 	XMFLOAT4 colorEmissive;
 };
 
-class HierarchyModelRender : public RenderMethod
+struct CBLambertData
 {
+	XMFLOAT3 lightDir;
+	XMFLOAT3 lightColor;
+};
+
+class LambertRender : public RenderMethod
+{
+public:
+	virtual ~LambertRender() {}
+
 public:
 	virtual BOOL Initialize(std::shared_ptr<Object> owner) override;
 	virtual void Render() override;
@@ -39,8 +50,9 @@ private:
 	std::unique_ptr<ConstantBuffer<CBModelTransformData>> m_upTransformCBuffer = nullptr;
 	std::unique_ptr<ConstantBuffer<CBCameraData>> m_upCameraCBuffer = nullptr;
 	std::unique_ptr<ConstantBuffer<CBColorData>> m_upColorCBuffer = nullptr;
+	std::unique_ptr<ConstantBuffer<CBLambertData>> m_upLambertCBuffer = nullptr;
 
-	const UINT DESCRIPTOR_COUNT_FOR_DRAW = 3;
+	const UINT DESCRIPTOR_COUNT_FOR_DRAW = 4;
 };
 
 #include "Mesh.h"
@@ -173,7 +185,7 @@ struct ModelNode
 							}
 						}
 					}
-					
+
 					if (read == "<Index Data>")
 					{
 						while (read != "</Index Data>")
@@ -225,7 +237,7 @@ struct ModelNode
 	}
 };
 
-class HierarchyModelObject : public Object
+class LambertObject : public Object
 {
 public:
 	virtual BOOL Initialize() override;
@@ -252,7 +264,7 @@ public:
 	}
 
 
-	friend class HierarchyModelRender;
+	friend class LambertRender;
 
 private:
 	std::unique_ptr<Transform> m_upTransform = nullptr;

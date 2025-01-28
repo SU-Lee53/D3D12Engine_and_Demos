@@ -7,10 +7,6 @@
 #pragma region Win32Callbacks
 WPARAM Game::Run(const GameDesc& desc)
 {
-#ifdef _DEBUG
-    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-#endif _DEBUG
-
     m_Desc = desc;
 
     MyRegisterClass();
@@ -65,10 +61,6 @@ WPARAM Game::Run(const GameDesc& desc)
         CORE.WaitForFenceValue(CORE.GetFenceValue(i));
     }
 
-
-#ifdef _DEBUG
-    _ASSERT(_CrtCheckMemory());
-#endif _DEBUG
 
     return (int)msg.wParam;
 }

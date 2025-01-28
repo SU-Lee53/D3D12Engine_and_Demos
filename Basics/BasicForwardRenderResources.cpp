@@ -79,7 +79,7 @@ BOOL BasicForwardPipeline::Initialize(shared_ptr<RootSignature> rootSignature)
 		m_Desc.DepthStencilState.StencilEnable = FALSE;
 		m_Desc.DepthStencilState.DepthEnable = TRUE;
 		m_Desc.RasterizerState.CullMode = D3D12_CULL_MODE_BACK;
-		m_Desc.RasterizerState.FillMode = D3D12_FILL_MODE_WIREFRAME;
+		m_Desc.RasterizerState.FillMode = D3D12_FILL_MODE_SOLID;
 		m_Desc.RasterizerState.DepthClipEnable = TRUE;
 		m_Desc.SampleMask = UINT_MAX;
 		m_Desc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;

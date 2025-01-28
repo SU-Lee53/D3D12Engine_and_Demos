@@ -28,11 +28,11 @@ public:
 	void PushData(const T& data);
 
 public:
-	std::shared_ptr<DescriptorHeap>& GetDescriptorHeap() { return m_pDescriptorHeap; }
+	std::unique_ptr<DescriptorHeap>& GetDescriptorHeap() { return m_pDescriptorHeap; }
 
 private:
 	ComPtr<ID3D12Resource>			m_pResource = nullptr;
-	std::shared_ptr<DescriptorHeap> m_pDescriptorHeap = nullptr;
+	std::unique_ptr<DescriptorHeap> m_pDescriptorHeap = nullptr;
 
 	// cbv data cache
 	D3D12_GPU_VIRTUAL_ADDRESS		m_GPUAddr;
@@ -77,7 +77,7 @@ inline BOOL ConstantBuffer<T>::Initialize()
 		heapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 	}
 
-	m_pDescriptorHeap = make_shared<DescriptorHeap>();
+	m_pDescriptorHeap = std::make_unique<DescriptorHeap>();
 	m_pDescriptorHeap->Initialize(heapDesc);
 
 	// Write cache datas
