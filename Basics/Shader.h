@@ -54,7 +54,7 @@ inline void Shader<ty>::Initialize(const std::wstring& filePath, const std::stri
 	m_strFileName = p.filename().string();
 
 
-	// D3DCompileFromFile 에서 설정할 target 설정
+	// Set shader target version for D3DCompileFromFile
 	std::string shaderVersion;
 	switch (ty)
 	{
@@ -86,9 +86,18 @@ inline void Shader<ty>::Initialize(const std::wstring& filePath, const std::stri
 #else
 	UINT compileFlags = 0;
 #endif
+	ComPtr<ID3DBlob> pError;
 
-	ThrowIfFailed(D3DCompileFromFile(m_wstrFilePath.c_str(), nullptr, nullptr, m_strEntryName.c_str(), shaderVersion.c_str(), compileFlags, 0, m_ShaderByteCode.GetAddressOf(), nullptr));
+	HRESULT hr = D3DCompileFromFile(m_wstrFilePath.c_str(), nullptr, nullptr, m_strEntryName.c_str(), shaderVersion.c_str(), compileFlags, 0, m_ShaderByteCode.GetAddressOf(), pError.GetAddressOf());
 
+	if (FAILED(hr))
+	{
+		if (pError)
+		{
+			OutputDebugStringA((char*)pError->GetBufferPointer());
+			__debugbreak();
+		}
+	}
 
 }
 

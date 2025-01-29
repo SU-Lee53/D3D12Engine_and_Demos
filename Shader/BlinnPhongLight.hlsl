@@ -12,7 +12,7 @@ cbuffer CameraData : register(b1)
 {
     matrix matView;
     matrix matProj;
-    float3 camPosition;
+    float3 camPos;
 };
 
 cbuffer MaterialData : register(b2)
@@ -25,6 +25,7 @@ cbuffer MaterialData : register(b2)
 
 cbuffer LambertLightData : register(b3)
 {
+    float3 lightPos;
     float3 lightDir;
     float4 lightColor;
 };
@@ -69,14 +70,37 @@ PSInput VSMain(VSInput input)
     return output;
 }
 
+//       Half vector(L + V == H)    -> in this situation : N == normalized H -> Most bright pixel
+//      light(L)  (N)   camera(V)
+//            \    |    /
+//             \   |   /
+//              \  |  / 
+//               \ | /
+//                \|/
+//  ----------------------------------
+    
 float4 PSMain(PSInput input) : SV_TARGET
 {
-    float3 N = normalize(input.Normal);
-    float3 L = normalize(-lightDir);
+    float3 N = normalize(input.Normal);                 // Normalized normal vector
+    float3 L = normalize(lightPos - input.WorldPos);    // Noralized vector to light
+    float3 V = normalize(camPos - input.WorldPos);      // Normalized vector to camera
+    float3 H = normalize(L + V);                        // Normalized half vector
     
+    // Diffuse(Lambert)
     float diffuseIntensity = max(0.0f, dot(N, L));
+    float3 diffuse = diffuseIntensity * lightColor.rgb * colorDiffuse.rgb;
     
-    float3 diffuse = diffuseIntensity * lightColor.xyz * colorDiffuse.rgb;
+    // Blinn-Phong
+    float shininess = max(1.0, colorSpecular.a);
+    float specularIntensity = pow(max(0.0f, dot(N, H)), shininess);
+    float3 specular = specularIntensity * lightColor.rgb * colorSpecular.rgb;
     
-    return float4(diffuse, 1.0f);
+    // Ambient
+    float3 ambient = colorAmbient.rgb * lightColor.rgb;
+    
+    float3 finalColor = diffuse + specular + ambient;
+    return float4(finalColor, 1.0f);
+    
 }
+
+    

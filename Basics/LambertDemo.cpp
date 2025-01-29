@@ -16,23 +16,19 @@ void LambertDemo::Initialize()
 
 	shared_ptr<LambertObject> originObj = static_pointer_cast<LambertObject>(m_pObj);
 	//originObj->LoadFromBinaryFile(L"../Models/Binaries/Hummer.bin");
-	//originObj->GetTransform()->SetWorldScale(XMFLOAT3(0.1f, 0.1f, 0.1f));
-
-	XMFLOAT4 colorKhaki;
-	XMStoreFloat4(&colorKhaki, Colors::DarkOliveGreen);
-	//originObj->SetColor(colorKhaki);
+	originObj->GetTransform()->SetWorldPosition(XMFLOAT3(0.0f, 0.0f, 3.0f));
 
 }
 
 void LambertDemo::Update()
 {
-	if(ImGui::Begin("Lambert"s.c_str()))
+	if(ImGui::Begin("Lambert Control"s.c_str()))
 	{
 		XMFLOAT3 dir = m_pLambertLight->GetDirection();
 		XMFLOAT4 color = m_pLambertLight->GetColor();
 
-		ImGui::DragFloat3("Direction"s.c_str(), (float*)&dir, 0.2f);
-		ImGui::DragFloat4("Color"s.c_str(), (float*)&color, 0.2f);
+		ImGui::DragFloat3("Direction"s.c_str(), (float*)&dir, 0.01f, -1.f, 1.f);
+		ImGui::DragFloat4("Color"s.c_str(), (float*)&color, 0.01f, 0.f, 1.f);
 
 		m_pLambertLight->SetDirection(dir);
 		m_pLambertLight->SetColor(color);
@@ -56,5 +52,5 @@ void LambertDemo::Render()
 
 CBLambertData LambertLight::GetLambertCBData()
 {
-	return CBLambertData{ m_vlightDir, m_vlightColor };
+	return CBLambertData{ m_vlightDir, 0.f/*padding*/, m_vlightColor };
 }

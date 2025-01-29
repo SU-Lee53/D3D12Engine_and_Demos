@@ -145,6 +145,8 @@
     <ClInclude Include="Application.h" />
     <ClInclude Include="BasicForwardRenderDemo.h" />
     <ClInclude Include="BasicForwardRenderResources.h" />
+    <ClInclude Include="BlinnPhongDemo.h" />
+    <ClInclude Include="BlinnPhongResource.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CB_types.h" />
     <ClInclude Include="ConstantBuffer.h" />
@@ -198,6 +200,8 @@
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="BasicForwardRenderDemo.cpp" />
     <ClCompile Include="BasicForwardRenderResources.cpp" />
+    <ClCompile Include="BlinnPhongDemo.cpp" />
+    <ClCompile Include="BlinnPhongResource.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CB_types.cpp" />
     <ClCompile Include="ConstantBuffer.cpp" />
@@ -273,6 +277,7 @@
     <None Include="SimpleMath.inl" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="..\Shader\BlinnPhongLight.hlsl" />
     <FxCompile Include="..\Shader\HierarchyModel.hlsl" />
     <FxCompile Include="..\Shader\LambertLight.hlsl" />
     <FxCompile Include="..\Shader\test.hlsl" />

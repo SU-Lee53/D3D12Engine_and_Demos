@@ -157,6 +157,15 @@
     <Filter Include="Utils\ImGui">
       <UniqueIdentifier>{8b601ed3-b6be-4414-8677-b302bc1e0283}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Demos\Level.0\Blinn-Phong Lighting\App">
+      <UniqueIdentifier>{2400391c-c296-4cc0-81fe-528fe4d4aae9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos\Level.0\Blinn-Phong Lighting\Resources">
+      <UniqueIdentifier>{321d0bac-ab35-4b79-bbc8-b9412f392c99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos\Level.0\Blinn-Phong Lighting\Shader">
+      <UniqueIdentifier>{d351be4d-bbb7-4eca-ab57-d7c7326d0115}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -315,6 +324,12 @@
     <ClInclude Include="define.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="BlinnPhongDemo.h">
+      <Filter>Game\Demos\Level.0\Blinn-Phong Lighting\App</Filter>
+    </ClInclude>
+    <ClInclude Include="BlinnPhongResource.h">
+      <Filter>Game\Demos\Level.0\Blinn-Phong Lighting\Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Basics.ico">
@@ -462,6 +477,12 @@
     <ClCompile Include="ImGui\imgui_impl_dx12.cpp">
       <Filter>Utils\ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="BlinnPhongDemo.cpp">
+      <Filter>Game\Demos\Level.0\Blinn-Phong Lighting\App</Filter>
+    </ClCompile>
+    <ClCompile Include="BlinnPhongResource.cpp">
+      <Filter>Game\Demos\Level.0\Blinn-Phong Lighting\Resources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -487,6 +508,9 @@
     </FxCompile>
     <FxCompile Include="..\Shader\LambertLight.hlsl">
       <Filter>Game\Demos\Level.0\Lambert Lighting\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shader\BlinnPhongLight.hlsl">
+      <Filter>Game\Demos\Level.0\Blinn-Phong Lighting\Shader</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

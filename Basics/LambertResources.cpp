@@ -8,6 +8,10 @@
 
 using namespace std;
 
+//////////////////////////
+// LambertRootSignature //
+//////////////////////////
+
 BOOL LambertRootSignature::Initialize()
 {
 	m_DescriptorRange.Resize(4);
@@ -59,6 +63,10 @@ BOOL LambertRootSignature::Initialize()
 	return TRUE;
 }
 
+/////////////////////
+// LambertPipeline //
+/////////////////////
+
 BOOL LambertPipeline::Initialize(std::shared_ptr<class RootSignature> rootSignature)
 {
 	SHADER.CompileAndAddShader<VertexShader>("LambertVS", L"../Shader/LambertLight.hlsl", "VSMain");
@@ -96,6 +104,10 @@ BOOL LambertPipeline::Initialize(std::shared_ptr<class RootSignature> rootSignat
 
 	return TRUE;
 }
+
+///////////////////
+// LambertRender //
+///////////////////
 
 BOOL LambertRender::Initialize(std::shared_ptr<Object> owner)
 {
@@ -194,6 +206,10 @@ void LambertRender::Render()
 
 	}
 }
+
+///////////////////
+// LambertObject //
+///////////////////
 
 BOOL LambertObject::Initialize()
 {

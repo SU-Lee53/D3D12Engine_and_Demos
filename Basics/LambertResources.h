@@ -1,8 +1,5 @@
 #pragma once
 
-#pragma once
-
-
 class LambertRootSignature : public RootSignature
 {
 public:
@@ -34,6 +31,7 @@ struct CBColorData
 struct CBLambertData
 {
 	XMFLOAT3 lightDir;
+	float padding = 0.f;
 	XMFLOAT4 lightColor;
 };
 
