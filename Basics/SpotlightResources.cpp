@@ -1,23 +1,23 @@
 #include "pch.h"
-#include "BlinnPhongResource.h"
+#include "SpotlightResources.h"
 #include "Mesh.h"
 #include "Application.h"
-#include "BlinnPhongDemo.h"
+#include "SpotlightDemo.h"
 #include "MeshHelper.h"
 
 using namespace std;
 
-/////////////////////////////
-// BlinnPhongRootSignature //
-/////////////////////////////
+////////////////////////////
+// SpotlightRootSignature //
+////////////////////////////
 
-BOOL BlinnPhongRootSignature::Initialize()
+BOOL SpotlightRootSignature::Initialize()
 {
 	m_DescriptorRange.Resize(4);
 	m_DescriptorRange[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0);	// b0 : Transform Data
 	m_DescriptorRange[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 1);	// b1 : Camera Data
 	m_DescriptorRange[2].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 2);	// b2 : Color Data
-	m_DescriptorRange[3].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 3);	// b3 : Blinn-Phong Light Data
+	m_DescriptorRange[3].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 3);	// b3 : Spotlight Light Data
 
 	m_RootParameter.Resize(1);
 	m_RootParameter[0].InitAsDescriptorTable(m_DescriptorRange.Size(), m_DescriptorRange.Get(), D3D12_SHADER_VISIBILITY_ALL);
@@ -62,17 +62,17 @@ BOOL BlinnPhongRootSignature::Initialize()
 	return TRUE;
 }
 
-////////////////////////
-// BlinnPhongPipeline //
-////////////////////////
+///////////////////////
+// SpotlightPipeline //
+///////////////////////
 
-BOOL BlinnPhongPipeline::Initialize(std::shared_ptr<class RootSignature> rootSignature)
+BOOL SpotlightPipeline::Initialize(std::shared_ptr<class RootSignature> rootSignature)
 {
-	SHADER.CompileAndAddShader<VertexShader>("BlinnPhongVS", L"../Shader/BlinnPhongLight.hlsl", "VSMain");
-	SHADER.CompileAndAddShader<PixelShader>("BlinnPhongPS", L"../Shader/BlinnPhongLight.hlsl", "PSMain");
+	SHADER.CompileAndAddShader<VertexShader>("SpotLightVS", L"../Shader/SpotLight.hlsl", "VSMain");
+	SHADER.CompileAndAddShader<PixelShader>("SpotLightPS", L"../Shader/SpotLight.hlsl", "PSMain");
 
-	VertexShader& vs = *SHADER.GetShader<VertexShader>("BlinnPhongVS");
-	PixelShader& ps = *SHADER.GetShader<PixelShader>("BlinnPhongPS");
+	VertexShader& vs = *SHADER.GetShader<VertexShader>("SpotLightVS");
+	PixelShader& ps = *SHADER.GetShader<PixelShader>("SpotLightPS");
 
 	// Set Pipeline State
 	{
@@ -104,11 +104,11 @@ BOOL BlinnPhongPipeline::Initialize(std::shared_ptr<class RootSignature> rootSig
 	return TRUE;
 }
 
-//////////////////////
-// BlinnPhongRender //
-//////////////////////
+/////////////////////
+// SpotlightRender //
+/////////////////////
 
-BOOL BlinnPhongRender::Initialize(std::shared_ptr<Object> owner)
+BOOL SpotlightRender::Initialize(std::shared_ptr<Object> owner)
 {
 	m_wpOwner = owner;
 
@@ -117,24 +117,24 @@ BOOL BlinnPhongRender::Initialize(std::shared_ptr<Object> owner)
 
 	// Root Signature
 	m_RootSignatures.resize(m_dwPassCount);
-	m_RootSignatures[0] = make_shared<BlinnPhongRootSignature>();
+	m_RootSignatures[0] = make_shared<SpotlightRootSignature>();
 	m_RootSignatures[0]->Initialize();
 
 	// Pipeline
 	m_Pipelines.resize(m_dwPassCount);
-	m_Pipelines[0] = make_shared<BlinnPhongPipeline>();
+	m_Pipelines[0] = make_shared<SpotlightPipeline>();
 	m_Pipelines[0]->Initialize(m_RootSignatures[0]);
 
 	// Constant Buffers
 	m_upTransformCBuffer = make_unique<ConstantBuffer<CBModelTransformData>>();
 	m_upCameraCBuffer = make_unique<ConstantBuffer<CBCameraData>>();
 	m_upColorCBuffer = make_unique<ConstantBuffer<CBColorData>>();
-	m_upBlinnPhongCBuffer = make_unique<ConstantBuffer<CBBlinnPhongData>>();
+	m_upSpotlightCBuffer = make_unique<ConstantBuffer<CBSpotlightData>>();
 
 	m_upTransformCBuffer->Initialize();
 	m_upCameraCBuffer->Initialize();
 	m_upColorCBuffer->Initialize();
-	m_upBlinnPhongCBuffer->Initialize();
+	m_upSpotlightCBuffer->Initialize();
 
 	// Descriptor Heap
 	m_HeapDesc.NumDescriptors = DESCRIPTOR_COUNT_FOR_DRAW;
@@ -146,11 +146,11 @@ BOOL BlinnPhongRender::Initialize(std::shared_ptr<Object> owner)
 	return TRUE;
 }
 
-void BlinnPhongRender::Render()
+void SpotlightRender::Render()
 {
 	ComPtr<ID3D12GraphicsCommandList>& pCommandList = RENDER.GetCurrentCommandList();
 
-	BlinnPhongObject& originOwner = *static_pointer_cast<BlinnPhongObject>(m_wpOwner.lock());
+	SpotlightObject& originOwner = *static_pointer_cast<SpotlightObject>(m_wpOwner.lock());
 
 	Transform& transform = *originOwner.GetTransform();
 	Mesh<VertexType>& mesh = *originOwner.m_upMesh;
@@ -168,25 +168,25 @@ void BlinnPhongRender::Render()
 	m_upCameraCBuffer->PushData(CORE.GetMainCameraCBData());
 	m_upColorCBuffer->PushData(color.GetMaterialCBData());
 
-	// Light Data is in Application(LambertDemo)
-	CBBlinnPhongData data = static_pointer_cast<BlinnPhongDemo>(GAME.GetGameDesc().app)->GetBlinnPhongLight()->GetBlinnPhongCBData();
-	m_upBlinnPhongCBuffer->PushData(data);
+	// Light Data is in Application(SpotlightDemo)
+	CBSpotlightData data = static_pointer_cast<SpotlightDemo>(GAME.GetGameDesc().app)->GetSpotLight()->GetSpotlightCBData();
+	m_upSpotlightCBuffer->PushData(data);
 
 	// 2. Get Descriptor from DescriptorHeap(m_upDescriptorHeap)
 	ComPtr<ID3D12DescriptorHeap> pDescriptorHeap = m_upDescriptorHeap->pDescriptorHeap;
 	Descriptor TransformDescriptorHandle = m_upDescriptorHeap->Alloc();
 	Descriptor CameraDescriptorHandle = m_upDescriptorHeap->Alloc();
 	Descriptor ColorDescriptorHandle = m_upDescriptorHeap->Alloc();
-	Descriptor LambertDescriptorHandle = m_upDescriptorHeap->Alloc();
+	Descriptor SpotlightDescriptorHandle = m_upDescriptorHeap->Alloc();
 
 	// 3. Copy Constant Buffer Data to Descriptor
 	DEVICE->CopyDescriptorsSimple(1, TransformDescriptorHandle.cpuHandle, m_upTransformCBuffer->GetDescriptorHeap()->DescriptorHandleFromStart.cpuHandle, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	DEVICE->CopyDescriptorsSimple(1, CameraDescriptorHandle.cpuHandle, m_upCameraCBuffer->GetDescriptorHeap()->DescriptorHandleFromStart.cpuHandle, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	DEVICE->CopyDescriptorsSimple(1, ColorDescriptorHandle.cpuHandle, m_upColorCBuffer->GetDescriptorHeap()->DescriptorHandleFromStart.cpuHandle, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	DEVICE->CopyDescriptorsSimple(1, LambertDescriptorHandle.cpuHandle, m_upBlinnPhongCBuffer->GetDescriptorHeap()->DescriptorHandleFromStart.cpuHandle, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	DEVICE->CopyDescriptorsSimple(1, SpotlightDescriptorHandle.cpuHandle, m_upSpotlightCBuffer->GetDescriptorHeap()->DescriptorHandleFromStart.cpuHandle, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
 	// Current pDescriptorHeap layout (Probably)
-	// | CBV(Transform): b0 | CBV(Camera): b1 | CBV(Color): b2 | CBV(Lambert): b3 |
+	// | CBV(Transform): b0 | CBV(Camera): b1 | CBV(Color): b2 | CBV(Spotlight): b3 |
 
 	pCommandList->SetGraphicsRootSignature(m_RootSignatures[0]->Get());
 	pCommandList->SetDescriptorHeaps(1, pDescriptorHeap.GetAddressOf());
@@ -204,11 +204,11 @@ void BlinnPhongRender::Render()
 
 }
 
-//////////////////////
-// BlinnPhongObject //
-//////////////////////
+/////////////////////
+// SpotlightObject //
+/////////////////////
 
-BOOL BlinnPhongObject::Initialize()
+BOOL SpotlightObject::Initialize()
 {
 	m_upTransform = make_unique<Transform>();
 	m_upTransform->Initialize();
@@ -237,19 +237,19 @@ BOOL BlinnPhongObject::Initialize()
 	return TRUE;
 }
 
-void BlinnPhongObject::Update()
+void SpotlightObject::Update()
 {
 	m_upTransform->Update();
 }
 
-void BlinnPhongObject::Render()
+void SpotlightObject::Render()
 {
 	m_upRenderMethod->Render();
 }
 
-BOOL BlinnPhongObject::InitRenderMethod()
+BOOL SpotlightObject::InitRenderMethod()
 {
-	m_upRenderMethod = make_unique<BlinnPhongRender>();
+	m_upRenderMethod = make_unique<SpotlightRender>();
 	m_upRenderMethod->Initialize(shared_from_this());
 
 	return TRUE;

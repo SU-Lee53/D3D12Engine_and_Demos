@@ -1,13 +1,13 @@
 #pragma once
 
-class BlinnPhongRootSignature : public RootSignature
+class SpotlightRootSignature : public RootSignature
 {
 public:
 	virtual BOOL Initialize() override;
 
 };
 
-class BlinnPhongPipeline : public Pipeline
+class SpotlightPipeline : public Pipeline
 {
 public:
 	virtual BOOL Initialize(std::shared_ptr<class RootSignature> rootSignature) override;
@@ -28,18 +28,26 @@ struct CBColorData
 	XMFLOAT4 colorEmissive;
 };
 
-struct CBBlinnPhongData
+struct CBSpotlightData
 {
 	XMFLOAT3 lightPos;
+	float pad1;
 	XMFLOAT3 lightDir;
-	LONGLONG pad1 = 0;
-	XMFLOAT4 lightColor;
+	float pad2;
+	XMFLOAT3 lightColor;
+	float pad3;
+
+	float lightIntensity;
+	float innerCone;	// cos(еш) of inner cone 
+	float outerCone;	// cos(еш) of outer cone 
+	float lightRange;
+	float attenuation;
 };
 
-class BlinnPhongRender : public RenderMethod
+class SpotlightRender : public RenderMethod
 {
 public:
-	virtual ~BlinnPhongRender() {}
+	virtual ~SpotlightRender() {}
 
 public:
 	virtual BOOL Initialize(std::shared_ptr<Object> owner) override;
@@ -49,7 +57,7 @@ private:
 	std::unique_ptr<ConstantBuffer<CBModelTransformData>> m_upTransformCBuffer = nullptr;
 	std::unique_ptr<ConstantBuffer<CBCameraData>> m_upCameraCBuffer = nullptr;
 	std::unique_ptr<ConstantBuffer<CBColorData>> m_upColorCBuffer = nullptr;
-	std::unique_ptr<ConstantBuffer<CBBlinnPhongData>> m_upBlinnPhongCBuffer = nullptr;
+	std::unique_ptr<ConstantBuffer<CBSpotlightData>> m_upSpotlightCBuffer = nullptr;
 
 	const UINT DESCRIPTOR_COUNT_FOR_DRAW = 4;
 };
@@ -75,7 +83,7 @@ struct ColorData
 	}
 };
 
-class BlinnPhongObject : public Object
+class SpotlightObject : public Object
 {
 public:
 	virtual BOOL Initialize() override;
@@ -93,7 +101,7 @@ public:
 	void SetSpecularColor(const XMFLOAT3& color) { m_upColorData->colorSpecular = XMFLOAT4(color.x, color.y, color.z, m_upColorData->colorSpecular.w); }
 	void SetAmbientColor(const XMFLOAT3& color) { m_upColorData->colorAmbient = XMFLOAT4(color.x, color.y, color.z, 1.f); }
 	void SetShiness(float shiness) { m_upColorData->colorSpecular.w = shiness; }
-	
+
 	XMFLOAT3 GetDiffuseColor()
 	{
 		XMVECTOR xmDiffuse = XMLoadFloat4(&m_upColorData->colorDiffuse);
@@ -120,7 +128,7 @@ public:
 
 	float GetShiness() { return m_upColorData->colorSpecular.w; }
 
-	friend class BlinnPhongRender;
+	friend class SpotlightRender;
 
 protected:
 	std::unique_ptr<Transform> m_upTransform = nullptr;

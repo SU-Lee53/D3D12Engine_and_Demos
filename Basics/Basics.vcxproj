@@ -189,6 +189,8 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="SimpleMath.h" />
+    <ClInclude Include="SpotlightDemo.h" />
+    <ClInclude Include="SpotlightResources.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="TimeManager.h" />
@@ -260,6 +262,8 @@
     <ClCompile Include="SimpleMath.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="SpotlightDemo.cpp" />
+    <ClCompile Include="SpotlightResources.cpp" />
     <ClCompile Include="TimeManager.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Utils.cpp" />
@@ -280,6 +284,7 @@
     <FxCompile Include="..\Shader\BlinnPhongLight.hlsl" />
     <FxCompile Include="..\Shader\HierarchyModel.hlsl" />
     <FxCompile Include="..\Shader\LambertLight.hlsl" />
+    <FxCompile Include="..\Shader\SpotLight.hlsl" />
     <FxCompile Include="..\Shader\test.hlsl" />
   </ItemGroup>
   <ItemGroup>

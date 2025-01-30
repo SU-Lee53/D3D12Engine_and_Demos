@@ -92,5 +92,5 @@ void BlinnPhongDemo::Render()
 
 CBBlinnPhongData BlinnPhongLight::GetBlinnPhongCBData()
 {
-	return CBBlinnPhongData{ m_vlightPos, m_vlightDir, 0.f/*padding*/, m_vlightColor };
+	return CBBlinnPhongData{ m_vlightPos, m_vlightDir, 1/*padding*/, m_vlightColor };
 }

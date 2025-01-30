@@ -166,6 +166,15 @@
     <Filter Include="Game\Demos\Level.0\Blinn-Phong Lighting\Shader">
       <UniqueIdentifier>{d351be4d-bbb7-4eca-ab57-d7c7326d0115}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Demos\Level.0\SpotLight\App">
+      <UniqueIdentifier>{f459a80f-a0e0-4b37-818d-143d673a4853}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos\Level.0\SpotLight\Resources">
+      <UniqueIdentifier>{822e362a-1b9e-4c94-b831-221902563f83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos\Level.0\SpotLight\Shader">
+      <UniqueIdentifier>{bd730f73-33f9-406a-9b5e-8ae5f87ce07a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -330,6 +339,12 @@
     <ClInclude Include="BlinnPhongResource.h">
       <Filter>Game\Demos\Level.0\Blinn-Phong Lighting\Resources</Filter>
     </ClInclude>
+    <ClInclude Include="SpotlightDemo.h">
+      <Filter>Game\Demos\Level.0\SpotLight\App</Filter>
+    </ClInclude>
+    <ClInclude Include="SpotlightResources.h">
+      <Filter>Game\Demos\Level.0\SpotLight\Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Basics.ico">
@@ -483,6 +498,12 @@
     <ClCompile Include="BlinnPhongResource.cpp">
       <Filter>Game\Demos\Level.0\Blinn-Phong Lighting\Resources</Filter>
     </ClCompile>
+    <ClCompile Include="SpotlightDemo.cpp">
+      <Filter>Game\Demos\Level.0\SpotLight\App</Filter>
+    </ClCompile>
+    <ClCompile Include="SpotlightResources.cpp">
+      <Filter>Game\Demos\Level.0\SpotLight\Resources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -511,6 +532,9 @@
     </FxCompile>
     <FxCompile Include="..\Shader\BlinnPhongLight.hlsl">
       <Filter>Game\Demos\Level.0\Blinn-Phong Lighting\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shader\SpotLight.hlsl">
+      <Filter>Game\Demos\Level.0\SpotLight\Shader</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>
