@@ -96,13 +96,11 @@ float3 ComputeDistanceAttenuation(float3 worldPos)
 float ComputeSpotlightFactor(float3 worldPos)
 {
     float3 L = normalize(lightPos - worldPos); // Normalized vector to origin of light(lightPos)
-    float3 D = normalize(lightDir); // Normalized vector of direction of spotlight
+    float3 D = normalize(-lightDir); // Normalized vector of direction of spotlight
     
     float theta = dot(D, L);
     
     // Spotlight Attenuation
-    float cosInner = cos(radians(innerCone));
-    float cosOuter = cos(radians(outerCone));
     float spotlightFactor = saturate((theta - outerCone) / (innerCone - outerCone));
     
     return spotlightFactor;

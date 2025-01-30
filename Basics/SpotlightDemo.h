@@ -41,11 +41,13 @@ private:
 	XMFLOAT3 m_vLightColor	= XMFLOAT3(1.f, 1.f, 1.f);
 
 	float m_fLightIntensity = 0.f;
-	float m_fInnerCone		= 0.f;;	// еш of inner cone 
-	float m_fOuterCone		= 0.f;;	// еш of outer cone 
-	float m_fLightRange		= 0.f;;
-	float m_fAttenuation	= 0.f;;
+	float m_fInnerConeCos	= 0.f;	// еш of inner cone 
+	float m_fOuterConeCos	= 0.f;	// еш of outer cone 
+	float m_fLightRange		= 0.f;
+	float m_fAttenuation	= 0.f;
 
+	float m_fInnerCone		= 0.f;
+	float m_fOuterCone		= 0.f;
 };
 
 class SpotlightDemo : public Application

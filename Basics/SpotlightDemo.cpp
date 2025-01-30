@@ -165,8 +165,8 @@ CBSpotlightData SpotLight::GetSpotlightCBData()
 		m_vLightColor,
 		1.f,	// pad3
 		m_fLightIntensity,
-		m_fInnerCone,
-		m_fOuterCone,
+		std::cosf(XMConvertToRadians(m_fInnerCone)),
+		std::cosf(XMConvertToRadians(m_fOuterCone)),
 		m_fLightRange,
 		m_fAttenuation
 	};
