@@ -32,7 +32,7 @@ void SpotlightDemo::Initialize()
 
 		m_pSpotlight->SetLightIntensity(1.0f);
 		m_pSpotlight->SetInnerCone(10.f);
-		m_pSpotlight->SetOuterCone(25.f);
+		m_pSpotlight->SetOuterCone(45.f);
 		m_pSpotlight->SetLightRange(20.0f);
 		m_pSpotlight->SetAttenuation(1.0f);
 	}
@@ -76,7 +76,7 @@ void SpotlightDemo::Initialize()
 
 void SpotlightDemo::Update()
 {
-	if (ImGui::Begin("BlinnPhong Control"s.c_str()))
+	if (ImGui::Begin("Spotlight Control"s.c_str()))
 	{
 		ImGui::Text("Light Control");
 		{
@@ -94,7 +94,7 @@ void SpotlightDemo::Update()
 			ImGui::DragFloat3("Direction"s.c_str(), (float*)&dir, 0.01f, -1.f, 1.f);
 			ImGui::DragFloat3("Color"s.c_str(), (float*)&color, 0.01f, 0.f, 1.f);
 			
-			ImGui::DragFloat("LightIntensity"s.c_str(), &lightIntensity, 0.1f, 0.f, 1.f);
+			ImGui::DragFloat("LightIntensity"s.c_str(), &lightIntensity, 0.1f, 0.f, 10.f);
 			ImGui::DragFloat("InnerCone"s.c_str(), &innerCone, 0.1f, 0.f, 90.f);
 			ImGui::DragFloat("OuterCone"s.c_str(), &outerCone, 0.1f, 0.f, 90.f);
 			ImGui::DragFloat("LightRange"s.c_str(), &lightRange, 0.1f, 0.f, 50.f);

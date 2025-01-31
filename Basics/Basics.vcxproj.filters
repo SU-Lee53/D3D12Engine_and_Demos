@@ -175,6 +175,15 @@
     <Filter Include="Game\Demos\Level.0\SpotLight\Shader">
       <UniqueIdentifier>{bd730f73-33f9-406a-9b5e-8ae5f87ce07a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Demos\Level.0\PointLight\App">
+      <UniqueIdentifier>{dc6a73ff-91bc-42ed-bd7a-7a4eb5774a68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos\Level.0\PointLight\Resources">
+      <UniqueIdentifier>{992687f7-ea2b-4c93-8bb3-6421e166ddec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos\Level.0\PointLight\Shader">
+      <UniqueIdentifier>{b735f1b9-3e90-4ca2-b16f-ba1fc152fbb2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -345,6 +354,12 @@
     <ClInclude Include="SpotlightResources.h">
       <Filter>Game\Demos\Level.0\SpotLight\Resources</Filter>
     </ClInclude>
+    <ClInclude Include="PointlightDemo.h">
+      <Filter>Game\Demos\Level.0\PointLight\App</Filter>
+    </ClInclude>
+    <ClInclude Include="PointlightResources.h">
+      <Filter>Game\Demos\Level.0\PointLight\Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Basics.ico">
@@ -504,6 +519,12 @@
     <ClCompile Include="SpotlightResources.cpp">
       <Filter>Game\Demos\Level.0\SpotLight\Resources</Filter>
     </ClCompile>
+    <ClCompile Include="PointlightDemo.cpp">
+      <Filter>Game\Demos\Level.0\PointLight\App</Filter>
+    </ClCompile>
+    <ClCompile Include="PointlightResources.cpp">
+      <Filter>Game\Demos\Level.0\PointLight\Resources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -535,6 +556,9 @@
     </FxCompile>
     <FxCompile Include="..\Shader\SpotLight.hlsl">
       <Filter>Game\Demos\Level.0\SpotLight\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shader\PointLight.hlsl">
+      <Filter>Game\Demos\Level.0\PointLight\Shader</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

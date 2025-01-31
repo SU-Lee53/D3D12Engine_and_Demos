@@ -1,23 +1,23 @@
 #include "pch.h"
-#include "SpotlightResources.h"
+#include "PointlightResources.h"
 #include "Mesh.h"
 #include "Application.h"
-#include "SpotlightDemo.h"
+#include "PointlightDemo.h"
 #include "MeshHelper.h"
 
 using namespace std;
 
-////////////////////////////
-// SpotlightRootSignature //
-////////////////////////////
+/////////////////////////////
+// PointlightRootSignature //
+/////////////////////////////
 
-BOOL SpotlightRootSignature::Initialize()
+BOOL PointlightRootSignature::Initialize()
 {
 	m_DescriptorRange.Resize(4);
 	m_DescriptorRange[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0);	// b0 : Transform Data
 	m_DescriptorRange[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 1);	// b1 : Camera Data
 	m_DescriptorRange[2].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 2);	// b2 : Color Data
-	m_DescriptorRange[3].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 3);	// b3 : Spot Light Data
+	m_DescriptorRange[3].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 3);	// b3 : Point Light Data
 
 	m_RootParameter.Resize(1);
 	m_RootParameter[0].InitAsDescriptorTable(m_DescriptorRange.Size(), m_DescriptorRange.Get(), D3D12_SHADER_VISIBILITY_ALL);
@@ -62,17 +62,17 @@ BOOL SpotlightRootSignature::Initialize()
 	return TRUE;
 }
 
-///////////////////////
-// SpotlightPipeline //
-///////////////////////
+////////////////////////
+// PointlightPipeline //
+////////////////////////
 
-BOOL SpotlightPipeline::Initialize(std::shared_ptr<class RootSignature> rootSignature)
+BOOL PointlightPipeline::Initialize(std::shared_ptr<class RootSignature> rootSignature)
 {
-	SHADER.CompileAndAddShader<VertexShader>("SpotLightVS", L"../Shader/SpotLight.hlsl", "VSMain");
-	SHADER.CompileAndAddShader<PixelShader>("SpotLightPS", L"../Shader/SpotLight.hlsl", "PSMain");
+	SHADER.CompileAndAddShader<VertexShader>("PointlightVS", L"../Shader/PointLight.hlsl", "VSMain");
+	SHADER.CompileAndAddShader<PixelShader>("PointlightPS", L"../Shader/PointLight.hlsl", "PSMain");
 
-	VertexShader& vs = *SHADER.GetShader<VertexShader>("SpotLightVS");
-	PixelShader& ps = *SHADER.GetShader<PixelShader>("SpotLightPS");
+	VertexShader& vs = *SHADER.GetShader<VertexShader>("PointlightVS");
+	PixelShader& ps = *SHADER.GetShader<PixelShader>("PointlightPS");
 
 	// Set Pipeline State
 	{
@@ -104,11 +104,11 @@ BOOL SpotlightPipeline::Initialize(std::shared_ptr<class RootSignature> rootSign
 	return TRUE;
 }
 
-/////////////////////
-// SpotlightRender //
-/////////////////////
+//////////////////////
+// PointlightRender //
+//////////////////////
 
-BOOL SpotlightRender::Initialize(std::shared_ptr<Object> owner)
+BOOL PointlightRender::Initialize(std::shared_ptr<Object> owner)
 {
 	m_wpOwner = owner;
 
@@ -117,24 +117,24 @@ BOOL SpotlightRender::Initialize(std::shared_ptr<Object> owner)
 
 	// Root Signature
 	m_RootSignatures.resize(m_dwPassCount);
-	m_RootSignatures[0] = make_shared<SpotlightRootSignature>();
+	m_RootSignatures[0] = make_shared<PointlightRootSignature>();
 	m_RootSignatures[0]->Initialize();
 
 	// Pipeline
 	m_Pipelines.resize(m_dwPassCount);
-	m_Pipelines[0] = make_shared<SpotlightPipeline>();
+	m_Pipelines[0] = make_shared<PointlightPipeline>();
 	m_Pipelines[0]->Initialize(m_RootSignatures[0]);
 
 	// Constant Buffers
 	m_upTransformCBuffer = make_unique<ConstantBuffer<CBModelTransformData>>();
 	m_upCameraCBuffer = make_unique<ConstantBuffer<CBCameraData>>();
 	m_upColorCBuffer = make_unique<ConstantBuffer<CBColorData>>();
-	m_upSpotlightCBuffer = make_unique<ConstantBuffer<CBSpotlightData>>();
+	m_upPointlightCBuffer = make_unique<ConstantBuffer<CBPointlightData>>();
 
 	m_upTransformCBuffer->Initialize();
 	m_upCameraCBuffer->Initialize();
 	m_upColorCBuffer->Initialize();
-	m_upSpotlightCBuffer->Initialize();
+	m_upPointlightCBuffer->Initialize();
 
 	// Descriptor Heap
 	m_HeapDesc.NumDescriptors = DESCRIPTOR_COUNT_FOR_DRAW;
@@ -146,11 +146,11 @@ BOOL SpotlightRender::Initialize(std::shared_ptr<Object> owner)
 	return TRUE;
 }
 
-void SpotlightRender::Render()
+void PointlightRender::Render()
 {
 	ComPtr<ID3D12GraphicsCommandList>& pCommandList = RENDER.GetCurrentCommandList();
 
-	SpotlightObject& originOwner = *static_pointer_cast<SpotlightObject>(m_wpOwner.lock());
+	PointlightObject& originOwner = *static_pointer_cast<PointlightObject>(m_wpOwner.lock());
 
 	Transform& transform = *originOwner.GetTransform();
 	Mesh<VertexType>& mesh = *originOwner.m_upMesh;
@@ -168,25 +168,25 @@ void SpotlightRender::Render()
 	m_upCameraCBuffer->PushData(CORE.GetMainCameraCBData());
 	m_upColorCBuffer->PushData(color.GetMaterialCBData());
 
-	// Light Data is in Application(SpotlightDemo)
-	CBSpotlightData data = static_pointer_cast<SpotlightDemo>(GAME.GetGameDesc().app)->GetSpotLight()->GetSpotlightCBData();
-	m_upSpotlightCBuffer->PushData(data);
+	// Light Data is in Application(PointlightDemo)
+	CBPointlightData data = static_pointer_cast<PointlightDemo>(GAME.GetGameDesc().app)->GetPointlight()->GetPointlightCBData();
+	m_upPointlightCBuffer->PushData(data);
 
 	// 2. Get Descriptor from DescriptorHeap(m_upDescriptorHeap)
 	ComPtr<ID3D12DescriptorHeap> pDescriptorHeap = m_upDescriptorHeap->pDescriptorHeap;
 	Descriptor TransformDescriptorHandle = m_upDescriptorHeap->Alloc();
 	Descriptor CameraDescriptorHandle = m_upDescriptorHeap->Alloc();
 	Descriptor ColorDescriptorHandle = m_upDescriptorHeap->Alloc();
-	Descriptor SpotlightDescriptorHandle = m_upDescriptorHeap->Alloc();
+	Descriptor PointlightDescriptorHandle = m_upDescriptorHeap->Alloc();
 
 	// 3. Copy Constant Buffer Data to Descriptor
 	DEVICE->CopyDescriptorsSimple(1, TransformDescriptorHandle.cpuHandle, m_upTransformCBuffer->GetDescriptorHeap()->DescriptorHandleFromStart.cpuHandle, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	DEVICE->CopyDescriptorsSimple(1, CameraDescriptorHandle.cpuHandle, m_upCameraCBuffer->GetDescriptorHeap()->DescriptorHandleFromStart.cpuHandle, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	DEVICE->CopyDescriptorsSimple(1, ColorDescriptorHandle.cpuHandle, m_upColorCBuffer->GetDescriptorHeap()->DescriptorHandleFromStart.cpuHandle, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	DEVICE->CopyDescriptorsSimple(1, SpotlightDescriptorHandle.cpuHandle, m_upSpotlightCBuffer->GetDescriptorHeap()->DescriptorHandleFromStart.cpuHandle, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	DEVICE->CopyDescriptorsSimple(1, PointlightDescriptorHandle.cpuHandle, m_upPointlightCBuffer->GetDescriptorHeap()->DescriptorHandleFromStart.cpuHandle, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
 	// Current pDescriptorHeap layout (Probably)
-	// | CBV(Transform): b0 | CBV(Camera): b1 | CBV(Color): b2 | CBV(Spotlight): b3 |
+	// | CBV(Transform): b0 | CBV(Camera): b1 | CBV(Color): b2 | CBV(Pointlight): b3 |
 
 	pCommandList->SetGraphicsRootSignature(m_RootSignatures[0]->Get());
 	pCommandList->SetDescriptorHeaps(1, pDescriptorHeap.GetAddressOf());
@@ -204,11 +204,11 @@ void SpotlightRender::Render()
 
 }
 
-/////////////////////
-// SpotlightObject //
-/////////////////////
+//////////////////////
+// PointlightRender //
+//////////////////////
 
-BOOL SpotlightObject::Initialize()
+BOOL PointlightObject::Initialize()
 {
 	m_upTransform = make_unique<Transform>();
 	m_upTransform->Initialize();
@@ -237,19 +237,19 @@ BOOL SpotlightObject::Initialize()
 	return TRUE;
 }
 
-void SpotlightObject::Update()
+void PointlightObject::Update()
 {
 	m_upTransform->Update();
 }
 
-void SpotlightObject::Render()
+void PointlightObject::Render()
 {
 	m_upRenderMethod->Render();
 }
 
-BOOL SpotlightObject::InitRenderMethod()
+BOOL PointlightObject::InitRenderMethod()
 {
-	m_upRenderMethod = make_unique<SpotlightRender>();
+	m_upRenderMethod = make_unique<PointlightRender>();
 	m_upRenderMethod->Initialize(shared_from_this());
 
 	return TRUE;

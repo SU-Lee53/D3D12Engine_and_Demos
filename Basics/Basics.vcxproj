@@ -170,6 +170,8 @@
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshHelper.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="PointlightDemo.h" />
+    <ClInclude Include="PointlightResources.h" />
     <ClInclude Include="renderer_types.h" />
     <ClInclude Include="Core.h" />
     <ClInclude Include="DDSTextureLoader12.h" />
@@ -238,6 +240,8 @@
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshHelper.cpp" />
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="PointlightDemo.cpp" />
+    <ClCompile Include="PointlightResources.cpp" />
     <ClCompile Include="renderer_types.cpp" />
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="DDSTextureLoader12.cpp">
@@ -284,6 +288,7 @@
     <FxCompile Include="..\Shader\BlinnPhongLight.hlsl" />
     <FxCompile Include="..\Shader\HierarchyModel.hlsl" />
     <FxCompile Include="..\Shader\LambertLight.hlsl" />
+    <FxCompile Include="..\Shader\PointLight.hlsl" />
     <FxCompile Include="..\Shader\SpotLight.hlsl" />
     <FxCompile Include="..\Shader\test.hlsl" />
   </ItemGroup>
