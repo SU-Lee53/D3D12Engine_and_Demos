@@ -166,6 +166,10 @@
     <ClInclude Include="ImGui\imstb_truetype.h" />
     <ClInclude Include="LambertDemo.h" />
     <ClInclude Include="LambertResources.h" />
+    <ClInclude Include="Light.h" />
+    <ClInclude Include="LightDemo.h" />
+    <ClInclude Include="LightDesc.h" />
+    <ClInclude Include="LightResources.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshHelper.h" />
@@ -236,6 +240,9 @@
     </ClCompile>
     <ClCompile Include="LambertDemo.cpp" />
     <ClCompile Include="LambertResources.cpp" />
+    <ClCompile Include="Light.cpp" />
+    <ClCompile Include="LightDemo.cpp" />
+    <ClCompile Include="LightResources.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshHelper.cpp" />

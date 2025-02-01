@@ -184,6 +184,21 @@
     <Filter Include="Game\Demos\Level.0\PointLight\Shader">
       <UniqueIdentifier>{b735f1b9-3e90-4ca2-b16f-ba1fc152fbb2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Demos\Level.0\All Of The Lights">
+      <UniqueIdentifier>{ed00acc2-dce4-42b5-bc3d-c9f0844f04cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos\Level.0\All Of The Lights\App">
+      <UniqueIdentifier>{8c35c475-7790-4f94-9373-fd42f6928a73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos\Level.0\All Of The Lights\Resources">
+      <UniqueIdentifier>{abcbd8ae-5fb0-4a69-ba5a-b91c27e257fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos\Level.0\All Of The Lights\Shader">
+      <UniqueIdentifier>{523ecde0-e3e6-4bec-8c62-5faae686dedc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer\Lights">
+      <UniqueIdentifier>{7220c7cc-281e-464c-8ce5-754d857cb451}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -360,6 +375,18 @@
     <ClInclude Include="PointlightResources.h">
       <Filter>Game\Demos\Level.0\PointLight\Resources</Filter>
     </ClInclude>
+    <ClInclude Include="LightDemo.h">
+      <Filter>Game\Demos\Level.0\All Of The Lights\App</Filter>
+    </ClInclude>
+    <ClInclude Include="LightResources.h">
+      <Filter>Game\Demos\Level.0\All Of The Lights\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Renderer\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="LightDesc.h">
+      <Filter>Renderer\Lights</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Basics.ico">
@@ -524,6 +551,15 @@
     </ClCompile>
     <ClCompile Include="PointlightResources.cpp">
       <Filter>Game\Demos\Level.0\PointLight\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="LightDemo.cpp">
+      <Filter>Game\Demos\Level.0\All Of The Lights\App</Filter>
+    </ClCompile>
+    <ClCompile Include="LightResources.cpp">
+      <Filter>Game\Demos\Level.0\All Of The Lights\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Renderer\Lights</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
