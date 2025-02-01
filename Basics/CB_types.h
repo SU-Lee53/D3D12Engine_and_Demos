@@ -16,14 +16,20 @@ struct CBCameraData
 // Lights //
 ////////////
 #include "LightDesc.h"
+#define MAX_LIGHT_COUNT 10
 
-struct CBLightData
+struct RawLightData // 16 * 4 = 64byte
 {
     XMFLOAT4 data1;
     XMFLOAT4 data2;
     XMFLOAT4 data3;
-    XMFLOAT4 data4;
-    XMFLOAT4 data5;
+    XMFLOAT2 data4;
+    int type;
+    BOOL bEnable;
+};
 
-    LIGHT_TYPE desc;
+struct CBLightData
+{
+    RawLightData lightData[MAX_LIGHT_COUNT];
+    int nLights = 0;
 };

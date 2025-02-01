@@ -5,7 +5,7 @@
 // Directional Light (Blinn-Phong) //
 /////////////////////////////////////
 
-struct DirectionalLightDesc
+struct DirectionalLightData
 {
 	XMFLOAT3 lightPos;
 	XMFLOAT3 lightDir;
@@ -16,13 +16,13 @@ struct DirectionalLightDesc
 // Point Light //
 /////////////////
 
-struct PointLightDesc
+struct PointLightData
 {
 	XMFLOAT3 lightPos;
-	XMFLOAT3 lightColor;
-
 	float lightIntensity;
+	XMFLOAT3 lightColor;
 	float constantAttenuation;
+
 	float linearAttenuation;
 	float QuadraticAttenuation;
 };
@@ -31,15 +31,15 @@ struct PointLightDesc
 // Spot Light //
 ////////////////
 
-struct SpotLightDesc
+struct SpotLightData
 {
 	XMFLOAT3 lightPos;
-	XMFLOAT3 lightDir;
-	XMFLOAT3 lightColor;
-
 	float lightIntensity;
+	XMFLOAT3 lightDir;
 	float innerCone;	// cos(еш) of inner cone 
+	XMFLOAT3 lightColor;
 	float outerCone;	// cos(еш) of outer cone 
+
 	float lightRange;
 	float attenuation;
 };
@@ -49,19 +49,21 @@ struct SpotLightDesc
 // Light Description //
 ///////////////////////
 
-enum LIGHT_TYPE : UINT8
+enum LIGHT_TYPE : int
 {
 	LIGHT_TYPE_DIRECTIONAL = 0,
 	LIGHT_TYPE_POINT_LIGHT,
 	LIGHT_TYPE_SPOT_LIGHT
 };
 
-struct LightDesc
+struct UnifiedLightData
 {
 	union
 	{
-		DirectionalLightDesc DirectionalLight;
-		SpotLightDesc SpotLight;
-		PointLightDesc PointLight;
+		DirectionalLightData DirectionalLight;
+		SpotLightData SpotLight;
+		PointLightData PointLight;
 	};
+
+	LIGHT_TYPE LightType;
 };

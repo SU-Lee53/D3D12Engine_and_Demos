@@ -76,7 +76,7 @@ PSInput VSMain(VSInput input)
     return output;
 }
 
-float4 ComputeSpotlight(float3 normal, float3 worldPos)
+float4 ComputePointlight(float3 normal, float3 worldPos)
 {
     normal = normalize(normal);
     float3 toLight = lightPos - worldPos;
@@ -95,7 +95,7 @@ float4 ComputeSpotlight(float3 normal, float3 worldPos)
 
 float4 PSMain(PSInput input) : SV_TARGET
 {
-    float4 color = ComputeSpotlight(input.Normal, input.WorldPos);
+    float4 color = ComputePointlight(input.Normal, input.WorldPos);
     return color;
 }
 

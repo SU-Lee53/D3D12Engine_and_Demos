@@ -596,5 +596,14 @@
     <FxCompile Include="..\Shader\PointLight.hlsl">
       <Filter>Game\Demos\Level.0\PointLight\Shader</Filter>
     </FxCompile>
+    <FxCompile Include="..\Shader\Light.hlsl">
+      <Filter>Game\Demos\Level.0\All Of The Lights\Resources</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shader\ComputeLight.hlsl">
+      <Filter>Game\Demos\Level.0\All Of The Lights\Resources</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shader\Common.hlsl">
+      <Filter>Game\Demos</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

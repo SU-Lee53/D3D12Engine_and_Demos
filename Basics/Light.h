@@ -8,12 +8,18 @@ public:
 	virtual void Update() = 0;
 
 public:
-	virtual CBLightData GetLightCBData() = 0;
+	virtual RawLightData GetLightRawData() = 0;
+
+	LIGHT_TYPE GetLightType() { return m_lightType; }
+
+	virtual void ControlLightWithImGui(int index) = 0;
+	void SetOnOFF(BOOL value) { m_bEnable = FALSE; }
+	BOOL GetOnOFF() { return m_bEnable; }
 
 protected:
 	LIGHT_TYPE m_lightType;
-	LightDesc m_desc = {};
-
+	UnifiedLightData m_desc = {};
+	BOOL m_bEnable = TRUE;
 };
 
 ///////////////////////
@@ -23,20 +29,21 @@ protected:
 class DirectionalLight : public Light
 {
 public:
-	virtual BOOL Initialize();
-	virtual void Update();
+	virtual BOOL Initialize() override;
+	virtual void Update() override;
 
 public:
-	virtual CBLightData GetLightCBData();
+	virtual RawLightData GetLightRawData() override;
+	virtual void ControlLightWithImGui(int index) override;
 
 public:
 	void SetPosition(const XMFLOAT3& pos) { m_desc.DirectionalLight.lightPos = pos; }
 	void SetDirection(const XMFLOAT3& dir) { m_desc.DirectionalLight.lightDir = dir; }
-	void SetColor(const XMFLOAT3& color) { m_desc.DirectionalLight.lightPos = color; }
+	void SetColor(const XMFLOAT3& color) { m_desc.DirectionalLight.lightColor = color; }
 
 	XMFLOAT3 GetPosition() { return m_desc.DirectionalLight.lightPos; }
 	XMFLOAT3 GetDirection() { return m_desc.DirectionalLight.lightDir; }
-	XMFLOAT3 GetColor() { return m_desc.DirectionalLight.lightPos; }
+	XMFLOAT3 GetColor() { return m_desc.DirectionalLight.lightColor; }
 
 };
 
@@ -47,11 +54,12 @@ public:
 class PointLight : public Light
 {
 public:
-	virtual BOOL Initialize();
-	virtual void Update();
+	virtual BOOL Initialize() override;
+	virtual void Update() override;
 
 public:
-	virtual CBLightData GetLightCBData();
+	virtual RawLightData GetLightRawData() override;
+	virtual void ControlLightWithImGui(int index) override;
 
 public:
 	void SetPosition(const XMFLOAT3& pos) { m_desc.PointLight.lightPos = pos; }
@@ -79,11 +87,12 @@ public:
 class SpotLight : public Light
 {
 public:
-	virtual BOOL Initialize();
-	virtual void Update();
+	virtual BOOL Initialize() override;
+	virtual void Update() override;
 
 public:
-	virtual CBLightData GetLightCBData();
+	virtual RawLightData GetLightRawData() override;
+	virtual void ControlLightWithImGui(int index) override;
 
 public:
 	void SetPosition(const XMFLOAT3& pos) { m_desc.SpotLight.lightPos = pos; }

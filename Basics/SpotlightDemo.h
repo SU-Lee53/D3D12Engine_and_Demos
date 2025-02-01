@@ -3,11 +3,11 @@
 
 struct CBSpotlightData;
 
-class SpotLight
+class DemoSpotLight
 {
 public:
-	SpotLight() {}
-	~SpotLight() {}
+	DemoSpotLight() {}
+	~DemoSpotLight() {}
 
 public:
 	BOOL Initialize() { return TRUE; }
@@ -58,12 +58,12 @@ public:
     virtual void Render() override;
 
 
-	std::shared_ptr<SpotLight>& GetSpotLight() { return m_pSpotlight; }
+	std::shared_ptr<DemoSpotLight>& GetSpotLight() { return m_pSpotlight; }
 
 private:
 	std::vector<std::shared_ptr<Object>> m_pObjs;
 	std::shared_ptr<Object> m_pLightObj;
-	std::shared_ptr<SpotLight> m_pSpotlight;
+	std::shared_ptr<DemoSpotLight> m_pSpotlight;
 
 
 };

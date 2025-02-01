@@ -28,19 +28,6 @@ struct CBColorData
 	XMFLOAT4 colorEmissive;
 };
 
-struct CBLightData
-{
-	XMFLOAT3 lightPos;
-	float pad1;
-	XMFLOAT3 lightColor;
-	float pad2;
-
-	float ligntIntensity;
-	float constantAttenuation;
-	float linearAttenuation;
-	float QuadraticAttenuation;
-};
-
 class LightRender : public RenderMethod
 {
 public:

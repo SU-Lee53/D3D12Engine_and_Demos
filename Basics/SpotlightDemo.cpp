@@ -23,7 +23,7 @@ void SpotlightDemo::Initialize()
 	m_pLightObj = make_shared<BasicForwardObject>();
 	m_pLightObj->Initialize();
 
-	m_pSpotlight = make_shared<SpotLight>();
+	m_pSpotlight = make_shared<DemoSpotLight>();
 	m_pSpotlight->Initialize();
 	{
 		m_pSpotlight->SetPosition(XMFLOAT3(0.0f, 1.0f, 0.0f));
@@ -155,7 +155,7 @@ void SpotlightDemo::Render()
 // SpotLight //
 ///////////////
 
-CBSpotlightData SpotLight::GetSpotlightCBData()
+CBSpotlightData DemoSpotLight::GetSpotlightCBData()
 {
 	return CBSpotlightData{
 		m_vLightPos,

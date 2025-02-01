@@ -51,6 +51,7 @@ using namespace Microsoft::WRL;
 #include <assert.h>
 
 // STL
+#include <array>
 #include <vector>
 #include <memory>
 #include <string>

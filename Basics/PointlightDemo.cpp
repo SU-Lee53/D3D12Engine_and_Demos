@@ -23,7 +23,7 @@ void PointlightDemo::Initialize()
 	m_pLightObj = make_shared<BasicForwardObject>();
 	m_pLightObj->Initialize();
 
-	m_pPointlight = make_shared<Pointlight>();
+	m_pPointlight = make_shared<DemoPointlight>();
 	m_pPointlight->Initialize();
 	{
 		m_pPointlight->SetPosition(XMFLOAT3(0.0f, 0.0f, 0.0f));
@@ -142,7 +142,7 @@ void PointlightDemo::Render()
 // Pointlight //
 ////////////////
 
-CBPointlightData Pointlight::GetPointlightCBData()
+CBPointlightData DemoPointlight::GetPointlightCBData()
 {
 	return CBPointlightData{
 		m_vLightPos,

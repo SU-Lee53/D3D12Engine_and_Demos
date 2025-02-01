@@ -88,7 +88,7 @@ inline void Shader<ty>::Initialize(const std::wstring& filePath, const std::stri
 #endif
 	ComPtr<ID3DBlob> pError;
 
-	HRESULT hr = D3DCompileFromFile(m_wstrFilePath.c_str(), nullptr, nullptr, m_strEntryName.c_str(), shaderVersion.c_str(), compileFlags, 0, m_ShaderByteCode.GetAddressOf(), pError.GetAddressOf());
+	HRESULT hr = D3DCompileFromFile(m_wstrFilePath.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, m_strEntryName.c_str(), shaderVersion.c_str(), compileFlags, 0, m_ShaderByteCode.GetAddressOf(), pError.GetAddressOf());
 
 	if (FAILED(hr))
 	{

@@ -293,8 +293,11 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Shader\BlinnPhongLight.hlsl" />
+    <FxCompile Include="..\Shader\Common.hlsl" />
+    <FxCompile Include="..\Shader\ComputeLight.hlsl" />
     <FxCompile Include="..\Shader\HierarchyModel.hlsl" />
     <FxCompile Include="..\Shader\LambertLight.hlsl" />
+    <FxCompile Include="..\Shader\Light.hlsl" />
     <FxCompile Include="..\Shader\PointLight.hlsl" />
     <FxCompile Include="..\Shader\SpotLight.hlsl" />
     <FxCompile Include="..\Shader\test.hlsl" />
