@@ -1,6 +1,6 @@
 #pragma once
 
-#define INSTANCED_COUNT 5000
+#define INSTANCED_COUNT 2000
 #define MAX_POSITION 10.f
 
 class InstancingRootSignature : public RootSignature

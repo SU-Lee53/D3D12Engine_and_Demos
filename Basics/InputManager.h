@@ -12,6 +12,9 @@ enum class KEY_TYPE
 	ENTER = VK_RETURN,
 	ESC = VK_ESCAPE,
 
+	LSHIFT = VK_LSHIFT,
+	RSHIFT = VK_RSHIFT,
+
 	A = 'A',
 	B = 'B',
 	C = 'C',

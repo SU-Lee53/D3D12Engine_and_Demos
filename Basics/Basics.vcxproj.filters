@@ -130,18 +130,6 @@
     <Filter Include="Game\Demos\Level.1">
       <UniqueIdentifier>{7495034c-e824-47cb-a806-6d7857f3e5fd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Demos\Level.1\Shadow Mapping">
-      <UniqueIdentifier>{9abfcf62-ea75-41d2-9546-4e343264b4c9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Demos\Level.1\Deferred Render">
-      <UniqueIdentifier>{298565e2-0407-4fc1-94aa-c7e5461ab2a7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Demos\Level.1\Cube Mapping">
-      <UniqueIdentifier>{01fe53ef-bf4d-4c09-b5b9-9b4ce82c6dd9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Demos\Level.0\Terrain + Skybox">
-      <UniqueIdentifier>{78862c1c-091c-472e-8462-e3f3ccd169e7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Demos\Level.0\Instancing">
       <UniqueIdentifier>{483d83d1-c59e-4e23-bb2c-294d164ef2f4}</UniqueIdentifier>
     </Filter>
@@ -210,6 +198,21 @@
     </Filter>
     <Filter Include="Renderer\StructuredBuffer">
       <UniqueIdentifier>{0d4186c0-05f1-451a-95c9-294342c32830}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos\Level.0\Frustum Culling">
+      <UniqueIdentifier>{4f23caee-c982-46f5-98f8-a943ee193591}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos\Level.0\Terrain">
+      <UniqueIdentifier>{c6cd749b-d236-4429-80d4-9e7c3eb5e9a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos\Level.0\Texture">
+      <UniqueIdentifier>{83dab589-4c8e-42f5-84f6-dad3cf3e26e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos\Level.1\Normal Mapping">
+      <UniqueIdentifier>{8e9d76bd-8156-4d1a-bf17-05e0cc144745}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos\Level.1\Skybox">
+      <UniqueIdentifier>{8dc11045-6d3e-4d69-8db6-922962a3dbfd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

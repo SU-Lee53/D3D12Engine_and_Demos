@@ -76,36 +76,43 @@ BOOL Camera::Update()
 		XMVECTOR xmRight = XMLoadFloat3(&CamRight);
 		XMVECTOR xmUp = XMLoadFloat3(&CamUp);
 
+		float fCamSpeed = 5.0f;
+
+		if (INPUT.GetButton(KEY_TYPE::LSHIFT))
+		{
+			fCamSpeed *= 2;
+		}
+
 		if (INPUT.GetButton(KEY_TYPE::W))
 		{
-			xmFront = XMVectorScale(xmFront, 0.1f);
+			xmFront = XMVectorScale(xmFront, fCamSpeed * DT);
 			xmPos = XMVectorAdd(xmPos, xmFront);
 		}
 		if (INPUT.GetButton(KEY_TYPE::S))
 		{
-			xmFront = XMVectorScale(xmFront, -0.1f);
+			xmFront = XMVectorScale(xmFront, -fCamSpeed * DT);
 			xmPos = XMVectorAdd(xmPos, xmFront);
 		}
 
 		if (INPUT.GetButton(KEY_TYPE::D))
 		{
-			xmRight = XMVectorScale(xmRight, 0.1f);
+			xmRight = XMVectorScale(xmRight, fCamSpeed * DT);
 			xmPos = XMVectorAdd(xmPos, xmRight);
 		}
 		if (INPUT.GetButton(KEY_TYPE::A))
 		{
-			xmRight = XMVectorScale(xmRight, -0.1f);
+			xmRight = XMVectorScale(xmRight, -fCamSpeed * DT);
 			xmPos = XMVectorAdd(xmPos, xmRight);
 		}
 
 		if (INPUT.GetButton(KEY_TYPE::SPACE))
 		{
-			xmUp = XMVectorScale(xmUp, 0.1f);
+			xmUp = XMVectorScale(xmUp, fCamSpeed * DT);
 			xmPos = XMVectorAdd(xmPos, xmUp);
 		}
 		if (INPUT.GetButton(KEY_TYPE::CTRL))
 		{
-			xmUp = XMVectorScale(xmUp, -0.1f);
+			xmUp = XMVectorScale(xmUp, -fCamSpeed * DT);
 			xmPos = XMVectorAdd(xmPos, xmUp);
 		}
 

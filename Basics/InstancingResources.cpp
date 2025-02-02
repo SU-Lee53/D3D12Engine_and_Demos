@@ -155,6 +155,8 @@ void InstancingRender::Render()
 	VertexBuffer& vertexBuffer = originOwner.m_upMesh->GetBuffer()->vertexBuffer;
 	IndexBuffer& indexBuffer = originOwner.m_upMesh->GetBuffer()->indexBuffer;
 
+	pCommandList->SetGraphicsRootSignature(m_RootSignatures[0]->Get());
+
 	// 1. Write data in Constant Buffer
 	m_upCameraCBuffer->PushData(CORE.GetMainCameraCBData());
 
@@ -168,7 +170,6 @@ void InstancingRender::Render()
 	// Current pDescriptorHeap layout (Probably)
 	// | CBV(Transform): b0 | SRV(Instancing Data): t1 |
 
-	pCommandList->SetGraphicsRootSignature(m_RootSignatures[0]->Get());
 	pCommandList->SetDescriptorHeaps(1, pDescriptorHeap.GetAddressOf());
 
 	// 4. Set Structured Buffer and push data
@@ -225,26 +226,16 @@ BOOL InstancingObject::Initialize()
 		std::for_each(posValue.begin(), posValue.end(), [&gen, &dis1](float& f) {f = dis1(gen); });
 		XMFLOAT3 pos(posValue.data());
 		XMVECTOR xmPos = XMLoadFloat3(&pos);
-		XMMATRIX xmWorld = XMMatrixTranslationFromVector(xmPos);
-		xmWorld = XMMatrixTranspose(xmWorld);
+
+		XMMATRIX xmWorld = XMMatrixTranspose(XMMatrixTranslationFromVector(xmPos));
 		XMStoreFloat4x4(&data.matWorld, xmWorld);
 	
 		array<float, 4> colorValues = {0.0f, 0.0f, 0.0f, 1.0f};
-		std::for_each(colorValues.begin(), colorValues.end() - 1, [&gen, &dis2](float& f) {f = dis2(gen); });
+		std::for_each(colorValues.begin(), colorValues.end(), [&gen, &dis2](float& f) {f = dis2(gen); });
 		data.colorDiffuse = XMFLOAT4(colorValues.data());
 	
 		m_InstancingDatas.push_back(data);
 	}
-
-	//SBInstancingData data;
-	//XMMATRIX xmWorld = XMMatrixIdentity();
-	//XMStoreFloat4x4(&data.matWorld, XMMatrixTranspose(xmWorld));
-	//
-	//array<float, 4> colorValues = { 0.0f, 0.0f, 0.0f, 1.0f };
-	//std::for_each(colorValues.begin(), colorValues.end() - 1, [&gen, &dis](float& f) {f = dis(gen); });
-	//data.colorDiffuse = XMFLOAT4(colorValues.data());
-	//
-	//m_InstancingDatas.push_back(data);
 
 	m_nInstances = m_InstancingDatas.size();
 
@@ -255,6 +246,19 @@ BOOL InstancingObject::Initialize()
 
 void InstancingObject::Update()
 {
+	for (int i = 0; i < INSTANCED_COUNT; i++)
+	{
+		XMFLOAT4 color = m_InstancingDatas[i].colorDiffuse;
+		
+		color.x = (std::sinf(color.w) + 1.f) / 2.f;
+		color.y = (std::cosf(color.w) + 1.f) / 2.f;
+		color.z = (std::sinf(color.w + 3.14f / 2) + 1.f) / 2.f;
+
+		color.w += 0.5f * DT;
+		if (color.w > 3.14f) color.w = 0;
+
+		m_InstancingDatas[i].colorDiffuse = color;
+	}
 }
 
 void InstancingObject::Render()
