@@ -1,27 +1,27 @@
 #include "pch.h"
-#include "SpotlightResources.h"
-#include "Mesh.h"
-#include "Application.h"
-#include "SpotlightDemo.h"
+#include "InstancingResources.h"
 #include "MeshHelper.h"
+#include <random>
 
 using namespace std;
 
-////////////////////////////
-// SpotlightRootSignature //
-////////////////////////////
+/////////////////////////////
+// InstancingRootSignature //
+/////////////////////////////
 
-BOOL SpotlightRootSignature::Initialize()
+BOOL InstancingRootSignature::Initialize()
 {
-	m_DescriptorRanges.resize(1);
-	m_DescriptorRanges[0].Resize(4);
-	m_DescriptorRanges[0][0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0);	// b0 : Transform Data
-	m_DescriptorRanges[0][1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 1);	// b1 : Camera Data
-	m_DescriptorRanges[0][2].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 2);	// b2 : Color Data
-	m_DescriptorRanges[0][3].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 3);	// b3 : Light Data
+	m_DescriptorRanges.resize(2);
+	
+	m_DescriptorRanges[0].Resize(1);
+	m_DescriptorRanges[0][0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0);	// b0 : Camera Data
 
-	m_RootParameter.Resize(1);
+	m_DescriptorRanges[1].Resize(1);
+	m_DescriptorRanges[1][0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0);	// t0 : Structured Buffer(Instancing Data)
+
+	m_RootParameter.Resize(2);
 	m_RootParameter[0].InitAsDescriptorTable(m_DescriptorRanges[0].Size(), m_DescriptorRanges[0].Get(), D3D12_SHADER_VISIBILITY_ALL);
+	m_RootParameter[1].InitAsShaderResourceView(0, 0, D3D12_SHADER_VISIBILITY_ALL);
 
 	m_StaticSampler.Resize(1);
 	{
@@ -44,7 +44,8 @@ BOOL SpotlightRootSignature::Initialize()
 		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT |
 		D3D12_ROOT_SIGNATURE_FLAG_DENY_HULL_SHADER_ROOT_ACCESS |
 		D3D12_ROOT_SIGNATURE_FLAG_DENY_DOMAIN_SHADER_ROOT_ACCESS |
-		D3D12_ROOT_SIGNATURE_FLAG_DENY_GEOMETRY_SHADER_ROOT_ACCESS;
+		D3D12_ROOT_SIGNATURE_FLAG_DENY_GEOMETRY_SHADER_ROOT_ACCESS |
+		D3D12_ROOT_SIGNATURE_FLAG_DENY_PIXEL_SHADER_ROOT_ACCESS;
 
 	CD3DX12_ROOT_SIGNATURE_DESC rootSignatureDesc = {};
 	rootSignatureDesc.Init(m_RootParameter.Size(), m_RootParameter.Get(), m_StaticSampler.Size(), m_StaticSampler.Get(), m_RootSignatureFlags);
@@ -63,17 +64,17 @@ BOOL SpotlightRootSignature::Initialize()
 	return TRUE;
 }
 
-///////////////////////
-// SpotlightPipeline //
-///////////////////////
+////////////////////////
+// InstancingPipeline //
+////////////////////////
 
-BOOL SpotlightPipeline::Initialize(std::shared_ptr<class RootSignature> rootSignature)
+BOOL InstancingPipeline::Initialize(std::shared_ptr<class RootSignature> rootSignature)
 {
-	SHADER.CompileAndAddShader<VertexShader>("SpotLightVS", L"../Shader/SpotLight.hlsl", "VSMain");
-	SHADER.CompileAndAddShader<PixelShader>("SpotLightPS", L"../Shader/SpotLight.hlsl", "PSMain");
+	SHADER.CompileAndAddShader<VertexShader>("InstancingVS", L"../Shader/Instancing.hlsl", "VSMain");
+	SHADER.CompileAndAddShader<PixelShader>("InstancingPS", L"../Shader/Instancing.hlsl", "PSMain");
 
-	VertexShader& vs = *SHADER.GetShader<VertexShader>("SpotLightVS");
-	PixelShader& ps = *SHADER.GetShader<PixelShader>("SpotLightPS");
+	VertexShader& vs = *SHADER.GetShader<VertexShader>("InstancingVS");
+	PixelShader& ps = *SHADER.GetShader<PixelShader>("InstancingPS");
 
 	// Set Pipeline State
 	{
@@ -105,11 +106,11 @@ BOOL SpotlightPipeline::Initialize(std::shared_ptr<class RootSignature> rootSign
 	return TRUE;
 }
 
-/////////////////////
-// SpotlightRender //
-/////////////////////
+//////////////////////
+// InstancingRender //
+//////////////////////
 
-BOOL SpotlightRender::Initialize(std::shared_ptr<Object> owner)
+BOOL InstancingRender::Initialize(std::shared_ptr<Object> owner)
 {
 	m_wpOwner = owner;
 
@@ -118,24 +119,20 @@ BOOL SpotlightRender::Initialize(std::shared_ptr<Object> owner)
 
 	// Root Signature
 	m_RootSignatures.resize(m_dwPassCount);
-	m_RootSignatures[0] = make_shared<SpotlightRootSignature>();
+	m_RootSignatures[0] = make_shared<InstancingRootSignature>();
 	m_RootSignatures[0]->Initialize();
 
 	// Pipeline
 	m_Pipelines.resize(m_dwPassCount);
-	m_Pipelines[0] = make_shared<SpotlightPipeline>();
+	m_Pipelines[0] = make_shared<InstancingPipeline>();
 	m_Pipelines[0]->Initialize(m_RootSignatures[0]);
 
 	// Constant Buffers
-	m_upTransformCBuffer = make_unique<ConstantBuffer<CBModelTransformData>>();
 	m_upCameraCBuffer = make_unique<ConstantBuffer<CBCameraData>>();
-	m_upColorCBuffer = make_unique<ConstantBuffer<CBColorData>>();
-	m_upSpotlightCBuffer = make_unique<ConstantBuffer<CBSpotlightData>>();
+	m_upInstancingSBuffer = make_unique<StructuredBuffer<SBInstancingData, INSTANCED_COUNT>>();
 
-	m_upTransformCBuffer->Initialize();
 	m_upCameraCBuffer->Initialize();
-	m_upColorCBuffer->Initialize();
-	m_upSpotlightCBuffer->Initialize();
+	m_upInstancingSBuffer->Initialize();
 
 	// Descriptor Heap
 	m_HeapDesc.NumDescriptors = DESCRIPTOR_COUNT_FOR_DRAW;
@@ -147,50 +144,36 @@ BOOL SpotlightRender::Initialize(std::shared_ptr<Object> owner)
 	return TRUE;
 }
 
-void SpotlightRender::Render()
+void InstancingRender::Render()
 {
 	ComPtr<ID3D12GraphicsCommandList>& pCommandList = RENDER.GetCurrentCommandList();
 
-	SpotlightObject& originOwner = *static_pointer_cast<SpotlightObject>(m_wpOwner.lock());
+	InstancingObject& originOwner = *static_pointer_cast<InstancingObject>(m_wpOwner.lock());
 
 	Transform& transform = *originOwner.GetTransform();
 	Mesh<VertexType>& mesh = *originOwner.m_upMesh;
-	ColorData& color = *originOwner.m_upColorData;
 	VertexBuffer& vertexBuffer = originOwner.m_upMesh->GetBuffer()->vertexBuffer;
 	IndexBuffer& indexBuffer = originOwner.m_upMesh->GetBuffer()->indexBuffer;
 
 	// 1. Write data in Constant Buffer
-	CBModelTransformData transformData;
-	{
-		transformData.matLocal = transform.GetLocalMatrixTransposed();
-		transformData.matWorld = transform.GetWorldMatrixTransposed();
-	}
-	m_upTransformCBuffer->PushData(transformData);
 	m_upCameraCBuffer->PushData(CORE.GetMainCameraCBData());
-	m_upColorCBuffer->PushData(color.GetMaterialCBData());
-
-	// Light Data is in Application(SpotlightDemo)
-	CBSpotlightData data = static_pointer_cast<SpotlightDemo>(GAME.GetGameDesc().app)->GetSpotLight()->GetSpotlightCBData();
-	m_upSpotlightCBuffer->PushData(data);
 
 	// 2. Get Descriptor from DescriptorHeap(m_upDescriptorHeap)
 	ComPtr<ID3D12DescriptorHeap> pDescriptorHeap = m_upDescriptorHeap->pDescriptorHeap;
-	Descriptor TransformDescriptorHandle = m_upDescriptorHeap->Alloc();
 	Descriptor CameraDescriptorHandle = m_upDescriptorHeap->Alloc();
-	Descriptor ColorDescriptorHandle = m_upDescriptorHeap->Alloc();
-	Descriptor SpotlightDescriptorHandle = m_upDescriptorHeap->Alloc();
 
 	// 3. Copy Constant Buffer Data to Descriptor
-	DEVICE->CopyDescriptorsSimple(1, TransformDescriptorHandle.cpuHandle, m_upTransformCBuffer->GetDescriptorHeap()->DescriptorHandleFromStart.cpuHandle, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	DEVICE->CopyDescriptorsSimple(1, CameraDescriptorHandle.cpuHandle, m_upCameraCBuffer->GetDescriptorHeap()->DescriptorHandleFromStart.cpuHandle, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	DEVICE->CopyDescriptorsSimple(1, ColorDescriptorHandle.cpuHandle, m_upColorCBuffer->GetDescriptorHeap()->DescriptorHandleFromStart.cpuHandle, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	DEVICE->CopyDescriptorsSimple(1, SpotlightDescriptorHandle.cpuHandle, m_upSpotlightCBuffer->GetDescriptorHeap()->DescriptorHandleFromStart.cpuHandle, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-
+	
 	// Current pDescriptorHeap layout (Probably)
-	// | CBV(Transform): b0 | CBV(Camera): b1 | CBV(Color): b2 | CBV(Spotlight): b3 |
+	// | CBV(Transform): b0 | SRV(Instancing Data): t1 |
 
 	pCommandList->SetGraphicsRootSignature(m_RootSignatures[0]->Get());
 	pCommandList->SetDescriptorHeaps(1, pDescriptorHeap.GetAddressOf());
+
+	// 4. Set Structured Buffer and push data
+	pCommandList->SetGraphicsRootShaderResourceView(1, m_upInstancingSBuffer->GetGPUVirtualAddress());
+	m_upInstancingSBuffer->PushData(originOwner.m_InstancingDatas.data(), originOwner.m_InstancingDatas.size());
 
 	CD3DX12_GPU_DESCRIPTOR_HANDLE gpuHandle(pDescriptorHeap->GetGPUDescriptorHandleForHeapStart());
 	pCommandList->SetGraphicsRootDescriptorTable(0, gpuHandle);
@@ -199,17 +182,17 @@ void SpotlightRender::Render()
 	pCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	pCommandList->IASetVertexBuffers(0, 1, &vertexBuffer.VertexBufferView);
 	pCommandList->IASetIndexBuffer(&indexBuffer.IndexBufferView);
-	pCommandList->DrawIndexedInstanced(mesh.GetIndexCount(), 1, 0, 0, 0);
+	pCommandList->DrawIndexedInstanced(mesh.GetIndexCount(), originOwner.m_nInstances, 0, 0, 0);
 
 	m_upDescriptorHeap->Reset();
 
 }
 
-/////////////////////
-// SpotlightObject //
-/////////////////////
+//////////////////////
+// InstancingObject //
+//////////////////////
 
-BOOL SpotlightObject::Initialize()
+BOOL InstancingObject::Initialize()
 {
 	m_upTransform = make_unique<Transform>();
 	m_upTransform->Initialize();
@@ -225,32 +208,63 @@ BOOL SpotlightObject::Initialize()
 	m_upTransform = make_unique<Transform>();
 	m_upTransform->Initialize();
 
-	m_upColorData = make_unique<ColorData>();
+	m_InstancingDatas.clear();
+
+	// std::random objs for random color
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_real_distribution<float> dis1(-MAX_POSITION, MAX_POSITION);
+	std::uniform_real_distribution<float> dis2(0.0f, 1.0f);
+
+
+	for (int x = 0; x < INSTANCED_COUNT; x++)
 	{
-		m_upColorData->colorDiffuse = XMFLOAT4(1.f, 1.f, 1.f, 1.f);
-		m_upColorData->colorSpecular = XMFLOAT4(1.f, 1.f, 1.f, 100.f);
-		m_upColorData->colorAmbient = XMFLOAT4(0.f, 0.f, 0.f, 0.f);
-		m_upColorData->colorEmissive = XMFLOAT4(0.f, 0.f, 0.f, 0.f);
+		SBInstancingData data;
+		
+		array<float, 3> posValue = { 0.0f, 0.0f, 0.0f };
+		std::for_each(posValue.begin(), posValue.end(), [&gen, &dis1](float& f) {f = dis1(gen); });
+		XMFLOAT3 pos(posValue.data());
+		XMVECTOR xmPos = XMLoadFloat3(&pos);
+		XMMATRIX xmWorld = XMMatrixTranslationFromVector(xmPos);
+		xmWorld = XMMatrixTranspose(xmWorld);
+		XMStoreFloat4x4(&data.matWorld, xmWorld);
+	
+		array<float, 4> colorValues = {0.0f, 0.0f, 0.0f, 1.0f};
+		std::for_each(colorValues.begin(), colorValues.end() - 1, [&gen, &dis2](float& f) {f = dis2(gen); });
+		data.colorDiffuse = XMFLOAT4(colorValues.data());
+	
+		m_InstancingDatas.push_back(data);
 	}
+
+	//SBInstancingData data;
+	//XMMATRIX xmWorld = XMMatrixIdentity();
+	//XMStoreFloat4x4(&data.matWorld, XMMatrixTranspose(xmWorld));
+	//
+	//array<float, 4> colorValues = { 0.0f, 0.0f, 0.0f, 1.0f };
+	//std::for_each(colorValues.begin(), colorValues.end() - 1, [&gen, &dis](float& f) {f = dis(gen); });
+	//data.colorDiffuse = XMFLOAT4(colorValues.data());
+	//
+	//m_InstancingDatas.push_back(data);
+
+	m_nInstances = m_InstancingDatas.size();
 
 	InitRenderMethod();
 
 	return TRUE;
 }
 
-void SpotlightObject::Update()
+void InstancingObject::Update()
 {
-	m_upTransform->Update();
 }
 
-void SpotlightObject::Render()
+void InstancingObject::Render()
 {
 	m_upRenderMethod->Render();
 }
 
-BOOL SpotlightObject::InitRenderMethod()
+BOOL InstancingObject::InitRenderMethod()
 {
-	m_upRenderMethod = make_unique<SpotlightRender>();
+	m_upRenderMethod = make_unique<InstancingRender>();
 	m_upRenderMethod->Initialize(shared_from_this());
 
 	return TRUE;

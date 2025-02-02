@@ -81,10 +81,6 @@ inline BOOL ConstantBuffer<T>::Initialize()
 	m_pDescriptorHeap->Initialize(heapDesc);
 
 	// Write cache datas
-	CD3DX12_RANGE writeRange(0, 0);
-	m_pResource->Map(0, &writeRange, reinterpret_cast<void**>(&m_rpSysMemAddr));
-
-
 	D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc = {};
 	{
 		cbvDesc.BufferLocation = m_pResource->GetGPUVirtualAddress();
@@ -94,6 +90,10 @@ inline BOOL ConstantBuffer<T>::Initialize()
 	DEVICE->CreateConstantBufferView(&cbvDesc, m_pDescriptorHeap->DescriptorHandleFromStart.cpuHandle);
 	m_GPUAddr = cbvDesc.BufferLocation;
 	m_uiDescriptorSize = DEVICE->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+
+	// Map data pointer
+	CD3DX12_RANGE writeRange(0, 0);
+	m_pResource->Map(0, &writeRange, reinterpret_cast<void**>(&m_rpSysMemAddr));
 
 	return TRUE;
 }

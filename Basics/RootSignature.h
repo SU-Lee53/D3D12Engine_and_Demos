@@ -117,7 +117,7 @@ protected:
 
 	// In real situation, variables below are useless after create root signature
 	// but, this renderer is for demo and example so im going to cache it for debug
-	DescriptorRange m_DescriptorRange;
+	std::vector<DescriptorRange> m_DescriptorRanges = {};
 	RootParameter m_RootParameter;
 	StaticSampler m_StaticSampler;
 

@@ -164,6 +164,8 @@
     <ClInclude Include="ImGui\imstb_rectpack.h" />
     <ClInclude Include="ImGui\imstb_textedit.h" />
     <ClInclude Include="ImGui\imstb_truetype.h" />
+    <ClInclude Include="InstancingDemo.h" />
+    <ClInclude Include="InstancingResources.h" />
     <ClInclude Include="LambertDemo.h" />
     <ClInclude Include="LambertResources.h" />
     <ClInclude Include="Light.h" />
@@ -197,6 +199,7 @@
     <ClInclude Include="SimpleMath.h" />
     <ClInclude Include="SpotlightDemo.h" />
     <ClInclude Include="SpotlightResources.h" />
+    <ClInclude Include="StructuredBuffer.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="TimeManager.h" />
@@ -238,6 +241,8 @@
     <ClCompile Include="ImGui\imgui_widgets.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="InstancingDemo.cpp" />
+    <ClCompile Include="InstancingResources.cpp" />
     <ClCompile Include="LambertDemo.cpp" />
     <ClCompile Include="LambertResources.cpp" />
     <ClCompile Include="Light.cpp" />
@@ -275,6 +280,7 @@
     </ClCompile>
     <ClCompile Include="SpotlightDemo.cpp" />
     <ClCompile Include="SpotlightResources.cpp" />
+    <ClCompile Include="StructuredBuffer.cpp" />
     <ClCompile Include="TimeManager.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Utils.cpp" />
@@ -296,6 +302,7 @@
     <FxCompile Include="..\Shader\Common.hlsl" />
     <FxCompile Include="..\Shader\ComputeLight.hlsl" />
     <FxCompile Include="..\Shader\HierarchyModel.hlsl" />
+    <FxCompile Include="..\Shader\Instancing.hlsl" />
     <FxCompile Include="..\Shader\LambertLight.hlsl" />
     <FxCompile Include="..\Shader\Light.hlsl" />
     <FxCompile Include="..\Shader\PointLight.hlsl" />

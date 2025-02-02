@@ -14,14 +14,15 @@ using namespace std;
 
 BOOL LambertRootSignature::Initialize()
 {
-	m_DescriptorRange.Resize(4);
-	m_DescriptorRange[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0);	// b0 : Transform Data
-	m_DescriptorRange[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 1);	// b1 : Camera Data
-	m_DescriptorRange[2].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 2);	// b2 : Color Data
-	m_DescriptorRange[3].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 3);	// b3 : Lambert Light Data
+	m_DescriptorRanges.resize(1);
+	m_DescriptorRanges[0].Resize(4);
+	m_DescriptorRanges[0][0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0);	// b0 : Transform Data
+	m_DescriptorRanges[0][1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 1);	// b1 : Camera Data
+	m_DescriptorRanges[0][2].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 2);	// b2 : Color Data
+	m_DescriptorRanges[0][3].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 3);	// b3 : Light Data
 
 	m_RootParameter.Resize(1);
-	m_RootParameter[0].InitAsDescriptorTable(m_DescriptorRange.Size(), m_DescriptorRange.Get(), D3D12_SHADER_VISIBILITY_ALL);
+	m_RootParameter[0].InitAsDescriptorTable(m_DescriptorRanges[0].Size(), m_DescriptorRanges[0].Get(), D3D12_SHADER_VISIBILITY_ALL);
 
 	m_StaticSampler.Resize(1);
 	{

@@ -40,7 +40,7 @@ void LightDemo::Initialize()
 			originObj->GetTransform()->SetWorldPosition(XMFLOAT3(-4.0f, 0.0f, 0.0f));
 
 			originObj = static_pointer_cast<LightObject>(m_pObjs[6]);
-			originObj->GetTransform()->SetWorldPosition(XMFLOAT3(0.0f, 0.0f, -4.0f));
+			originObj->GetTransform()->SetWorldPosition(XMFLOAT3(0.0f, 0.0f, 4.0f));
 
 			originObj = static_pointer_cast<LightObject>(m_pObjs[7]);
 			originObj->GetTransform()->SetWorldPosition(XMFLOAT3(0.0f, 0.0f, -4.0f));

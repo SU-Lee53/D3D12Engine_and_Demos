@@ -103,6 +103,8 @@ using namespace std::literals;
 #include "RootSignature.h"
 #include "RenderMethod.h"
 #include "Object.h"
+#include "StructuredBuffer.h"
+#include "Mesh.h"
 
 // Debugs
 #ifdef _DEBUG

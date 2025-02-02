@@ -1,4 +1,5 @@
 #pragma once
+#include <random>
 
 class Utils
 {
@@ -9,5 +10,6 @@ public:
 		size_t alligned_size = (size + 255) & (~255);
 		return alligned_size;
 	}
+
 };
 

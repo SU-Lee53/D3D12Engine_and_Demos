@@ -2,9 +2,10 @@
 
 inline std::string HrToString(HRESULT hr)
 {
-    char s_str[64] = {};
-    sprintf_s(s_str, "HRESULT of 0x%08X", static_cast<UINT>(hr));
-    return std::string(s_str);
+    std::string output = std::format("HRESULT of 0x{}\n", static_cast<UINT>(hr));
+    OutputDebugStringA(output.c_str());
+
+    return output;
 }
 
 class HrException : public std::runtime_error

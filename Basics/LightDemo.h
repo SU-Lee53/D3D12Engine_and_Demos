@@ -1,6 +1,9 @@
 #pragma once
 #include "Application.h"
 
+
+// https://www.youtube.com/watch?v=w2Yh9sxfTd8
+
 class Light;
 
 using LightPair = std::pair<std::shared_ptr<Light>, std::shared_ptr<Object>>;

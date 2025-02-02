@@ -199,6 +199,18 @@
     <Filter Include="Renderer\Lights">
       <UniqueIdentifier>{7220c7cc-281e-464c-8ce5-754d857cb451}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Demos\Level.0\Instancing\App">
+      <UniqueIdentifier>{2d96cac3-9ba0-4154-aba5-ce469243a9a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos\Level.0\Instancing\Resources">
+      <UniqueIdentifier>{9c5dca65-0ed9-4296-8eb2-f5d9c6bdc1a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos\Level.0\Instancing\Shader">
+      <UniqueIdentifier>{4d50491b-5aa9-43a5-bfdc-fa5055c9d8d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer\StructuredBuffer">
+      <UniqueIdentifier>{0d4186c0-05f1-451a-95c9-294342c32830}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -387,6 +399,15 @@
     <ClInclude Include="LightDesc.h">
       <Filter>Renderer\Lights</Filter>
     </ClInclude>
+    <ClInclude Include="InstancingDemo.h">
+      <Filter>Game\Demos\Level.0\Instancing\App</Filter>
+    </ClInclude>
+    <ClInclude Include="InstancingResources.h">
+      <Filter>Game\Demos\Level.0\Instancing\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="StructuredBuffer.h">
+      <Filter>Renderer\StructuredBuffer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Basics.ico">
@@ -561,6 +582,15 @@
     <ClCompile Include="Light.cpp">
       <Filter>Renderer\Lights</Filter>
     </ClCompile>
+    <ClCompile Include="InstancingDemo.cpp">
+      <Filter>Game\Demos\Level.0\Instancing\App</Filter>
+    </ClCompile>
+    <ClCompile Include="InstancingResources.cpp">
+      <Filter>Game\Demos\Level.0\Instancing\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="StructuredBuffer.cpp">
+      <Filter>Renderer\StructuredBuffer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -604,6 +634,9 @@
     </FxCompile>
     <FxCompile Include="..\Shader\Common.hlsl">
       <Filter>Game\Demos</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shader\Instancing.hlsl">
+      <Filter>Game\Demos\Level.0\Instancing\Shader</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

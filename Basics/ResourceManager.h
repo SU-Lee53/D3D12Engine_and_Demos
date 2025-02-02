@@ -17,13 +17,22 @@ private:
 public:
 	template<ShaderInputType T>
 	HRESULT CreateVertexBuffer(const std::vector<T>& initData, VertexBuffer& refOutBuffer);
-
 	HRESULT CreateIndexBuffer(const std::vector<UINT>& initData, IndexBuffer& refOutBuffer);
 
 private:
 	UINT64 Fence();
 	void WaitForFenceValue();
 
+public:
+	ComPtr<ID3D12GraphicsCommandList>& GetCommandList() { return m_pCommandList; }
+	
+	BOOL CloseAndExcuteCommandList()
+	{
+		m_pCommandList->Close();
+
+		ID3D12CommandList* ppCommandLists[] = { m_pCommandList.Get() };
+		m_pCommandQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
+	}
 
 private:
 	ComPtr<ID3D12GraphicsCommandList>	m_pCommandList = nullptr;
