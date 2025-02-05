@@ -1406,7 +1406,9 @@ void FbxLoader::PrintTextureInfo(FbxSurfaceMaterial* pfbxSurfaceMaterial, const 
 						if (pfbxFileTexture)
 						{
 							ImGui::Text("This Texture is File Texture");
-							ImGui::Text("Texture Path : %s", pfbxFileTexture->GetFileName());
+							string strTextureFilename = pfbxFileTexture->GetFileName();
+							strTextureFilename = ExtractFilename(strTextureFilename);
+							ImGui::Text("Texture Path : %s", strTextureFilename.c_str());
 						}
 						else
 						{
@@ -1837,7 +1839,6 @@ void FbxLoader::ExportMesh(std::shared_ptr<ModelNode> pOutModelNode, FbxMesh* pf
 	pOutModelNode->pMesh->Initialize(vertices, indices);
 
 }
-
 void FbxLoader::ExportMaterial(std::shared_ptr<ModelNode> pOutModelNode, FbxNode* pfbxNode)
 {
 	FbxSurfaceMaterial* pfbxSurfaceMaterial = pfbxNode->GetMaterial(0);
@@ -1861,16 +1862,19 @@ void FbxLoader::ExportMaterial(std::shared_ptr<ModelNode> pOutModelNode, FbxNode
 				FbxTexture* pfbxTexture = pfbxDiffuseProp.GetSrcObject<FbxTexture>();
 				FbxFileTexture* pfbxFileTexture = FbxCast<FbxFileTexture>(pfbxTexture);
 
-				try
-				{
-					string strTexturePath = pfbxFileTexture->GetFileName();
-					filesystem::path fsTexturePath(strTexturePath);
-					wstrDiffuseTexturePath = fsTexturePath.wstring();
-				}
-				catch (::exception e)
-				{
-					wstrDiffuseTexturePath = L"";	// Error Texture
-				}
+				string strTextureFilename = pfbxFileTexture->GetFileName();
+				strTextureFilename = ExtractFilename(strTextureFilename);
+				wstrDiffuseTexturePath = wstring(strTextureFilename.begin(), strTextureFilename.end());
+				//try
+				//{
+				//	string strTexturePath = pfbxFileTexture->GetFileName();
+				//	filesystem::path fsTexturePath(strTexturePath);
+				//	wstrDiffuseTexturePath = fsTexturePath.wstring();
+				//}
+				//catch (::exception e)
+				//{
+				//	wstrDiffuseTexturePath = L"";	// Error Texture
+				//}
 			}
 		}
 		else
@@ -1919,6 +1923,16 @@ void FbxLoader::ExportMaterial(std::shared_ptr<ModelNode> pOutModelNode, FbxNode
 		pOutModelNode->pMaterial->SetMaterialData(materialData);
 	}
 
+}
+
+std::string FbxLoader::ExtractFilename(const std::string& strTexturePath)
+{
+	size_t posOfSlash = strTexturePath.find_last_of('/');
+	size_t posOfBackSlash = strTexturePath.find_last_of('\\');
+
+	size_t posOfLastSlash = posOfSlash > posOfBackSlash ? posOfSlash : posOfBackSlash;
+
+	return strTexturePath.substr(posOfLastSlash + 1);	// posOfLastSlash is literally position of last slash(or backslash)
 }
 
 void FbxLoader::CleanUp()

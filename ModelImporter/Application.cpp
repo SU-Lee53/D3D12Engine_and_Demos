@@ -29,7 +29,7 @@ void Application::Initialize()
 
 	m_pLoadedFromBinaries = make_shared<Model>();
 	m_pLoadedFromBinaries->Initialize();
-	m_pLoadedFromBinaries->ImportModelFromBinary("../Models/Binaries/Hummer.bin");
+	m_pLoadedFromBinaries->ImportModelFromBinary("../Models/Binaries/corolla.bin");
 	m_pLoadedFromBinaries->ScaleModel(XMFLOAT3(0.1f, 0.1f, 0.1f));
 }
 

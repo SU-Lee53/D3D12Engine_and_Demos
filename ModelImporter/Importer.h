@@ -51,6 +51,8 @@ private:
 
 #pragma endregion FBX_TO_MODEL
 
+private:
+	std::string ExtractFilename(const std::string& strTexturePath);
 
 private:
 	void CleanUp();
