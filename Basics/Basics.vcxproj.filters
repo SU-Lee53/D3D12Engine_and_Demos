@@ -202,9 +202,6 @@
     <Filter Include="Game\Demos\Level.0\Frustum Culling">
       <UniqueIdentifier>{4f23caee-c982-46f5-98f8-a943ee193591}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Demos\Level.0\Terrain">
-      <UniqueIdentifier>{c6cd749b-d236-4429-80d4-9e7c3eb5e9a0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Demos\Level.0\Texture">
       <UniqueIdentifier>{83dab589-4c8e-42f5-84f6-dad3cf3e26e9}</UniqueIdentifier>
     </Filter>
@@ -213,6 +210,21 @@
     </Filter>
     <Filter Include="Game\Demos\Level.1\Skybox">
       <UniqueIdentifier>{8dc11045-6d3e-4d69-8db6-922962a3dbfd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos\Level.1\Terrain">
+      <UniqueIdentifier>{c6cd749b-d236-4429-80d4-9e7c3eb5e9a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer\Texture">
+      <UniqueIdentifier>{2c8d3068-8c95-41c5-be24-87af5e4f411b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos\Level.0\Texture\App">
+      <UniqueIdentifier>{938e5435-6c1a-4315-af27-b6f29a6740d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos\Level.0\Texture\Resources">
+      <UniqueIdentifier>{1c5b34ac-9728-4c24-b49e-1597cb8843b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos\Level.0\Texture\Shader">
+      <UniqueIdentifier>{c147333d-c808-4517-9476-1a1c9861c37b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -393,9 +405,6 @@
     <ClInclude Include="LightDemo.h">
       <Filter>Game\Demos\Level.0\All Of The Lights\App</Filter>
     </ClInclude>
-    <ClInclude Include="LightResources.h">
-      <Filter>Game\Demos\Level.0\All Of The Lights\Shader</Filter>
-    </ClInclude>
     <ClInclude Include="Light.h">
       <Filter>Renderer\Lights</Filter>
     </ClInclude>
@@ -410,6 +419,19 @@
     </ClInclude>
     <ClInclude Include="StructuredBuffer.h">
       <Filter>Renderer\StructuredBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Renderer\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="WICTextureLoader12.h">
+      <Filter>Renderer\DirectXTex</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureDemoResources.h">
+      <Filter>Game\Demos\Level.0\Texture\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureDemo.h" />
+    <ClInclude Include="LightResources.h">
+      <Filter>Game\Demos\Level.0\All Of The Lights\Resources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -579,9 +601,6 @@
     <ClCompile Include="LightDemo.cpp">
       <Filter>Game\Demos\Level.0\All Of The Lights\App</Filter>
     </ClCompile>
-    <ClCompile Include="LightResources.cpp">
-      <Filter>Game\Demos\Level.0\All Of The Lights\Shader</Filter>
-    </ClCompile>
     <ClCompile Include="Light.cpp">
       <Filter>Renderer\Lights</Filter>
     </ClCompile>
@@ -593,6 +612,19 @@
     </ClCompile>
     <ClCompile Include="StructuredBuffer.cpp">
       <Filter>Renderer\StructuredBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Renderer\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="WICTextureLoader12.cpp">
+      <Filter>Renderer\DirectXTex</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureDemoResources.cpp">
+      <Filter>Game\Demos\Level.0\Texture\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureDemo.cpp" />
+    <ClCompile Include="LightResources.cpp">
+      <Filter>Game\Demos\Level.0\All Of The Lights\Resources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -629,17 +661,17 @@
     <FxCompile Include="..\Shader\PointLight.hlsl">
       <Filter>Game\Demos\Level.0\PointLight\Shader</Filter>
     </FxCompile>
-    <FxCompile Include="..\Shader\Light.hlsl">
-      <Filter>Game\Demos\Level.0\All Of The Lights\Resources</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Shader\ComputeLight.hlsl">
-      <Filter>Game\Demos\Level.0\All Of The Lights\Resources</Filter>
-    </FxCompile>
     <FxCompile Include="..\Shader\Common.hlsl">
       <Filter>Game\Demos</Filter>
     </FxCompile>
     <FxCompile Include="..\Shader\Instancing.hlsl">
       <Filter>Game\Demos\Level.0\Instancing\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shader\ComputeLight.hlsl">
+      <Filter>Game\Demos\Level.0\All Of The Lights\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shader\Light.hlsl">
+      <Filter>Game\Demos\Level.0\All Of The Lights\Shader</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

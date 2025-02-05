@@ -202,10 +202,14 @@
     <ClInclude Include="StructuredBuffer.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="constants.h" />
+    <ClInclude Include="Texture.h" />
+    <ClInclude Include="TextureDemo.h" />
+    <ClInclude Include="TextureDemoResources.h" />
     <ClInclude Include="TimeManager.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="types.h" />
     <ClInclude Include="Utils.h" />
+    <ClInclude Include="WICTextureLoader12.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
@@ -281,9 +285,13 @@
     <ClCompile Include="SpotlightDemo.cpp" />
     <ClCompile Include="SpotlightResources.cpp" />
     <ClCompile Include="StructuredBuffer.cpp" />
+    <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="TextureDemo.cpp" />
+    <ClCompile Include="TextureDemoResources.cpp" />
     <ClCompile Include="TimeManager.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Utils.cpp" />
+    <ClCompile Include="WICTextureLoader12.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Basics.rc" />

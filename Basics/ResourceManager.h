@@ -25,13 +25,17 @@ private:
 
 public:
 	ComPtr<ID3D12GraphicsCommandList>& GetCommandList() { return m_pCommandList; }
-	
+	ComPtr<ID3D12CommandAllocator>& GetCommandAllocator() { return m_pCommandAllocator; }
+
 	BOOL CloseAndExcuteCommandList()
 	{
 		m_pCommandList->Close();
 
 		ID3D12CommandList* ppCommandLists[] = { m_pCommandList.Get() };
 		m_pCommandQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
+
+		Fence();
+		WaitForFenceValue();
 	}
 
 private:

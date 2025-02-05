@@ -32,6 +32,10 @@ extern "C" { __declspec(dllexport) extern const char* D3D12SDKPath = (const char
 extern "C" { __declspec(dllexport) extern const char* D3D12SDKPath = (const char*)u8".\\D3D12\\x64\\"; }
 #endif
 
+// DirectXTex
+#include "../library/include/DirectXTex/DirectXTex.h"
+#include "DDSTextureLoader12.h"
+#include "WICTextureLoader12.h"
 #ifdef _DEBUG
 #pragma comment(lib, "../library/lib/DirectXTex/DirectXTex_debug.lib")
 #else
