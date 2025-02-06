@@ -1,11 +1,12 @@
 #include "pch.h"
 #include "PointlightDemo.h"
-#include "PointlightResources.h"
 #include "BasicForwardRenderResources.h"
 #include "Object.h"
 #include "Camera.h"
 
 using namespace std;
+using namespace PointLight;
+using namespace BasicForward;
 
 ////////////////////
 // PointlightDemo //
@@ -142,9 +143,9 @@ void PointlightDemo::Render()
 // Pointlight //
 ////////////////
 
-CBPointlightData DemoPointlight::GetPointlightCBData()
+PointLight::CBPointlightData DemoPointlight::GetPointlightCBData()
 {
-	return CBPointlightData{
+	return PointLight::CBPointlightData{
 		m_vLightPos,
 		1.f,	// pad1
 		m_vLightColor,

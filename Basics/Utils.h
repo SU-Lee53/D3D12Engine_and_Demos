@@ -18,5 +18,22 @@ public:
 		XMStoreFloat3(&outUp, xmWorld.r[1]); // UP is in 2nd row
 	}
 
+	static void SetDefaultSamplerDesc(D3D12_STATIC_SAMPLER_DESC& outSamplerDesc, UINT registerIndex)
+	{
+		outSamplerDesc.Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
+		outSamplerDesc.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+		outSamplerDesc.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+		outSamplerDesc.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+		outSamplerDesc.MipLODBias = 0.f;
+		outSamplerDesc.MaxAnisotropy = 16;
+		outSamplerDesc.ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
+		outSamplerDesc.BorderColor = D3D12_STATIC_BORDER_COLOR_OPAQUE_WHITE;
+		outSamplerDesc.MinLOD = -FLT_MAX;
+		outSamplerDesc.MaxLOD = D3D12_FLOAT32_MAX;
+		outSamplerDesc.ShaderRegister = registerIndex;
+		outSamplerDesc.RegisterSpace = 0;
+		outSamplerDesc.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	}
+
 };
 

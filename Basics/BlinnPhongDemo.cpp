@@ -5,8 +5,9 @@
 #include "Object.h"
 #include "Camera.h"
 
+using namespace BasicForward;
+using namespace BlinnPhong;
 using namespace std;
-
 
 ////////////////////
 // BlinnPhongDemo //
@@ -90,7 +91,7 @@ void BlinnPhongDemo::Render()
 // BlinnPhongLight //
 /////////////////////
 
-CBBlinnPhongData BlinnPhongLight::GetBlinnPhongCBData()
+BlinnPhong::CBBlinnPhongData BlinnPhongLight::GetBlinnPhongCBData()
 {
-	return CBBlinnPhongData{ m_vlightPos, m_vlightDir, 1/*padding*/, m_vlightColor };
+	return BlinnPhong::CBBlinnPhongData{ m_vlightPos, m_vlightDir, 1/*padding*/, m_vlightColor };
 }

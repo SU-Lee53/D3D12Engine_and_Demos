@@ -7,6 +7,7 @@
 #include "Light.h"
 
 using namespace std;
+using namespace BasicForward;
 
 void LightDemo::Initialize()
 {
@@ -15,34 +16,34 @@ void LightDemo::Initialize()
 		m_pObjs.resize(8);
 		for (auto& obj : m_pObjs)
 		{
-			obj = make_shared<LightObject>();
+			obj = make_shared<Light::LightObject>();
 			obj->Initialize();
 		}
 
-		shared_ptr<LightObject> originObj = nullptr;
+		shared_ptr<Light::LightObject> originObj = nullptr;
 		{
-			originObj = static_pointer_cast<LightObject>(m_pObjs[0]);
+			originObj = static_pointer_cast<Light::LightObject>(m_pObjs[0]);
 			originObj->GetTransform()->SetWorldPosition(XMFLOAT3(2.0f, 0.0f, 0.0f));
 
-			originObj = static_pointer_cast<LightObject>(m_pObjs[1]);
+			originObj = static_pointer_cast<Light::LightObject>(m_pObjs[1]);
 			originObj->GetTransform()->SetWorldPosition(XMFLOAT3(-2.0f, 0.0f, 0.0f));
 
-			originObj = static_pointer_cast<LightObject>(m_pObjs[2]);
+			originObj = static_pointer_cast<Light::LightObject>(m_pObjs[2]);
 			originObj->GetTransform()->SetWorldPosition(XMFLOAT3(0.0f, 0.0f, 2.0f));
 
-			originObj = static_pointer_cast<LightObject>(m_pObjs[3]);
+			originObj = static_pointer_cast<Light::LightObject>(m_pObjs[3]);
 			originObj->GetTransform()->SetWorldPosition(XMFLOAT3(0.0f, 0.0f, -2.0f));
 
-			originObj = static_pointer_cast<LightObject>(m_pObjs[4]);
+			originObj = static_pointer_cast<Light::LightObject>(m_pObjs[4]);
 			originObj->GetTransform()->SetWorldPosition(XMFLOAT3(4.0f, 0.0f, 0.0f));
 
-			originObj = static_pointer_cast<LightObject>(m_pObjs[5]);
+			originObj = static_pointer_cast<Light::LightObject>(m_pObjs[5]);
 			originObj->GetTransform()->SetWorldPosition(XMFLOAT3(-4.0f, 0.0f, 0.0f));
 
-			originObj = static_pointer_cast<LightObject>(m_pObjs[6]);
+			originObj = static_pointer_cast<Light::LightObject>(m_pObjs[6]);
 			originObj->GetTransform()->SetWorldPosition(XMFLOAT3(0.0f, 0.0f, 4.0f));
 
-			originObj = static_pointer_cast<LightObject>(m_pObjs[7]);
+			originObj = static_pointer_cast<Light::LightObject>(m_pObjs[7]);
 			originObj->GetTransform()->SetWorldPosition(XMFLOAT3(0.0f, 0.0f, -4.0f));
 		}
 	}

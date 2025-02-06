@@ -1,11 +1,12 @@
 #include "pch.h"
 #include "SpotlightDemo.h"
-#include "SpotlightResources.h"
 #include "BasicForwardRenderResources.h"
 #include "Object.h"
 #include "Camera.h"
 
 using namespace std;
+using namespace SpotLight;
+using namespace BasicForward;
 
 ///////////////////
 // SpitlightDemo //
@@ -155,9 +156,9 @@ void SpotlightDemo::Render()
 // SpotLight //
 ///////////////
 
-CBSpotlightData DemoSpotLight::GetSpotlightCBData()
+SpotLight::CBSpotlightData DemoSpotLight::GetSpotlightCBData()
 {
-	return CBSpotlightData{
+	return SpotLight::CBSpotlightData{
 		m_vLightPos,
 		1.f,	// pad1
 		m_vLightDir,

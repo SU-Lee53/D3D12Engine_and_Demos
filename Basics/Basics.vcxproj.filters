@@ -429,11 +429,15 @@
     <ClInclude Include="TextureDemoResources.h">
       <Filter>Game\Demos\Level.0\Texture\Resources</Filter>
     </ClInclude>
-    <ClInclude Include="TextureDemo.h" />
     <ClInclude Include="LightResources.h">
       <Filter>Game\Demos\Level.0\All Of The Lights\Resources</Filter>
     </ClInclude>
-    <ClInclude Include="TextureManager.h" />
+    <ClInclude Include="TextureDemo.h">
+      <Filter>Game\Demos\Level.0\Texture\App</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager.h">
+      <Filter>Renderer\Managers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Basics.ico">
@@ -623,11 +627,15 @@
     <ClCompile Include="TextureDemoResources.cpp">
       <Filter>Game\Demos\Level.0\Texture\Resources</Filter>
     </ClCompile>
-    <ClCompile Include="TextureDemo.cpp" />
     <ClCompile Include="LightResources.cpp">
       <Filter>Game\Demos\Level.0\All Of The Lights\Resources</Filter>
     </ClCompile>
-    <ClCompile Include="TextureManager.cpp" />
+    <ClCompile Include="TextureDemo.cpp">
+      <Filter>Game\Demos\Level.0\Texture\App</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureManager.cpp">
+      <Filter>Renderer\Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -674,6 +682,9 @@
     </FxCompile>
     <FxCompile Include="..\Shader\Light.hlsl">
       <Filter>Game\Demos\Level.0\All Of The Lights\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shader\Texture.hlsl">
+      <Filter>Game\Demos\Level.0\Texture\Shader</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

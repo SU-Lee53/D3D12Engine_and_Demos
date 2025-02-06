@@ -1,8 +1,7 @@
 #pragma once
 
 #include "Application.h"
-
-struct CBLambertData;
+#include "LambertResources.h"
 
 class LambertLight
 {
@@ -20,7 +19,7 @@ public:
 	XMFLOAT3 GetDirection() { return m_vlightDir; }
 	XMFLOAT4 GetColor() { return m_vlightColor; }
 
-	CBLambertData GetLambertCBData();
+	Lambert::CBLambertData GetLambertCBData();
 
 private:
 	XMFLOAT3 m_vlightDir = XMFLOAT3(0.f, 0.f, 1.f);

@@ -4,9 +4,9 @@
 
 // https://www.youtube.com/watch?v=w2Yh9sxfTd8
 
-class Light;
+class Light_Base;
 
-using LightPair = std::pair<std::shared_ptr<Light>, std::shared_ptr<Object>>;
+using LightPair = std::pair<std::shared_ptr<Light_Base>, std::shared_ptr<Object>>;
 
 class LightDemo : public Application
 {

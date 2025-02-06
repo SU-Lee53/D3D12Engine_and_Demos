@@ -14,6 +14,8 @@ public:
 	std::shared_ptr<Texture> GetTexture(const std::string& strTextureName);
 	BOOL RemoveTexture(const std::string& strTextureName);
 
+private:
+	BOOL CreateErrorTexture();
 
 private:
 	std::unordered_map<std::string, std::shared_ptr<Texture>> m_pTextureMap;

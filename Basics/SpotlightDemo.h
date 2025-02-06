@@ -1,7 +1,6 @@
 #pragma once
 #include "Application.h"
-
-struct CBSpotlightData;
+#include "SpotlightResources.h"
 
 class DemoSpotLight
 {
@@ -33,7 +32,7 @@ public:
 	float GetLightRange() { return m_fLightRange; }
 	float GetAttenuation() { return m_fAttenuation; }
 
-	CBSpotlightData GetSpotlightCBData();
+	SpotLight::CBSpotlightData GetSpotlightCBData();
 
 private:
 	XMFLOAT3 m_vLightPos	= XMFLOAT3(0.f, 0.f, 0.f);

@@ -8,13 +8,13 @@ using namespace std;
 
 void LambertDemo::Initialize()
 {
-	m_pObj = make_shared<LambertObject>();
+	m_pObj = make_shared<Lambert::LambertObject>();
 	m_pObj->Initialize();
 	
 	m_pLambertLight = make_shared<LambertLight>();
 	m_pLambertLight->Initialize();
 
-	shared_ptr<LambertObject> originObj = static_pointer_cast<LambertObject>(m_pObj);
+	shared_ptr<Lambert::LambertObject> originObj = static_pointer_cast<Lambert::LambertObject>(m_pObj);
 	//originObj->LoadFromBinaryFile(L"../Models/Binaries/Hummer.bin");
 	originObj->GetTransform()->SetWorldPosition(XMFLOAT3(0.0f, 0.0f, 3.0f));
 
@@ -50,7 +50,7 @@ void LambertDemo::Render()
 // LambertLight //
 //////////////////
 
-CBLambertData LambertLight::GetLambertCBData()
+Lambert::CBLambertData LambertLight::GetLambertCBData()
 {
-	return CBLambertData{ m_vlightDir, 0.f/*padding*/, m_vlightColor };
+	return Lambert::CBLambertData{ m_vlightDir, 0.f/*padding*/, m_vlightColor };
 }

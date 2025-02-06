@@ -3,6 +3,7 @@
 #include "MeshHelper.h"
 #include <random>
 
+using namespace Instancing;
 using namespace std;
 
 /////////////////////////////
@@ -37,7 +38,7 @@ BOOL InstancingRootSignature::Initialize()
 		m_StaticSampler[0].MaxLOD = D3D12_FLOAT32_MAX;
 		m_StaticSampler[0].ShaderRegister = 0;
 		m_StaticSampler[0].RegisterSpace = 0;
-		m_StaticSampler[0].ShaderRegister = D3D12_SHADER_VISIBILITY_PIXEL;
+		m_StaticSampler[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	}
 
 	m_RootSignatureFlags =
@@ -167,14 +168,14 @@ void InstancingRender::Render()
 	// 3. Copy Constant Buffer Data to Descriptor
 	DEVICE->CopyDescriptorsSimple(1, CameraDescriptorHandle.cpuHandle, m_upCameraCBuffer->GetDescriptorHeap()->DescriptorHandleFromStart.cpuHandle, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	
-	// Current pDescriptorHeap layout (Probably)
-	// | CBV(Transform): b0 | SRV(Instancing Data): t1 |
-
 	pCommandList->SetDescriptorHeaps(1, pDescriptorHeap.GetAddressOf());
 
 	// 4. Set Structured Buffer and push data
 	pCommandList->SetGraphicsRootShaderResourceView(1, m_upInstancingSBuffer->GetGPUVirtualAddress());
 	m_upInstancingSBuffer->PushData(originOwner.m_InstancingDatas.data(), originOwner.m_InstancingDatas.size());
+
+	// Current pDescriptorHeap layout (Probably)
+	// | CBV(Transform): b0 | SRV(Instancing Data): t0 |
 
 	CD3DX12_GPU_DESCRIPTOR_HANDLE gpuHandle(pDescriptorHeap->GetGPUDescriptorHandleForHeapStart());
 	pCommandList->SetGraphicsRootDescriptorTable(0, gpuHandle);

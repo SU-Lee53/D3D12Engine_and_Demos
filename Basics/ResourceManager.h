@@ -33,12 +33,16 @@ public:
 
 		ID3D12CommandList* ppCommandLists[] = { m_pCommandList.Get() };
 		m_pCommandQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
+
+		return TRUE;
 	}
 
 	BOOL FenceAndWait()
 	{
 		Fence();
 		WaitForFenceValue();
+
+		return TRUE;
 	}
 
 private:

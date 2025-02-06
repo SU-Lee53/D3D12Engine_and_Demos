@@ -112,6 +112,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <PreprocessToFile>false</PreprocessToFile>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -293,7 +294,9 @@
     <ClCompile Include="TimeManager.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Utils.cpp" />
-    <ClCompile Include="WICTextureLoader12.cpp" />
+    <ClCompile Include="WICTextureLoader12.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Basics.rc" />
@@ -318,6 +321,7 @@
     <FxCompile Include="..\Shader\PointLight.hlsl" />
     <FxCompile Include="..\Shader\SpotLight.hlsl" />
     <FxCompile Include="..\Shader\test.hlsl" />
+    <FxCompile Include="..\Shader\Texture.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="ImGui\LICENSE.txt" />

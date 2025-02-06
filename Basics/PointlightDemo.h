@@ -1,7 +1,6 @@
 #pragma once
 #include "Application.h"
-
-struct CBPointlightData;
+#include "PointlightResources.h"
 
 class DemoPointlight
 {
@@ -29,7 +28,7 @@ public:
 	float GetLinearAttenuation() { return m_fLinearAttenuation; }
 	float GetQuadraticAttenuation() { return m_fQuadraticAttenuation; }
 
-	CBPointlightData GetPointlightCBData();
+	PointLight::CBPointlightData GetPointlightCBData();
 
 private:
 	XMFLOAT3 m_vLightPos = XMFLOAT3(0.f, 0.f, 0.f);

@@ -4,6 +4,7 @@
 #include "Object.h"
 #include "Camera.h"
 
+using namespace HierarchyModel;
 using namespace std;
 
 void HierarchyModelDemo::Initialize()

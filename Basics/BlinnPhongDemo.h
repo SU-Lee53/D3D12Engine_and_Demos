@@ -1,7 +1,6 @@
 #pragma once
 #include "Application.h"
-
-struct CBBlinnPhongData;
+#include "BlinnPhongResource.h"
 
 class BlinnPhongLight
 {
@@ -21,7 +20,7 @@ public:
 	XMFLOAT3 GetDirection() { return m_vlightDir; }
 	XMFLOAT4 GetColor() { return m_vlightColor; }
 
-	CBBlinnPhongData GetBlinnPhongCBData();
+	BlinnPhong::CBBlinnPhongData GetBlinnPhongCBData();
 
 private:
 	XMFLOAT3 m_vlightPos = XMFLOAT3(1.f, 1.f, 1.f);

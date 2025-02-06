@@ -1,7 +1,7 @@
 #pragma once
 #include "LightDesc.h"
 
-class Light
+class Light_Base
 {
 public:
 	virtual BOOL Initialize() = 0;
@@ -26,7 +26,7 @@ protected:
 // Directional Light //
 ///////////////////////
 
-class DirectionalLight : public Light
+class DirectionalLight : public Light_Base
 {
 public:
 	virtual BOOL Initialize() override;
@@ -51,7 +51,7 @@ public:
 // Point Light //
 /////////////////
 
-class PointLight : public Light
+class PointLight : public Light_Base
 {
 public:
 	virtual BOOL Initialize() override;
@@ -84,7 +84,7 @@ public:
 // Spot Light //
 ////////////////
 
-class SpotLight : public Light
+class SpotLight : public Light_Base
 {
 public:
 	virtual BOOL Initialize() override;

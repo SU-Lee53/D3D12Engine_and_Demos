@@ -33,14 +33,27 @@ BOOL Texture::Initialize(std::wstring wstrPath)
 
 	if (bResult)
 	{
+		D3D12_DESCRIPTOR_HEAP_DESC heapDesc = {};
+		{
+			heapDesc.NumDescriptors = 1;
+			heapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+			heapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+		}
+
+		// Create Descriptor Heap
+		m_upDescriptorHeap = make_unique<DescriptorHeap>();
+		m_upDescriptorHeap->Initialize(heapDesc);
+
 		// Create Shader Resource View
 		D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 		srvDesc.Format = desc.Format;
 		srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 		srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-		srvDesc.Texture2D.MipLevels = desc.Format;
+		srvDesc.Texture2D.MipLevels = desc.MipLevels;
 
-		DEVICE->CreateShaderResourceView(m_pTexResource.Get(), &srvDesc, m_SRV);
+		DEVICE->CreateShaderResourceView(m_pTexResource.Get(), &srvDesc, m_upDescriptorHeap->DescriptorHandleFromStart.cpuHandle);
+
+		m_SRV = srvDesc.Buffer;
 	}
 	else
 	{
@@ -103,8 +116,8 @@ BOOL Texture::LoadFromDDSFile(std::wstring wstrPath, D3D12_RESOURCE_DESC& outDes
 
 BOOL Texture::LoadFromWICFile(std::wstring wstrPath, D3D12_RESOURCE_DESC& outDesc)
 {
-	// In most cases, .dds files supports subresources(mipmap)
-	// but, I'm going to check if WIC file has subresource, just in case
+	// Non .dds file dosen't have subresources(mipmap)
+	// So, MipLevels of non-.dds file is 1
 
 	std::unique_ptr<uint8_t[]> ddsData = nullptr;
 	D3D12_SUBRESOURCE_DATA subResourceData = {};
@@ -116,12 +129,7 @@ BOOL Texture::LoadFromWICFile(std::wstring wstrPath, D3D12_RESOURCE_DESC& outDes
 	}
 
 	D3D12_RESOURCE_DESC texDesc = m_pTexResource->GetDesc();
-	UINT uiSubResourceSize = 0;
-	UINT64 ui64UploadBufferSize = GetRequiredIntermediateSize(m_pTexResource.Get(), 0, uiSubResourceSize);
-	if (subResourceData.pData)
-	{
-		uiSubResourceSize = 1;
-	}
+	UINT uiSubResourceSize = 1;	// MipLevel is 1
 	UINT64 ui64UploadBufferSize = GetRequiredIntermediateSize(m_pTexResource.Get(), 0, uiSubResourceSize);
 
 	ComPtr<ID3D12Resource> pUploadBuffer = nullptr;

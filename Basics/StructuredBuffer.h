@@ -14,12 +14,12 @@ public:
 	void PushData(const T* data, const size_t nData);
 
 public:
-	std::unique_ptr<DescriptorHeap>& GetDescriptorHeap() { return m_pDescriptorHeap; }
+	std::unique_ptr<DescriptorHeap>& GetDescriptorHeap() { return m_upDescriptorHeap; }
 	D3D12_GPU_VIRTUAL_ADDRESS GetGPUVirtualAddress() { return m_GPUAddr; }
 
 private:
 	ComPtr<ID3D12Resource> m_pResource = nullptr;
-	std::unique_ptr<DescriptorHeap> m_pDescriptorHeap = nullptr;
+	std::unique_ptr<DescriptorHeap> m_upDescriptorHeap = nullptr;
 
 	D3D12_BUFFER_SRV m_SRVBuffer = 0;
 	D3D12_GPU_VIRTUAL_ADDRESS m_GPUAddr = 0;
@@ -74,8 +74,8 @@ inline BOOL StructuredBuffer<T, size>::Initialize()
 		heapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 	}
 
-	m_pDescriptorHeap = std::make_unique<DescriptorHeap>();
-	m_pDescriptorHeap->Initialize(heapDesc);
+	m_upDescriptorHeap = std::make_unique<DescriptorHeap>();
+	m_upDescriptorHeap->Initialize(heapDesc);
 
 	// Write cache datas
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc;
@@ -89,7 +89,7 @@ inline BOOL StructuredBuffer<T, size>::Initialize()
 		srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 	}
 
-	DEVICE->CreateShaderResourceView(m_pResource.Get(), &srvDesc, m_pDescriptorHeap->DescriptorHandleFromStart.cpuHandle);
+	DEVICE->CreateShaderResourceView(m_pResource.Get(), &srvDesc, m_upDescriptorHeap->DescriptorHandleFromStart.cpuHandle);
 	m_SRVBuffer = srvDesc.Buffer;
 	m_uiDescriptorSize = DEVICE->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	m_uiSRVSize = sizeof(ElementType) * size;

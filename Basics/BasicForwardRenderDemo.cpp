@@ -3,6 +3,8 @@
 #include "BasicForwardRenderResources.h"
 #include "Object.h"
 #include "Camera.h"
+
+using namespace BasicForward;
 using namespace std;
 
 void BasicForwardRenderDemo::Initialize()

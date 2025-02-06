@@ -4,6 +4,7 @@
 #include "LightDemo.h"
 #include "MeshHelper.h"
 
+using namespace Light;
 using namespace std;
 
 ////////////////////////
@@ -36,7 +37,7 @@ BOOL LightRootSignature::Initialize()
 		m_StaticSampler[0].MaxLOD = D3D12_FLOAT32_MAX;
 		m_StaticSampler[0].ShaderRegister = 0;
 		m_StaticSampler[0].RegisterSpace = 0;
-		m_StaticSampler[0].ShaderRegister = D3D12_SHADER_VISIBILITY_PIXEL;
+		m_StaticSampler[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	}
 
 	m_RootSignatureFlags =

@@ -3,6 +3,7 @@
 #include "InstancingResources.h"
 #include "Camera.h"
 
+using namespace Instancing;
 using namespace std;
 
 void InstancingDemo::Initialize()
