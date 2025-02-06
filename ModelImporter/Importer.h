@@ -48,7 +48,6 @@ private:
 	void ExportMesh(std::shared_ptr<ModelNode> pOutModelNode, FbxMesh* pfbxMesh);
 	void ExportMaterial(std::shared_ptr<ModelNode> pOutModelNode, FbxNode* pfbxNode);
 
-
 #pragma endregion FBX_TO_MODEL
 
 private:

@@ -433,6 +433,7 @@
     <ClInclude Include="LightResources.h">
       <Filter>Game\Demos\Level.0\All Of The Lights\Resources</Filter>
     </ClInclude>
+    <ClInclude Include="TextureManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Basics.ico">
@@ -626,6 +627,7 @@
     <ClCompile Include="LightResources.cpp">
       <Filter>Game\Demos\Level.0\All Of The Lights\Resources</Filter>
     </ClCompile>
+    <ClCompile Include="TextureManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

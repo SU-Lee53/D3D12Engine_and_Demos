@@ -5,7 +5,6 @@ using namespace std;
 
 BOOL ShaderManager::Initialize()
 {
-	// 여기는 나중에 외부 파일로 직렬화시켜 빼던가 하는게 좋을듯
 	std::vector<SHADER_COMPILE_TARGET_DESC> descs =
 	{
 		{SHADER_TYPE_VERTEX, L"../Shader/test.hlsl", "VSMain", "testVS"},
@@ -140,7 +139,7 @@ void ShaderManager::RemoveVertexShader(const string& key)
 {
 	auto target = m_vsMap.find(key);
 
-	// ref count 가 1이 아니다 -> 어디선가 쓰고있다
+	// ref count != 1 -> Still in used
 	if (target->second.use_count() != 1)
 		__debugbreak();
 
@@ -151,7 +150,7 @@ void ShaderManager::RemoveGeometryShader(const string& key)
 {
 	auto target = m_gsMap.find(key);
 
-	// ref count 가 1이 아니다 -> 어디선가 쓰고있다
+	// ref count != 1 -> Still in used
 	if (target->second.use_count() != 1)
 		__debugbreak();
 
@@ -162,7 +161,7 @@ void ShaderManager::RemoveHullShader(const string& key)
 {
 	auto target = m_hsMap.find(key);
 
-	// ref count 가 1이 아니다 -> 어디선가 쓰고있다
+	// ref count != 1 -> Still in used
 	if (target->second.use_count() != 1)
 		__debugbreak();
 
@@ -173,7 +172,7 @@ void ShaderManager::RemoveDomainShader(const string& key)
 {
 	auto target = m_dsMap.find(key);
 
-	// ref count 가 1이 아니다 -> 어디선가 쓰고있다
+	// ref count != 1 -> Still in used
 	if (target->second.use_count() != 1)
 		__debugbreak();
 
@@ -184,7 +183,7 @@ void ShaderManager::RemovePixelShader(const string& key)
 {
 	auto target = m_psMap.find(key);
 
-	// ref count 가 1이 아니다 -> 어디선가 쓰고있다
+	// ref count != 1 -> Still in used
 	if (target->second.use_count() != 1)
 		__debugbreak();
 
@@ -195,7 +194,7 @@ void ShaderManager::RemoveComputeShader(const string& key)
 {
 	auto target = m_csMap.find(key);
 
-	// ref count 가 1이 아니다 -> 어디선가 쓰고있다
+	// ref count != 1 -> Still in used
 	if (target->second.use_count() != 1)
 		__debugbreak();
 

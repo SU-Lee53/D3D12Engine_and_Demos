@@ -18,7 +18,6 @@ BOOL Texture::Initialize(std::wstring wstrPath)
 {
 	std::filesystem::path p(wstrPath);
 	m_strPath = p.string();
-	m_strName = p.stem().string();
 
 	D3D12_RESOURCE_DESC desc = {};
 	BOOL bResult = FALSE;
@@ -95,6 +94,7 @@ BOOL Texture::LoadFromDDSFile(std::wstring wstrPath, D3D12_RESOURCE_DESC& outDes
 	cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_pTexResource.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE));
 
 	RESOURCE.CloseAndExcuteCommandList();
+	RESOURCE.FenceAndWait();
 
 	outDesc = texDesc;
 
@@ -153,6 +153,7 @@ BOOL Texture::LoadFromWICFile(std::wstring wstrPath, D3D12_RESOURCE_DESC& outDes
 	cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_pTexResource.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE));
 
 	RESOURCE.CloseAndExcuteCommandList();
+	RESOURCE.FenceAndWait();
 
 	outDesc = texDesc;
 

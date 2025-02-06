@@ -205,6 +205,7 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureDemo.h" />
     <ClInclude Include="TextureDemoResources.h" />
+    <ClInclude Include="TextureManager.h" />
     <ClInclude Include="TimeManager.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="types.h" />
@@ -288,6 +289,7 @@
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TextureDemo.cpp" />
     <ClCompile Include="TextureDemoResources.cpp" />
+    <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="TimeManager.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Utils.cpp" />

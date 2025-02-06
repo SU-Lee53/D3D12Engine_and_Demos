@@ -246,6 +246,7 @@ public:
 protected:
 	std::unique_ptr<Transform> m_upTransform = nullptr;
 	std::unique_ptr<Texture> m_upTexture = nullptr;
+	std::vector<std::shared_ptr<ModelNode>> m_pModelNodes = {};
 
 	std::unique_ptr<Mesh<VertexType>> m_upMesh = nullptr;
 

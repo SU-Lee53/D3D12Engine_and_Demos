@@ -31,6 +31,7 @@ WPARAM Game::Run(const GameDesc& desc)
         RENDER.Initialize();
         RESOURCE.Initialize();
         GUI.Initialize();
+        TEXTURE.Initialize();
 
         m_Desc.app->Initialize();
     }

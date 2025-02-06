@@ -5,6 +5,8 @@
 using namespace std;
 using namespace std::literals;
 
+std::wstring Texture::m_wstrTextureSavePath = L"../Models/Texture/";
+
 Texture::Texture()
 {
 }
@@ -20,7 +22,7 @@ BOOL Texture::Initialize(const std::wstring& wstrPath)
 
 BOOL Texture::LoadFromFile(const std::wstring& wstrPath)
 {
-	m_strFilePath = string(wstrPath.begin(), wstrPath.end());
+	m_strFileName = string(wstrPath.begin(), wstrPath.end());
 
 	DirectX::TexMetadata texMetaData;
 

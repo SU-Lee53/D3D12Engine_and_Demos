@@ -94,6 +94,7 @@ using namespace std::literals;
 #include "InputManager.h"
 #include "TimeManager.h"
 #include "ImGuiManager.h"
+#include "TextureManager.h"
 
 // Object Components
 #include "Transform.h"

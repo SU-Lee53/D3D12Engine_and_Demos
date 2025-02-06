@@ -99,12 +99,15 @@ private:
 
 	// This can be extend near future
 	// Right now(01.26.2025), Export MaterialData, Texture(path)
+	// TODO : Copy texture file to ../Model/Texture (02.06.2025)
 	friend std::ostream& operator<<(std::ostream& os, const Material& material)
 	{
 		os << "<Material>" << std::endl;
 		os << material.m_MaterialData;
 		os << *material.m_pDiffuseTexture;
 		os << "</Material>" << std::endl;
+
+
 		return os;
 	}
 

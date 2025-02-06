@@ -1851,7 +1851,7 @@ void FbxLoader::ExportMaterial(std::shared_ptr<ModelNode> pOutModelNode, FbxNode
 	{
 		// Diffuse (+ Texture)
 		FbxProperty pfbxDiffuseProp = pfbxSurfaceMaterial->FindProperty(FbxSurfaceMaterial::sDiffuse);
-		wstring wstrDiffuseTexturePath = L"";
+		wstring wstrDiffuseTextureFilename = L"";
 		if (pfbxDiffuseProp.IsValid())
 		{
 			FbxColor fbxDiffuseColor = pfbxDiffuseProp.Get<FbxColor>();
@@ -1864,17 +1864,7 @@ void FbxLoader::ExportMaterial(std::shared_ptr<ModelNode> pOutModelNode, FbxNode
 
 				string strTextureFilename = pfbxFileTexture->GetFileName();
 				strTextureFilename = ExtractFilename(strTextureFilename);
-				wstrDiffuseTexturePath = wstring(strTextureFilename.begin(), strTextureFilename.end());
-				//try
-				//{
-				//	string strTexturePath = pfbxFileTexture->GetFileName();
-				//	filesystem::path fsTexturePath(strTexturePath);
-				//	wstrDiffuseTexturePath = fsTexturePath.wstring();
-				//}
-				//catch (::exception e)
-				//{
-				//	wstrDiffuseTexturePath = L"";	// Error Texture
-				//}
+				wstrDiffuseTextureFilename = wstring(strTextureFilename.begin(), strTextureFilename.end());
 			}
 		}
 		else
@@ -1919,7 +1909,7 @@ void FbxLoader::ExportMaterial(std::shared_ptr<ModelNode> pOutModelNode, FbxNode
 		}
 
 
-		pOutModelNode->pMaterial->Initialize(wstrDiffuseTexturePath);
+		pOutModelNode->pMaterial->Initialize(wstrDiffuseTextureFilename);
 		pOutModelNode->pMaterial->SetMaterialData(materialData);
 	}
 

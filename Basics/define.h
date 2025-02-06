@@ -26,6 +26,7 @@ public:										\
 #define TIME			GET_SINGLE(TimeManager)
 #define RESOURCE		GET_SINGLE(ResourceManager)
 #define GUI				GET_SINGLE(ImGuiManager)
+#define TEXTURE			GET_SINGLE(TextureManager)
 
 #define DEVICE				CORE.GetDevice()
 #define COMMAND_QUEUE		CORE.GetCommandQueue()
