@@ -65,7 +65,7 @@ BOOL Texture::LoadFromFile(const std::wstring& wstrPath)
 
 BOOL Texture::CreateErrorTexture(DirectX::TexMetadata& texMetaData)
 {
-	wstring errorPath = L"../Resource/error.jpg";
+	wstring errorPath = L"../Models/Texture/error.jpg";
 
 	if (FAILED(LoadFromWICFile(errorPath.c_str(), WIC_FLAGS_FORCE_RGB, &texMetaData, m_Image)))
 	{
