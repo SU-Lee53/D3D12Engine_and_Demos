@@ -101,7 +101,9 @@ private:
 	BOOL IsTexture(FbxSurfaceMaterial* pfbxSurfaceMaterial, const char* cstrPropertyName);
 
 	template<typename elementType, typename vectorType = typename elementType::ArrayElementType>
-	vectorType ExtractElement(elementType* pElement, int cpIndex, fbxsdk::FbxMesh* pfbxMesh, int polyIndex, int vtxIndex, const std::string& elementName);
+	vectorType ExtractElement(elementType* pElement, int cpIndex, int polyIndex, int vtxIndex, const std::string& elementName);
+
+	BOOL ConvertPolygonNormalToVertexNormal(FbxMesh* pfbxMesh);
 
 #pragma endregion FBX_VIEWER
 
@@ -145,7 +147,7 @@ private:
 };
 
 template<typename elementType, typename vectorType>
-inline vectorType FbxLoader::ExtractElement(elementType* pElement, int cpIndex, fbxsdk::FbxMesh* pfbxMesh, int polyIndex, int vtxIndex, const std::string& elementName)
+inline vectorType FbxLoader::ExtractElement(elementType* pElement, int cpIndex, int polyIndex, int vtxIndex, const std::string& elementName)
 {
 	vectorType v;
 
@@ -171,7 +173,7 @@ inline vectorType FbxLoader::ExtractElement(elementType* pElement, int cpIndex, 
 		}
 		else if (pElement->GetMappingMode() == FbxGeometryElement::eByPolygonVertex)
 		{
-			int index = vtxIndex;
+			int index = polyIndex * 3 + vtxIndex;
 			if (pElement->GetReferenceMode() == FbxGeometryElement::eDirect)
 			{
 				v = pElement->GetDirectArray().GetAt(index);
