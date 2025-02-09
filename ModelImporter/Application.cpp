@@ -3,6 +3,7 @@
 #include "Importer.h"
 #include "Model.h"
 #include "Camera.h"
+#include "AssimpConverter.h"
 
 using namespace std;
 
@@ -18,19 +19,11 @@ void Application::Initialize()
 {
 	m_pCamera = make_shared<Camera>();
 	m_pCamera->Initialize();
+	
+	m_pImporter = make_unique<AssimpConverter>();
+	m_pImporter->Initialize(L"../fbx/Gunship.fbx");
 
-	m_pImporter = make_unique<FbxLoader>();
-	m_pImporter->Initialize();
-	m_pImporter->LoadFBXFile("../fbx/corolla.fbx");
 
-	m_pLoadedFromImporter = make_shared<Model>();
-	m_pImporter->ExportModelInSceneToModel(m_pLoadedFromImporter);
-	//m_pLoadedFromImporter->ScaleModel(XMFLOAT3(0.01f, 0.01f, 0.01f));
-
-	m_pLoadedFromBinaries = make_shared<Model>();
-	m_pLoadedFromBinaries->Initialize();
-	m_pLoadedFromBinaries->ImportModelFromBinary("../Models/Binaries/corolla.bin");
-	m_pLoadedFromBinaries->ScaleModel(XMFLOAT3(0.1f, 0.1f, 0.1f));
 }
 
 void Application::Update()
@@ -42,7 +35,7 @@ void Application::Update()
 		{
 			if (ImGui::BeginTabItem("Importer"))
 			{
-				m_pImporter->ShowFBXNodeToImGui();
+				m_pImporter->PrintModelDataToImGui();
 				ImGui::EndTabItem();
 			}
 
@@ -60,7 +53,7 @@ void Application::Update()
 					ImGui::SameLine();
 					if (ImGui::Button("Export to binary"))
 					{
-						m_pLoadedFromImporter->ExportModelToBinary();
+						//m_pLoadedFromImporter->ExportModelToBinary();
 					}
 				}
 
@@ -74,8 +67,8 @@ void Application::Update()
 	ImGui::End();
 
 	// Model
-	m_pLoadedFromImporter->Update();
-	m_pLoadedFromBinaries->Update();
+	//m_pLoadedFromImporter->Update();
+	//m_pLoadedFromBinaries->Update();
 
 	// Cam
 	{
@@ -160,12 +153,12 @@ void Application::Update()
 
 void Application::Render()
 {
-	if (m_bShowWhat)
-	{
-		m_pLoadedFromImporter->Render(m_pCamera);
-	}
-	else
-	{
-		m_pLoadedFromBinaries->Render(m_pCamera);
-	}
+	//if (m_bShowWhat)
+	//{
+	//	m_pLoadedFromImporter->Render(m_pCamera);
+	//}
+	//else
+	//{
+	//	m_pLoadedFromBinaries->Render(m_pCamera);
+	//}
 }

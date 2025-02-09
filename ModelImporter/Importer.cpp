@@ -1065,6 +1065,12 @@ void FbxLoader::PrintMeshInfo(FbxMesh* pfbxMesh, const char* cstrNodeName)
 
 	MeshData meshData;
 
+	if (m_bIsNormalConverted == FALSE && pfbxMesh->GetElementNormal()->GetMappingMode() == FbxGeometryElement::eByPolygonVertex)
+	{
+		ConvertPolygonNormalToVertexNormal(pfbxMesh);
+		m_bIsNormalConverted = TRUE;
+	}
+
 	if (ImGui::TreeNode(strMeshTreeNodeName.c_str()))
 	{
 		string strIndexTreeNodeName = "Index Info | Name : " + string(cstrNodeName);
@@ -1074,25 +1080,14 @@ void FbxLoader::PrintMeshInfo(FbxMesh* pfbxMesh, const char* cstrNodeName)
 			int nVertices = 0;
 
 			FbxGeometryElementUV* uvElement = pfbxMesh->GetElementUV(0);
-			FbxGeometryElementNormal* normalElement = pfbxMesh->GetElementNormal(0);
-
-			BOOL bisNormalConverted = FALSE;
-			if (normalElement->GetMappingMode() == FbxGeometryElement::eByPolygonVertex)
-			{
-				if (!pfbxMesh->GetElementNormal(1))	// if converted vertices is not added -> convert
-				{
-					ConvertPolygonNormalToVertexNormal(pfbxMesh);
-				}
-				normalElement = pfbxMesh->GetElementNormal(1);
-				bisNormalConverted = TRUE;
-			}
+			FbxGeometryElementNormal* normalElement = m_bIsNormalConverted ? pfbxMesh->GetElementNormal(1) : pfbxMesh->GetElementNormal(0);
 
 			ImGui::Text("UV Mapping Mode : %s", GetFbxMappingNodeName(uvElement->GetMappingMode()).c_str());
 			ImGui::Text("UV Reference Mode : %s", GetFbxReferenceNodeName(uvElement->GetReferenceMode()).c_str());
 			
 			ImGui::Text("Normal Mapping Mode : %s", GetFbxMappingNodeName(normalElement->GetMappingMode()).c_str());
 			ImGui::Text("Normal Reference Mode : %s", GetFbxReferenceNodeName(normalElement->GetReferenceMode()).c_str());
-			ImGui::Text("Is normal converted to per polygons to per vertex? : %s", bisNormalConverted ? "TRUE" : "FALSE");
+			ImGui::Text("Is normal converted per polygons to per vertex? : %s", m_bIsNormalConverted ? "TRUE" : "FALSE");
 
 			for (int polyIndex = 0; polyIndex < nPolygons; polyIndex++)
 			{
@@ -2038,104 +2033,79 @@ void FbxLoader::ExportMesh(std::shared_ptr<ModelNode> pOutModelNode, FbxMesh* pf
 	vector<VertexType>	vertices = {};
 	vector<UINT>		indices = {};
 
-	MeshData meshData;
-	FbxGeometryElementUV* pUVElement = pfbxMesh->GetElementUV(0);
-	FbxGeometryElementNormal* pNormalElement = pfbxMesh->GetElementNormal(0);
-	FbxGeometryElementBinormal* pBinormalElement = pfbxMesh->GetElementBinormal(0);
-	FbxGeometryElementTangent* pTangentElement = pfbxMesh->GetElementTangent(0);
-	FbxGeometryElementVertexColor* pVertexColor = pfbxMesh->GetElementVertexColor(0);
+	VertexData vData;
+	UINT index;
 
-	int polyCount = pfbxMesh->GetPolygonCount();
+	int nPolygons = pfbxMesh->GetPolygonCount();
+	int nVertices = 0;
 
-	// unordered_map for avoid vertex repetition
-	unordered_multimap<VertexData, int> uniqueVertices;
-
-	for (int polyIndex = 0; polyIndex < polyCount; polyIndex++)
+	if (m_bIsNormalConverted == FALSE && pfbxMesh->GetElementNormal()->GetMappingMode() == FbxGeometryElement::eByPolygonVertex)
 	{
-		int polySize = pfbxMesh->GetPolygonSize(polyIndex);	// We already Triangulated whole scene, polySize must be 3
-		assert(polySize == 3);
+		ConvertPolygonNormalToVertexNormal(pfbxMesh);
+		m_bIsNormalConverted = TRUE;
+	}
 
+	map<int, VertexData> sortedVertices;	// map of { VertexData : cpIndex } -> this will sort vertex autometically
+
+	int nControlPoints = pfbxMesh->GetControlPointsCount();
+
+	for (int polyIndex = 0; polyIndex < nPolygons; polyIndex++)
+	{
+		int polySize = pfbxMesh->GetPolygonSize(polyIndex);
 		for (int vtxIndex = 0; vtxIndex < polySize; vtxIndex++)
 		{
-			// Control Point == Vertex
 			int cpIndex = pfbxMesh->GetPolygonVertex(polyIndex, vtxIndex);
 			FbxVector4 position = pfbxMesh->GetControlPointAt(cpIndex);
+			vData.position = position;
+			index = cpIndex;
 
 			// UV
-			FbxVector2 uv(0.0f, 0.0f);
-			if (pUVElement) {
-				if (pUVElement->GetMappingMode() == FbxGeometryElement::eByControlPoint)
-				{
-					int index = cpIndex;
-					if (pUVElement->GetReferenceMode() == FbxGeometryElement::eDirect)
-					{
-						uv = pUVElement->GetDirectArray().GetAt(index);
-					}
-					else if (pUVElement->GetReferenceMode() == FbxGeometryElement::eIndexToDirect)
-					{
-						int id = pUVElement->GetIndexArray().GetAt(index);
-						uv = pUVElement->GetDirectArray().GetAt(id);
-					}
-				}
-				else if (pUVElement->GetMappingMode() == FbxGeometryElement::eByPolygonVertex)
-				{
-					int textureUVIndex = pfbxMesh->GetTextureUVIndex(polyIndex, vtxIndex);
-					uv = pUVElement->GetDirectArray().GetAt(textureUVIndex);
-				}
-			}
+			FbxGeometryElementUV* uvElement = pfbxMesh->GetElementUV();
+			FbxVector2 uv = ExtractElement(uvElement, cpIndex, polyIndex, vtxIndex, "UV");
+			vData.uv = uv;
 
 			// Normal
-			FbxVector4 normal = ExtractElement(pNormalElement, cpIndex, polyIndex, meshData.indices.size(), "Normal"s);
+			FbxGeometryElementNormal* normalElement = m_bIsNormalConverted ? pfbxMesh->GetElementNormal(1) : pfbxMesh->GetElementNormal(0);
+			FbxVector4 normal = ExtractElement(normalElement, cpIndex, polyIndex, vtxIndex, "Normal");
+			vData.normal = normal;
 
-			// BiNormal
-			FbxVector4 binormal = ExtractElement(pBinormalElement, cpIndex, polyIndex, meshData.indices.size(), "Binormal"s);
+			// Binormal
+			FbxGeometryElementBinormal* binormalElement = pfbxMesh->GetElementBinormal(0);
+			FbxVector4 binormal = ExtractElement(binormalElement, cpIndex, polyIndex, vtxIndex, "Binormal");
+			vData.binormal = binormal;
 
-			// Tangent
-			FbxVector4 tangent = ExtractElement(pTangentElement, cpIndex, polyIndex, meshData.indices.size(), "Tangent"s);
+			// tangent
+			FbxGeometryElementTangent* tangentElement = pfbxMesh->GetElementTangent(0);
+			FbxVector4 tangent = ExtractElement(tangentElement, cpIndex, polyIndex, vtxIndex, "Tangent");
+			vData.tangent = tangent;
 
-			// Color
-			FbxColor color = ExtractElement(pVertexColor, cpIndex, polyIndex, meshData.indices.size(), "Color"s);
+			// Vertex Color
+			FbxGeometryElementVertexColor* vtxColorElement = pfbxMesh->GetElementVertexColor(0);
+			FbxColor color = ExtractElement(vtxColorElement, cpIndex, polyIndex, vtxIndex, "Color");
+			vData.color = color;
 
-
-			// Check if this vertex is already founded
-			VertexData v{ position, uv, normal, binormal, tangent, color };
-
-			auto it = uniqueVertices.find(v);
-			if (it == uniqueVertices.end()) // Vertex not founded yet
+			if (sortedVertices.find(cpIndex) == sortedVertices.end())	// if current vertices is not inserted
 			{
-				int newIndex = static_cast<int>(uniqueVertices.size());
-				uniqueVertices.insert(make_pair(v, newIndex));
+				sortedVertices.insert(make_pair(cpIndex, vData));
+			}
 
-				meshData.positions.push_back(position);
-				meshData.uvs.push_back(uv);
-				meshData.normals.push_back(normal);
-				meshData.binormals.push_back(binormal);
-				meshData.tangents.push_back(tangent);
-				meshData.colors.push_back(color);
-				meshData.indices.push_back(newIndex);
-			}
-			else	// Vertex already founded
-			{
-				meshData.indices.push_back(it->second);
-			}
+			indices.push_back(index);
 		}
 	}
 
-	vertices.resize(meshData.positions.size());
-
-	for (int i = 0; i < vertices.size(); i++)
+	vertices.resize(sortedVertices.size());
+	for (int i = 0; i < sortedVertices.size(); i++)
 	{
-		vertices[i].Position = XMFLOAT3((float)meshData.positions[i][0], (float)meshData.positions[i][1], (float)meshData.positions[i][2]);
-		vertices[i].TexCoord = XMFLOAT2((float)meshData.uvs[i][0], (float)meshData.uvs[i][1]);
-		vertices[i].Normal = XMFLOAT3((float)meshData.normals[i][0], (float)meshData.normals[i][1], (float)meshData.normals[i][2]);
-		vertices[i].BiNormal = XMFLOAT3((float)meshData.binormals[i][0], (float)meshData.binormals[i][1], (float)meshData.binormals[i][2]);
-		vertices[i].Tangent = XMFLOAT3((float)meshData.tangents[i][0], (float)meshData.tangents[i][1], (float)meshData.tangents[i][2]);
-		vertices[i].Color = XMFLOAT4((float)meshData.colors[i][0], (float)meshData.colors[i][1], (float)meshData.colors[i][2], (float)meshData.colors[i][3]);
+		vertices[i].Position = XMFLOAT3(sortedVertices[i].position[0], sortedVertices[i].position[1], sortedVertices[i].position[2]);
+		vertices[i].TexCoord = XMFLOAT2(sortedVertices[i].uv[0], sortedVertices[i].uv[1]);
+		vertices[i].Normal = XMFLOAT3(sortedVertices[i].normal[0], sortedVertices[i].normal[1], sortedVertices[i].normal[2]);
+		vertices[i].BiNormal = XMFLOAT3(sortedVertices[i].binormal[0], sortedVertices[i].binormal[1], sortedVertices[i].binormal[2]);
+		vertices[i].Tangent = XMFLOAT3(sortedVertices[i].tangent[0], sortedVertices[i].tangent[1], sortedVertices[i].tangent[2]);
+		vertices[i].Color = XMFLOAT4(sortedVertices[i].color[0], sortedVertices[i].color[1], sortedVertices[i].color[2], sortedVertices[i].color[3]);
 	}
 
-	indices.assign(meshData.indices.begin(), meshData.indices.end());
-
 	pOutModelNode->pMesh->Initialize(vertices, indices);
+
 }
 
 void FbxLoader::ExportMaterial(std::shared_ptr<ModelNode> pOutModelNode, FbxNode* pfbxNode)

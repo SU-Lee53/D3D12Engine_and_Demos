@@ -58,6 +58,9 @@
     <Filter Include="D3D11Renderer\Camera">
       <UniqueIdentifier>{a7c7cb2e-2e31-4d37-b5b5-bb385681c8db}</UniqueIdentifier>
     </Filter>
+    <Filter Include="AssimpConverter">
+      <UniqueIdentifier>{b1aff5d0-780b-4acc-9355-f7e3fdb0651f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -150,6 +153,9 @@
     <ClInclude Include="InputManager.h">
       <Filter>D3D11Renderer\Managers</Filter>
     </ClInclude>
+    <ClInclude Include="AssimpConverter.h">
+      <Filter>AssimpConverter</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="ModelImporter.ico">
@@ -231,6 +237,9 @@
     </ClCompile>
     <ClCompile Include="InputManager.cpp">
       <Filter>D3D11Renderer\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="AssimpConverter.cpp">
+      <Filter>AssimpConverter</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -2,6 +2,7 @@
 //
 #include "stdafx.h"
 #include "ModelImporter.h"
+#include "AssimpConverter.h"
 #include "Application.h"
 
 #define MAX_LOADSTRING 100

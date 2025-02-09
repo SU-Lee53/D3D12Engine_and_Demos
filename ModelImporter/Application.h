@@ -1,6 +1,7 @@
 #pragma once
 
 class FbxLoader;
+class AssimpConverter;
 
 class Application
 {
@@ -14,7 +15,7 @@ public:
 	void Render();
 
 private:
-	std::unique_ptr<FbxLoader> m_pImporter = nullptr;
+	std::unique_ptr<AssimpConverter> m_pImporter = nullptr;
 	std::shared_ptr<class Model> m_pLoadedFromImporter;
 	std::shared_ptr<class Model> m_pLoadedFromBinaries;
 

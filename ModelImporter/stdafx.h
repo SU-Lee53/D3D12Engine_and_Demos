@@ -87,6 +87,13 @@ using namespace Microsoft::WRL;
 #include "fbxsdk.h"
 #define FBXSDK_SHARED
 
+// Assimp
+#pragma comment(lib,  "../library/lib/assimp/x64/assimp-vc143-mt.lib")
+#include "../library/include/assimp/Importer.hpp"
+#include "../library/include/assimp/scene.h"
+#include "../library/include/assimp/postprocess.h"
+
+
 // headers
 #include "define.h"
 #include "CB_types.h"

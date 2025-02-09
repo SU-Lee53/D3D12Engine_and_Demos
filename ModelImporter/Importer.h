@@ -143,6 +143,7 @@ private:
 
 	UINT m_tabs = 0;
 
+	BOOL m_bIsNormalConverted = FALSE;
 
 };
 
