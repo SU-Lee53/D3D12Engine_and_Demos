@@ -92,6 +92,8 @@ using namespace Microsoft::WRL;
 #include "../library/include/assimp/Importer.hpp"
 #include "../library/include/assimp/scene.h"
 #include "../library/include/assimp/postprocess.h"
+#include "../library/include/assimp/vector3.h"
+#include "../library/include/assimp/matrix4x4.h"
 
 
 // headers

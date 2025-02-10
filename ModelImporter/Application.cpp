@@ -21,7 +21,7 @@ void Application::Initialize()
 	m_pCamera->Initialize();
 	
 	m_pImporter = make_unique<AssimpConverter>();
-	m_pImporter->Initialize(L"../fbx/Gunship.fbx");
+	m_pImporter->Initialize(L"../fbx/corolla.fbx");
 
 
 }
