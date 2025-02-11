@@ -79,38 +79,48 @@ void AssimpConverter::PrintNodeInfo(aiNode* pNode)
 		string strNodeName = pNode->mName.C_Str();
 		string strTreeNodeName = "Node Name : " + strNodeName;
 		PrintTabs();
-		if (ImGui::TreeNode(strTreeNodeName.c_str()))
+
+		TREENODE_BEGIN(strTreeNodeName.c_str())
 		{
 			// Mesh
 			string strMeshTreeNodeName = strNodeName + "'s Mesh"s;
-			if(ImGui::TreeNode(strMeshTreeNodeName.c_str()))
+			TREENODE_BEGIN(strTreeNodeName.c_str())
 			{
 				// Position
 				for (int i = 0; i < pNode->mNumMeshes; i++)
 				{
-					UINT meshIndex = *pNode->mMeshes;
+					UINT meshIndex = pNode->mMeshes[i];
 					aiMesh* pMesh = m_rpScene->mMeshes[meshIndex];
+
 					string strVtxTreeNodeName = strNodeName + "'s Vertices"s;
-					if (ImGui::TreeNode(strVtxTreeNodeName.c_str()))
+					TREENODE_BEGIN(strVtxTreeNodeName.c_str())
 					{
 						ImGui::Text("nVertices : %d", pMesh->mNumVertices);
+
+						ImGui::Indent();
+
 						for (int vtxIndex = 0; vtxIndex < pMesh->mNumVertices; vtxIndex++)
 						{
 							aiVector3D vtx = pMesh->mVertices[vtxIndex];
 							ImGui::Text("#%d : (%f, %f, %f)", vtxIndex, vtx[0], vtx[1], vtx[2]);
 						}
-						ImGui::TreePop();
+						ImGui::Unindent();
+						ImGui::Separator();
 					}
+					TREENODE_END
 
 					// UV : Can have multiple channels
 					for (int nUVChannels = 0; nUVChannels < pMesh->GetNumUVChannels(); nUVChannels++)
 					{
 						string strUVTreeNodeName = strNodeName + "'s UV #" + to_string(nUVChannels);
-						if (ImGui::TreeNode(strUVTreeNodeName.c_str()))
+						TREENODE_BEGIN(strUVTreeNodeName.c_str())
 						{
 							aiVector3D* uvChannel = pMesh->mTextureCoords[nUVChannels];
 							unsigned int nUVComponents = pMesh->mNumUVComponents[nUVChannels];
 							ImGui::Text("UV Channel #%d | Dimension : %d", nUVChannels, nUVComponents);	// In assimp, nUVs is also nVertices
+
+							ImGui::Indent();
+
 							for (int uvIndex = 0; uvIndex < pMesh->mNumVertices; uvIndex++)
 							{
 								aiVector3D uv = uvChannel[uvIndex];
@@ -122,27 +132,32 @@ void AssimpConverter::PrintNodeInfo(aiNode* pNode)
 									ImGui::Text("#%d : (%f, %f, %f)", uvIndex, uv[0], uv[1], uv[2]);
 							}
 
-							ImGui::TreePop();
+							ImGui::Unindent();
+							ImGui::Separator();
 						}
+						TREENODE_END
 					}
 
 					// Normal
 					string strNormalTreeNodeName = strNodeName + "'s Normals";
-					if (ImGui::TreeNode(strNormalTreeNodeName.c_str()))
+					TREENODE_BEGIN(strNormalTreeNodeName.c_str())
 					{
 						ImGui::Text("nNormals : %d", pMesh->mNumVertices);	// In assimp, nNormals is nVertices
+						ImGui::Indent();
 						for (int nIndex = 0; nIndex < pMesh->mNumVertices; nIndex++)
 						{
 							aiVector3D normal = pMesh->mNormals[nIndex];
 							ImGui::Text("#%d : (%f, %f, %f)", nIndex, normal[0], normal[1], normal[2]);
 						}
 
-						ImGui::TreePop();
+						ImGui::Unindent();
+						ImGui::Separator();
 					}
+					TREENODE_END
 
 					// BiNormal, Tangent
 					string strTangentTreeNodeName = strNodeName + "'s Tangent";
-					if (ImGui::TreeNode(strTangentTreeNodeName.c_str()))
+					TREENODE_BEGIN(strTangentTreeNodeName.c_str())
 					{
 						aiVector3D* tangents = pMesh->mTangents;
 						aiVector3D* normals = pMesh->mNormals;
@@ -154,22 +169,21 @@ void AssimpConverter::PrintNodeInfo(aiNode* pNode)
 							aiVector3D normal = normals[nIndex];
 							aiVector3D biTangent = biTangents[nIndex];
 
-							ImGui::NewLine();
+							ImGui::Indent();
 							ImGui::Text("#%d", nIndex);
 							ImGui::Text("Tangent : (%f, %f, %f)", tangent[0], tangent[1], tangent[2]);
 							ImGui::Text("Normal : (%f, %f, %f)", normal[0], normal[1], normal[2]);
 							ImGui::Text("Bitangent : (%f, %f, %f)", biTangent[0], biTangent[1], biTangent[2]);
+							ImGui::Unindent();
+							ImGui::Separator();
 						}
-
-
-						ImGui::TreePop();
 					}
-
+					TREENODE_END
 
 
 					// Face (index)
 					string strFaceTreeNodeName = strNodeName + "'s Faces";
-					if (ImGui::TreeNode(strFaceTreeNodeName.c_str()))
+					TREENODE_BEGIN(strFaceTreeNodeName.c_str())
 					{
 						aiFace* pFace = pMesh->mFaces;
 						UINT nFaces = pMesh->mNumFaces;
@@ -178,21 +192,22 @@ void AssimpConverter::PrintNodeInfo(aiNode* pNode)
 						{
 							aiFace face = pFace[faceIndex];
 							UINT nFaceIndices = face.mNumIndices;
-							ImGui::NewLine();
+							ImGui::Indent();
 							for (int nIndices = 0; nIndices < nFaceIndices; nIndices++)
 							{
 								ImGui::Text("%d - #%d : %d", faceIndex, nIndices, face.mIndices[nIndices]);
 							}
+							ImGui::Unindent();
+							ImGui::Separator();
 
 						}
-
-						ImGui::TreePop();
 					}
-
+					TREENODE_END
 
 					string strPropTreeNodeName = strNodeName + "'s Properties"s;
-					if (ImGui::TreeNode(strPropTreeNodeName.c_str()))
+					TREENODE_BEGIN(strPropTreeNodeName.c_str())
 					{
+						ImGui::Indent();
 						ImGui::Text("Mesh Properties");
 						ImGui::Text("HasBones? : %s", pMesh->HasBones() ? "TRUE" : "FALSE");
 						ImGui::Text("HasFaces? : %s", pMesh->HasFaces() ? "TRUE" : "FALSE");
@@ -207,18 +222,18 @@ void AssimpConverter::PrintNodeInfo(aiNode* pNode)
 						{
 							ImGui::Text("HasVertexColors of Channel #%d? : %s", i, pMesh->HasVertexColors(i) ? "TRUE" : "FALSE");
 						}
-						ImGui::TreePop();
+						ImGui::Unindent();
 					}
-					
+					TREENODE_END
 
 				}
 
-				ImGui::TreePop();
 			}
+			TREENODE_END
 
 			// MetaData?
 			string strMetaTreeNodeName = strNodeName + "'s MetaData";
-			if (ImGui::TreeNode(strMetaTreeNodeName.c_str()))
+			TREENODE_BEGIN(strMetaTreeNodeName.c_str())
 			{
 				aiMetadata* pMetaData = pNode->mMetaData;
 				ImGui::Text("mNumProperties : %d", pMetaData->mNumProperties);
@@ -293,13 +308,13 @@ void AssimpConverter::PrintNodeInfo(aiNode* pNode)
 						break;
 					}
 				}
-				ImGui::TreePop();
 			}
+			TREENODE_END
 
 			// Transform
 			// Something wrong in mTransformation
 			string strTransformNodeName = strNodeName + "'s SRT";
-			if (ImGui::TreeNode(strTransformNodeName.c_str()))
+			TREENODE_BEGIN(strTransformNodeName.c_str())
 			{
 				aiMatrix4x4 aiMattransform = pNode->mTransformation;
 				XMFLOAT4X4 xmMatTransform(aiMattransform[0]);
@@ -320,15 +335,141 @@ void AssimpConverter::PrintNodeInfo(aiNode* pNode)
 					xmMatTransform.m[1][0], xmMatTransform.m[1][1], xmMatTransform.m[1][2], xmMatTransform.m[1][3],
 					xmMatTransform.m[2][0], xmMatTransform.m[2][1], xmMatTransform.m[2][2], xmMatTransform.m[2][3],
 					xmMatTransform.m[3][0], xmMatTransform.m[3][1], xmMatTransform.m[3][2], xmMatTransform.m[3][3]
-					);
-
-				ImGui::TreePop();
+				);
 			}
+			TREENODE_END
+
+			// Material
+			string strMaterialNodeName = strNodeName + "'s Material";
+			TREENODE_BEGIN(strMaterialNodeName.c_str())
+			{
+				for (int i = 0; i < pNode->mNumMeshes; i++)
+				{
+					UINT meshIndex = pNode->mMeshes[i];
+					aiMesh* pMesh = m_rpScene->mMeshes[meshIndex];
+					UINT materialIndex = pMesh->mMaterialIndex;
+					aiMaterial* pMaterial = m_rpScene->mMaterials[materialIndex];
+
+					aiString aistrMaterialName;
+					if (pMaterial->Get(AI_MATKEY_NAME, aistrMaterialName) == AI_SUCCESS)
+					{
+						ImGui::Text("Material Name : %s", aistrMaterialName.C_Str());
+					}
+					else
+					{
+						ImGui::TextColored(ImVec4(1.f,0.f,0.f,1.f), "Material Name : UNKNOWN");
+					}
+
+					ImGui::Separator();
+
+					// Material Properties
+					string strPropertyNodeName = strNodeName + "'s Properties";
+					TREENODE_BEGIN(strPropertyNodeName.c_str())
+					{
+						ImGui::Text("nProperties : %d", pMaterial->mNumProperties);
+						for (int propIndex = 0; propIndex < pMaterial->mNumProperties; propIndex++)
+						{
+							aiMaterialProperty* pProperty = pMaterial->mProperties[propIndex];
+
+							ImGui::Text("Property #%d", propIndex);
+
+							ImGui::Indent();
+							string strPropKey = pProperty->mKey.C_Str();
+							aiPropertyTypeInfo eType = pProperty->mType;
+							UINT uiDataLength = pProperty->mDataLength;
+							UINT uiIndex = pProperty->mIndex;
+							UINT uiSemantic = pProperty->mSemantic;
+
+							ImGui::Text("mKey : %s", strPropKey.c_str());
+							ImGui::Text("mType : %s", GetPropertyTypeToString(eType).c_str());
+							ImGui::Text("mType(raw) : %u", eType);
+							ImGui::Text("mDataLength : %u bytes", uiDataLength);
+							ImGui::Text("mIndex : %u", uiIndex);
+							ImGui::Text("mSemantic : %u", uiSemantic);
+
+							ImGui::Unindent();
+							ImGui::Separator();
+						}
+					}
+					TREENODE_END
+
+					// Texture Paths
+					string strTextureNodeName = strNodeName + "'s Textures";
+					TREENODE_BEGIN(strTextureNodeName.c_str())
+					{
+						aiString pTexturePath;
+
+						pMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_DIFFUSE, 0), pTexturePath);
+						ImGui::Text("DIFFUSE : %s", pTexturePath.C_Str());
+
+						pMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_SPECULAR, 0), pTexturePath);
+						ImGui::Text("SPECULAR : %s", pTexturePath.C_Str());
+
+						pMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_AMBIENT, 0), pTexturePath);
+						ImGui::Text("AMBIENT : %s", pTexturePath.C_Str());
+
+						pMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_EMISSIVE, 0), pTexturePath);
+						ImGui::Text("EMISSIVE : %s", pTexturePath.C_Str());
+
+						pMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_HEIGHT, 0), pTexturePath);
+						ImGui::Text("HEIGHT : %s", pTexturePath.C_Str());
+
+						pMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_NORMALS, 0), pTexturePath);
+						ImGui::Text("NORMALS : %s", pTexturePath.C_Str());
+
+						pMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_SHININESS, 0), pTexturePath);
+						ImGui::Text("SHININESS : %s", pTexturePath.C_Str());
+
+						pMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_DISPLACEMENT, 0), pTexturePath);
+						ImGui::Text("DISPLACEMENT : %s", pTexturePath.C_Str());
+
+						pMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_LIGHTMAP, 0), pTexturePath);
+						ImGui::Text("LIGHTMAP : %s", pTexturePath.C_Str());
+
+						pMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_REFLECTION, 0), pTexturePath);
+						ImGui::Text("REFLECTION : %s", pTexturePath.C_Str());
+					}
+					TREENODE_END
+
+					// Colors
+					string strColorNodeName = strNodeName + "'s Colors";
+					TREENODE_BEGIN(strColorNodeName.c_str())
+					{
+						aiColor4D aiColor;
+
+						pMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, aiColor);
+						ImGui::Text("DIFFUSE : (%f, %f, %f, %f)", aiColor.r, aiColor.g, aiColor.b, aiColor.a);
+
+						pMaterial->Get(AI_MATKEY_COLOR_AMBIENT, aiColor);
+						ImGui::Text("AMBIENT : (%f, %f, %f, %f)", aiColor.r, aiColor.g, aiColor.b, aiColor.a);
+
+						pMaterial->Get(AI_MATKEY_COLOR_SPECULAR, aiColor);
+						ImGui::Text("SPECULAR : (%f, %f, %f, %f)", aiColor.r, aiColor.g, aiColor.b, aiColor.a);
+
+						pMaterial->Get(AI_MATKEY_COLOR_EMISSIVE, aiColor);
+						ImGui::Text("EMISSIVE : (%f, %f, %f, %f)", aiColor.r, aiColor.g, aiColor.b, aiColor.a);
+
+						pMaterial->Get(AI_MATKEY_COLOR_TRANSPARENT, aiColor);
+						ImGui::Text("TRANSPARENT : (%f, %f, %f, %f)", aiColor.r, aiColor.g, aiColor.b, aiColor.a);
+
+						pMaterial->Get(AI_MATKEY_COLOR_REFLECTIVE, aiColor);
+						ImGui::Text("REFLECTIVE : (%f, %f, %f, %f)", aiColor.r, aiColor.g, aiColor.b, aiColor.a);
+
+
+					}
+					TREENODE_END
+					
 
 
 
-			ImGui::TreePop();
+
+
+				}
+			}
+			TREENODE_END
+
 		}
+		TREENODE_END
 
 	}
 

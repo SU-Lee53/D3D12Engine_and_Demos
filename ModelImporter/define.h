@@ -12,6 +12,9 @@ public:										\
 		return s_instance;					\
 	}
 
+#define TREENODE_BEGIN(lable)	if (ImGui::TreeNode(lable)) {
+#define TREENODE_END			ImGui::TreePop(); }
+
 
 #define GET_SINGLE(classname)	classname::GetInstance()
 

@@ -33,6 +33,7 @@ private:
 
 
 public:
+	// Utilities
 	void PrintTabs();
 	BOOL IsNodeHelperNode(aiNode* pNode)
 	{
@@ -45,6 +46,43 @@ public:
 		return TRUE;
 	}
 
+	std::string GetPropertyTypeToString(aiPropertyTypeInfo type)
+	{
+		std::string ret;
+
+		switch (type)
+		{
+		case aiPTI_Float:
+			ret = "aiPTI_Float"s;
+			break;
+		case aiPTI_Double:
+			ret = "aiPTI_Double"s;
+			break;
+		case aiPTI_String:
+			ret = "aiPTI_String"s;
+			break;
+		case aiPTI_Integer:
+			ret = "aiPTI_Integer"s;
+			break;
+		case aiPTI_Buffer:
+			ret = "aiPTI_Buffer"s;
+			break;
+		case _aiPTI_Force32Bit:
+			ret = "_aiPTI_Force32Bit"s;
+			break;
+		default:
+			ret = "UNKNOWN"s;
+			break;
+		}
+
+		return ret;
+	}
+
+	template<typename T>
+	std::optional<T> QueryDataByMaterialProperty(aiMaterial* pMaterial, aiMaterialProperty* pProp);
+
+	std::string QueryRawData(aiMaterialProperty* pProp);
+
 private:
 	std::shared_ptr<Assimp::Importer> m_pImporter = nullptr;
 	const aiScene* m_rpScene = nullptr;
@@ -55,3 +93,24 @@ private:
 	UINT m_tabs = 0;
 };
 
+template<typename T>
+inline std::optional<T> AssimpConverter::QueryDataByMaterialProperty(aiMaterial* pMaterial, aiMaterialProperty* pProp)
+{
+	T data;
+
+	if (pMaterial->Get(pProp->mKey.C_Str(), data) == AI_SUCCESS)
+	{
+		return data;
+	}
+	else
+	{
+		return std::nullopt;
+	}
+
+}
+
+inline std::string AssimpConverter::QueryRawData(aiMaterialProperty* pProp)
+{
+	std::string raw(reinterpret_cast<const char*>(pProp->mData), pProp->mDataLength);
+	return raw;
+}
