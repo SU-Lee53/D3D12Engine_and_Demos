@@ -23,6 +23,13 @@ void Application::Initialize()
 	m_pImporter = make_unique<AssimpConverter>();
 	m_pImporter->Initialize(L"../fbx/corolla.fbx");
 
+	m_pLoadedFromImporter = make_shared<Model>();
+	m_pImporter->ExportMeshInConverterToModel(m_pLoadedFromImporter);
+	m_pLoadedFromImporter->ScaleModel(XMFLOAT3(0.1f, 0.1f, 0.1f));
+
+
+	m_pLoadedFromBinaries = make_shared<Model>();
+	m_pLoadedFromBinaries->ImportModelFromBinary("../Models/Binaries/Hummer.bin");
 
 }
 
@@ -53,7 +60,7 @@ void Application::Update()
 					ImGui::SameLine();
 					if (ImGui::Button("Export to binary"))
 					{
-						//m_pLoadedFromImporter->ExportModelToBinary();
+						m_pLoadedFromImporter->ExportModelToBinary();
 					}
 				}
 
@@ -67,8 +74,8 @@ void Application::Update()
 	ImGui::End();
 
 	// Model
-	//m_pLoadedFromImporter->Update();
-	//m_pLoadedFromBinaries->Update();
+	m_pLoadedFromImporter->Update();
+	m_pLoadedFromBinaries->Update();
 
 	// Cam
 	{
@@ -153,12 +160,12 @@ void Application::Update()
 
 void Application::Render()
 {
-	//if (m_bShowWhat)
-	//{
-	//	m_pLoadedFromImporter->Render(m_pCamera);
-	//}
-	//else
-	//{
-	//	m_pLoadedFromBinaries->Render(m_pCamera);
-	//}
+	if (m_bShowWhat)
+	{
+		m_pLoadedFromImporter->Render(m_pCamera);
+	}
+	else
+	{
+		m_pLoadedFromBinaries->Render(m_pCamera);
+	}
 }

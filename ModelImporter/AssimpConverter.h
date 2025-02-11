@@ -1,5 +1,8 @@
 #pragma once
 
+class Model;
+struct ModelNode;
+
 class AssimpConverter
 {
 public:
@@ -15,6 +18,9 @@ public:
 
 private:
 	void PrintNodeInfo(aiNode* pNode);
+	void PrintTransformInfo(aiNode* pNode);
+	void PrintMeshInfo(aiNode* pNode);
+	void PrintMaterialInfo(aiNode* pNode);
 
 
 #pragma endregion PRINT_DATAS
@@ -22,12 +28,13 @@ private:
 #pragma region EXPORT_TO_MODEL
 
 public:
-	void ExportMeshInConverterToModel();
+	void ExportMeshInConverterToModel(std::shared_ptr<Model> pOutModel);
 
 private:
-	void ExportNode();
-	void ExportMesh();
-	void ExportMaterial();
+	void ExportNode(aiNode* pNode, std::shared_ptr<Model> pOutModel, int curindex, int parentIndex);
+	BOOL ExportMesh(aiMesh* pMesh, std::shared_ptr<ModelNode> pOutModel);
+	BOOL ExportTransform(aiNode* pNode, std::shared_ptr<ModelNode> pOutModel);
+	BOOL ExportMaterial(aiMaterial* pMaterial, std::shared_ptr<ModelNode> pOutModel);
 
 #pragma endregion EXPORT_TO_MODEL
 

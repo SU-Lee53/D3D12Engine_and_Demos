@@ -219,7 +219,10 @@ void Model::PrintInfoToImGui()
 		for (int i = 0; i < m_pModelNodes.size(); i++)
 		{
 			const bool bSelected = (m_ItemSelected == i);
-			if (ImGui::Selectable(m_pModelNodes[i]->strName.c_str(), bSelected))
+
+			string shownName = m_pModelNodes[i]->strName.empty() ? "NAME_EMPTY" : m_pModelNodes[i]->strName.c_str();
+
+			if (ImGui::Selectable(shownName.c_str(), bSelected))
 				m_ItemSelected = i;
 
 			if (m_ItemHighlighted && ImGui::IsItemHovered())
