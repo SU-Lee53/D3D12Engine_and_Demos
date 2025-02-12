@@ -5,6 +5,9 @@
 using namespace std;
 namespace fs = std::filesystem;
 
+static_assert(sizeof(aiMatrix4x4) == (16 * sizeof(float)), "aiMatrix4x4 Align Error");
+static_assert(sizeof(aiMatrix4x4) == sizeof(XMFLOAT4X4), "aiMatrix4x4 Align Error");
+
 AssimpConverter::AssimpConverter()
 {
 }
@@ -28,7 +31,7 @@ BOOL AssimpConverter::Initialize(const std::wstring& wstrPath)
 
 	string strPath(wstrPath.begin(), wstrPath.end());
 
-	m_rpScene = m_pImporter->ReadFile(strPath,
+	m_rpScene = m_pImporter->ReadFile(strPath, 
 		aiProcess_MakeLeftHanded |
 		aiProcess_FlipUVs |
 		aiProcess_FlipWindingOrder |	// Convert to D3D
@@ -42,12 +45,15 @@ BOOL AssimpConverter::Initialize(const std::wstring& wstrPath)
 
 	if (m_rpScene == nullptr)
 	{
-		OutputDebugStringA("Scene is not imported\n");
+		OutputDebugStringA(m_pImporter->GetErrorString());
 		__debugbreak();
 		return FALSE;
 	}
 
 	m_rpRootNode = m_rpScene->mRootNode;
+
+	aiMatrix4x4 mat;
+	mat = m_rpRootNode->mTransformation;
 
 	return TRUE;
 }
@@ -62,7 +68,7 @@ void AssimpConverter::PrintModelDataToImGui()
 		nVertices += m_rpScene->mMeshes[i]->mNumVertices;
 	}
 
-	ImGui::NewLine();
+	ImGui::Separator();
 	ImGui::Text("Total Vertex Count : %d", nVertices);
 }
 
@@ -70,7 +76,7 @@ void AssimpConverter::PrintNodeInfo(aiNode* pNode)
 {
 	ImGui::Indent();
 
-	string strNodeTreeName = "Node Name = " + string(pNode->mName.C_Str());
+	string strNodeTreeName = "Node Name : " + string(pNode->mName.C_Str());
 	if (ImGui::TreeNode(strNodeTreeName.c_str()))
 	{
 		PrintTransformInfo(pNode);
@@ -95,12 +101,13 @@ void AssimpConverter::PrintTransformInfo(aiNode* pNode)
 	XMFLOAT4X4 matTransform(aimatTransform[0]);
 
 	// Transpose
-	XMMATRIX xmMat = XMLoadFloat4x4(&matTransform);
-	XMMatrixTranspose(xmMat);
-	XMStoreFloat4x4(&matTransform, xmMat);
+	//XMMATRIX xmMat = XMLoadFloat4x4(&matTransform);
+	//XMMatrixTranspose(xmMat);
+	//XMStoreFloat4x4(&matTransform, xmMat);
 
 	string strNodeName = pNode->mName.C_Str();
-	string strTreeName = "Transfrom info" + strNodeName;
+	string strTreeName = "Transfrom info : " + strNodeName;
+
 
 	if (ImGui::TreeNode(strTreeName.c_str()))
 	{
@@ -368,7 +375,8 @@ BOOL AssimpConverter::ExportTransform(aiNode* pNode, std::shared_ptr<ModelNode> 
 
 	// Current aiNode::mTransformation is somewhat weird
 	// but Decomposed data looks legit. so let's use it
-	aiMatrix4x4 transform = pNode->mTransformation;
+	aiMatrix4x4 transform;
+	transform = pNode->mTransformation;
 
 	aiVector3D vPosition(0.f, 0.f, 0.f);
 	aiVector3D vRotation(0.f, 0.f, 0.f);

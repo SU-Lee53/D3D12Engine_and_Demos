@@ -111,9 +111,6 @@
     <ClInclude Include="define.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Importer.h">
-      <Filter>Importer</Filter>
-    </ClInclude>
     <ClInclude Include="Application.h">
       <Filter>App</Filter>
     </ClInclude>
@@ -198,9 +195,6 @@
     </ClCompile>
     <ClCompile Include="Imgui\imgui_widgets.cpp">
       <Filter>D3D11Renderer\ImGUI</Filter>
-    </ClCompile>
-    <ClCompile Include="Importer.cpp">
-      <Filter>Importer</Filter>
     </ClCompile>
     <ClCompile Include="Application.cpp">
       <Filter>App</Filter>

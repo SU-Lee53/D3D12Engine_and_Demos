@@ -52,6 +52,7 @@ void Model::Render(shared_ptr<Camera> pCamera)
 		CB_TRANSFORM transformData = {};
 		::ZeroMemory(&transformData, sizeof(transformData));
 		{
+			//transformData.matLocal = CalculateRelativeTranforms(node);
 			transformData.matLocal = node->pTransform->GetLocalMatrixTransposed();
 			transformData.matWorld = node->pTransform->GetWorldMatrixTransposed();
 		}
@@ -291,4 +292,25 @@ void Model::PrintInfoToImGui()
 	}
 
 
+}
+
+XMFLOAT4X4 Model::CalculateRelativeTranforms(std::shared_ptr<ModelNode> pNode)
+{
+	XMFLOAT4X4 res = pNode->pTransform->GetLocalMatrixTransposed();
+	XMMATRIX xmRes = XMLoadFloat4x4(&res);
+
+	std::shared_ptr<ModelNode> ancestor = m_pModelNodes[pNode->parentIndex];
+	while (ancestor->parentIndex != 0)
+	{
+		XMFLOAT4X4 Anc = ancestor->pTransform->GetLocalMatrixTransposed();
+		XMMATRIX xmAnc = XMLoadFloat4x4(&Anc);
+
+		xmRes = XMMatrixMultiply(xmRes, xmAnc);
+
+		ancestor = m_pModelNodes[ancestor->parentIndex];
+	}
+	
+	XMStoreFloat4x4(&res, xmRes);
+
+	return res;
 }

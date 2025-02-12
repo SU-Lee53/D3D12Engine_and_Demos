@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "Application.h"
-#include "Importer.h"
 #include "Model.h"
 #include "Camera.h"
 #include "AssimpConverter.h"
@@ -21,7 +20,7 @@ void Application::Initialize()
 	m_pCamera->Initialize();
 	
 	m_pImporter = make_unique<AssimpConverter>();
-	m_pImporter->Initialize(L"../fbx/corolla.fbx");
+	m_pImporter->Initialize(L"../fbx/Gunship.fbx");
 
 	m_pLoadedFromImporter = make_shared<Model>();
 	m_pImporter->ExportMeshInConverterToModel(m_pLoadedFromImporter);

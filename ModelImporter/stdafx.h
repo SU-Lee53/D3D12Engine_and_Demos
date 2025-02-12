@@ -65,34 +65,42 @@ using namespace Microsoft::WRL;
 
 
 // fbx SDK
-#if defined(_M_AMD64)
-#if defined(_DEBUG)
-#pragma comment(lib, "../library/lib/FBXSDK/x64/debug/libfbxsdk.lib")
-#elif
-#pragma comment(lib, "../library/lib/FBXSDK/x64/release/libfbxsdk.lib")
-#endif
-#elif defined(_M_IX86)
-#if defined(_DEBUG)
-#pragma comment(lib, "../library/lib/FBXSDK/x86/debug/libfbxsdk.lib")
-#elif
-#pragma comment(lib, "../library/lib/FBXSDK/x86/release/libfbxsdk.lib")
-#endif
-#elif defined(_M_ARM64EC)
-#if defined(_DEBUG)
-#pragma comment(lib, "../library/lib/FBXSDK/arm64/debug/libfbxsdk.lib")
-#elif
-#pragma comment(lib, "../library/lib/FBXSDK/arm64/release/libfbxsdk.lib")
-#endif
-#endif
-
-#include "fbxsdk.h"
-#define FBXSDK_SHARED
+//#if defined(_M_AMD64)
+//#if defined(_DEBUG)
+//#pragma comment(lib, "../library/lib/FBXSDK/x64/debug/libfbxsdk.lib")
+//#elif
+//#pragma comment(lib, "../library/lib/FBXSDK/x64/release/libfbxsdk.lib")
+//#endif
+//#elif defined(_M_IX86)
+//#if defined(_DEBUG)
+//#pragma comment(lib, "../library/lib/FBXSDK/x86/debug/libfbxsdk.lib")
+//#elif
+//#pragma comment(lib, "../library/lib/FBXSDK/x86/release/libfbxsdk.lib")
+//#endif
+//#elif defined(_M_ARM64EC)
+//#if defined(_DEBUG)
+//#pragma comment(lib, "../library/lib/FBXSDK/arm64/debug/libfbxsdk.lib")
+//#elif
+//#pragma comment(lib, "../library/lib/FBXSDK/arm64/release/libfbxsdk.lib")
+//#endif
+//#endif
+//
+//#include "fbxsdk.h"
+//#define FBXSDK_SHARED
 
 // Assimp
+#if defined(_DEBUG)
 #pragma comment(lib,  "../library/lib/assimp/x64/assimp-vc143-mtd.lib")
+#else
+#pragma comment(lib,  "../library/lib/assimp/x64/assimp-vc143-mt.lib")
+#endif
+
 #include "../library/include/assimp/Importer.hpp"
 #include "../library/include/assimp/scene.h"
 #include "../library/include/assimp/postprocess.h"
+#include "../library/include/assimp/DefaultLogger.hpp"
+#include "../library/include/assimp/importerdesc.h"
+
 
 
 // headers

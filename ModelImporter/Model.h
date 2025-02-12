@@ -145,6 +145,9 @@ public:
 	std::string GetName() { return m_strName; }
 
 private:
+	XMFLOAT4X4 CalculateRelativeTranforms(std::shared_ptr<ModelNode> pNode);
+
+private:
 	std::string m_strName = "";
 	std::vector<std::shared_ptr<ModelNode>> m_pModelNodes = {};
 
