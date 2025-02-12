@@ -11,7 +11,7 @@ public:
 		DescriptorRanges.resize(size);
 	}
 
-	size_t Size()
+	size_t Size() const
 	{ 
 		return DescriptorRanges.size(); 
 	}
@@ -45,7 +45,7 @@ public:
 		RootParameters.resize(size);
 	}
 
-	size_t Size()
+	size_t Size() const
 	{ 
 		return RootParameters.size(); 
 	}
@@ -77,7 +77,7 @@ public:
 	{
 		StaticSamplers.resize(size);
 	}
-	size_t Size() 
+	size_t Size() const
 	{
 		return StaticSamplers.size();
 	}
@@ -109,6 +109,18 @@ public:
 	ID3D12RootSignature* Get()
 	{
 		return m_pRootSignature.Get();
+	}
+
+	UINT GetRootParameterSize() { return m_RootParameter.Size(); }
+	UINT GetDescriptorCount() 
+	{
+		int sum = 0;
+		for (const auto& dRange : m_DescriptorRanges)
+		{
+			sum += dRange.Size();
+		}
+
+		return sum;
 	}
 
 protected:

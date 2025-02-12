@@ -7,16 +7,19 @@ using namespace std;
 
 BOOL TextureDemoRootSignature::Initialize()
 {
-	m_DescriptorRanges.resize(1);
+	m_DescriptorRanges.resize(2);
 
-	m_DescriptorRanges[0].Resize(4);
+	m_DescriptorRanges[0].Resize(3);
 	m_DescriptorRanges[0][0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0);	// b0 : Transform Data
 	m_DescriptorRanges[0][1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 1);	// b1 : Camera Data
 	m_DescriptorRanges[0][2].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 2);	// b2 : Color Data
-	m_DescriptorRanges[0][3].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0);	// t1 : texture
 
-	m_RootParameter.Resize(1);
+	m_DescriptorRanges[1].Resize(1);
+	m_DescriptorRanges[1][0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0);	// t1 : texture
+
+	m_RootParameter.Resize(2);
 	m_RootParameter[0].InitAsDescriptorTable(m_DescriptorRanges[0].Size(), m_DescriptorRanges[0].Get(), D3D12_SHADER_VISIBILITY_ALL);
+	m_RootParameter[1].InitAsDescriptorTable(m_DescriptorRanges[1].Size(), m_DescriptorRanges[1].Get(), D3D12_SHADER_VISIBILITY_ALL);
 
 	m_StaticSampler.Resize(1);
 	{
@@ -125,7 +128,7 @@ BOOL TextureDemoRender::Initialize(std::shared_ptr<Object> owner)
 	m_upColorCBuffer->Initialize();
 
 	// Descriptor Heap
-	m_HeapDesc.NumDescriptors = DESCRIPTOR_COUNT_FOR_DRAW;
+	m_HeapDesc.NumDescriptors = m_RootSignatures[0]->GetDescriptorCount();
 	m_HeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	m_HeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	m_upDescriptorHeap = make_unique<DescriptorHeap>();
@@ -177,9 +180,14 @@ void TextureDemoRender::Render()
 		// Current pDescriptorHeap layout (Probably)
 		// | CBV(Transform): b0 | CBV(Camera): b1 | CBV(Color): b2 | SRV(Texutre): t0 |
 
+		// Set Root Parameter[0]
 		CD3DX12_GPU_DESCRIPTOR_HANDLE gpuHandle(pDescriptorHeap->GetGPUDescriptorHandleForHeapStart());
 		pCommandList->SetGraphicsRootDescriptorTable(0, gpuHandle);
-		
+
+		// Set Root Parameter[1]
+		CD3DX12_GPU_DESCRIPTOR_HANDLE gpuHandleForTexture(gpuHandle, DESCRIPTOR_COUNT_FOR_TABLE_0, DEVICE->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV));
+		pCommandList->SetGraphicsRootDescriptorTable(1, gpuHandleForTexture);
+
 		pCommandList->SetPipelineState(m_Pipelines[0]->Get());
 		pCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		pCommandList->IASetVertexBuffers(0, 1, &vertexBuffer.VertexBufferView);

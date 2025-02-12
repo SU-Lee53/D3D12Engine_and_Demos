@@ -196,7 +196,7 @@ BOOL BasicForwardObject::Initialize()
 	vector<BasicVertexType> vtx;
 	vector<UINT> idx;
 
-	MeshHelper::CreateBoxMesh(vtx, idx);
+	MeshHelper::CreateCube(vtx, idx);
 	m_pMesh = make_shared<Mesh<BasicVertexType>>();
 	bResult = m_pMesh->Initialize(vtx, idx);
 

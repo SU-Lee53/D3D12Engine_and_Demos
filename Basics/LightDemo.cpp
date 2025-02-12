@@ -83,7 +83,6 @@ void LightDemo::Update()
 		}
 
 	}
-	ImGui::End();
 
 
 

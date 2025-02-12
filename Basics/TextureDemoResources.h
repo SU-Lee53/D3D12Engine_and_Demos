@@ -49,7 +49,8 @@ namespace TextureDemoResource
 		std::unique_ptr<ConstantBuffer<CBCameraData>> m_upCameraCBuffer = nullptr;
 		std::unique_ptr<ConstantBuffer<CBColorData>> m_upColorCBuffer = nullptr;
 
-		const UINT DESCRIPTOR_COUNT_FOR_DRAW = 4;	// Texture use one
+		const UINT DESCRIPTOR_COUNT_FOR_TABLE_0 = 3;
+		const UINT DESCRIPTOR_COUNT_FOR_TABLE_1 = 1;	// Texture use one
 	};
 
 	struct ColorData

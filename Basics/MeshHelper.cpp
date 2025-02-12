@@ -3,7 +3,7 @@
 
 using namespace std;
 
-void MeshHelper::CreateBoxMesh(vector<BasicVertexType>& vtx, vector<UINT>& idx)
+void MeshHelper::CreateCube(vector<BasicVertexType>& vtx, vector<UINT>& idx)
 {
 	float fx = 0.5f;
 	float fy = 0.5f;
@@ -21,15 +21,15 @@ void MeshHelper::CreateBoxMesh(vector<BasicVertexType>& vtx, vector<UINT>& idx)
 	Vec4 c7 = DirectX::Colors::White;
 
 	// Front 
-	vtx[0] = BasicInput(Input{}, Vec3{ -fx, +fy, -fz }, c0, Vec2{ 0.f, 1.f });
-	vtx[1] = BasicInput(Input{}, Vec3{ +fx, +fy, -fz }, c1, Vec2{ 0.f, 1.f });
-	vtx[2] = BasicInput(Input{}, Vec3{ +fx, +fy, +fz }, c2, Vec2{ 0.f, 1.f });
-	vtx[3] = BasicInput(Input{}, Vec3{ -fx, +fy, +fz }, c3, Vec2{ 0.f, 1.f });
+	vtx[0] = BasicInput(Input{}, XMFLOAT3{ -fx, +fy, -fz }, c0, XMFLOAT2{ 0.f, 1.f });
+	vtx[1] = BasicInput(Input{}, XMFLOAT3{ +fx, +fy, -fz }, c1, XMFLOAT2{ 0.f, 1.f });
+	vtx[2] = BasicInput(Input{}, XMFLOAT3{ +fx, +fy, +fz }, c2, XMFLOAT2{ 0.f, 1.f });
+	vtx[3] = BasicInput(Input{}, XMFLOAT3{ -fx, +fy, +fz }, c3, XMFLOAT2{ 0.f, 1.f });
 	// Back
-	vtx[4] = BasicInput(Input{}, Vec3{ -fx, -fy, -fz }, c4, Vec2{ 1.0f, 1.0f });
-	vtx[5] = BasicInput(Input{}, Vec3{ +fx, -fy, -fz }, c5, Vec2{ 0.0f, 1.0f });
-	vtx[6] = BasicInput(Input{}, Vec3{ +fx, -fy, +fz }, c6, Vec2{ 0.0f, 0.0f });
-	vtx[7] = BasicInput(Input{}, Vec3{ -fx, -fy, +fz }, c7, Vec2{ 1.0f, 0.0f });
+	vtx[4] = BasicInput(Input{}, XMFLOAT3{ -fx, -fy, -fz }, c4, XMFLOAT2{ 1.0f, 1.0f });
+	vtx[5] = BasicInput(Input{}, XMFLOAT3{ +fx, -fy, -fz }, c5, XMFLOAT2{ 0.0f, 1.0f });
+	vtx[6] = BasicInput(Input{}, XMFLOAT3{ +fx, -fy, +fz }, c6, XMFLOAT2{ 0.0f, 0.0f });
+	vtx[7] = BasicInput(Input{}, XMFLOAT3{ -fx, -fy, +fz }, c7, XMFLOAT2{ 1.0f, 0.0f });
 
 	idx.resize(36);
 
@@ -177,4 +177,42 @@ void MeshHelper::CreateSphere(std::vector<VertexType>& vertices, std::vector<UIN
 		indices.push_back(lastRingStartIndex + i);
 		indices.push_back(lastRingStartIndex + i + 1);
 	}
+}
+
+void MeshHelper::CreatePlane(std::vector<VertexType>& vertices, std::vector<UINT>& indices)
+{
+	vertices.resize(4);
+
+	vertices[0].Position = XMFLOAT3(-0.5f, -0.5f, 0.f);
+	vertices[0].TexCoord = XMFLOAT2(0.f, 1.f);
+	vertices[0].Normal = XMFLOAT3(0.f, 0.f, -1.f);
+	vertices[0].Tangent = XMFLOAT3(1.f, 0.f, 0.f);
+
+	vertices[1].Position = XMFLOAT3(-0.5f, 0.5f, 0.f);
+	vertices[1].TexCoord = XMFLOAT2(0.f, 0.f);
+	vertices[1].Normal = XMFLOAT3(0.f, 0.f, -1.f);
+	vertices[1].Tangent = XMFLOAT3(1.f, 0.f, 0.f);
+
+	vertices[2].Position = XMFLOAT3(0.5f, -0.5f, 0.f);
+	vertices[2].TexCoord = XMFLOAT2(1.f, 1.f);
+	vertices[2].Normal = XMFLOAT3(0.f, 0.f, -1.f);
+	vertices[2].Tangent = XMFLOAT3(1.f, 0.f, 0.f);
+
+	vertices[3].Position = XMFLOAT3(0.5f, 0.5f, 0.f);
+	vertices[3].TexCoord = XMFLOAT2(1.f, 0.f);
+	vertices[3].Normal = XMFLOAT3(0.f, 0.f, -1.f);
+	vertices[3].Tangent = XMFLOAT3(1.f, 0.f, 0.f);
+
+	// Calculate Binormal
+	for (int i = 0; i < 4; i++)
+	{
+		XMVECTOR xmNormal = XMLoadFloat3(&vertices[i].Normal);
+		XMVECTOR xmTangent = XMLoadFloat3(&vertices[i].Tangent);
+
+		XMVECTOR xmBinormal = XMVector3Cross(xmNormal, xmTangent);
+		XMStoreFloat3(&vertices[i].BiNormal, xmBinormal);
+	}
+
+
+	indices = { 0, 1, 2, 2, 1, 3 };
 }

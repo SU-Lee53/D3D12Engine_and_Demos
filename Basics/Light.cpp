@@ -41,13 +41,13 @@ RawLightData DirectionalLight::GetLightRawData()
     };
 }
 
-void DirectionalLight::ControlLightWithImGui(int index)
+void DirectionalLight::ControlLightWithImGui(int showIndex)
 {
     XMFLOAT3 pos = GetPosition();
     XMFLOAT3 dir = GetDirection();
     XMFLOAT3 color = GetColor();
 
-    if (ImGui::TreeNode(to_string(index).c_str()))
+    if (ImGui::TreeNode(to_string(showIndex).c_str()))
     {
         ImGui::Text("Light Type : Directional Light");
         ImGui::DragFloat3("Position"s.c_str(), (float*)&pos, 0.01f, -10.f, 10.f);
@@ -111,7 +111,7 @@ RawLightData PointLight::GetLightRawData()
     };
 }
 
-void PointLight::ControlLightWithImGui(int index)
+void PointLight::ControlLightWithImGui(int showIndex)
 {
     XMFLOAT3 pos = GetPosition();
     XMFLOAT3 color = GetColor();
@@ -124,7 +124,7 @@ void PointLight::ControlLightWithImGui(int index)
     string PosToStr = "("s + to_string(pos.x) + ", "s + to_string(pos.y) + ", " + to_string(pos.z) + ")"s;
     string strTabName = "PointLight On : "s + PosToStr;
 
-    if (ImGui::TreeNode(to_string(index).c_str()))
+    if (ImGui::TreeNode(to_string(showIndex).c_str()))
     {
         ImGui::Text("Light Type : Point Light");
         ImGui::DragFloat3("Position"s.c_str(), (float*)&pos, 0.01f, -10.f, 10.f);
@@ -198,7 +198,7 @@ RawLightData SpotLight::GetLightRawData()
     };
 }
 
-void SpotLight::ControlLightWithImGui(int index)
+void SpotLight::ControlLightWithImGui(int showIndex)
 {
     XMFLOAT3 pos = GetPosition();
     XMFLOAT3 dir = GetDirection();
@@ -213,7 +213,7 @@ void SpotLight::ControlLightWithImGui(int index)
     string PosToStr = "("s + to_string(pos.x) + ", "s + to_string(pos.y) + ", " + to_string(pos.z) + ")"s;
     string strTabName = "SpotLight On : "s + PosToStr;
 
-    if (ImGui::TreeNode(to_string(index).c_str()))
+    if (ImGui::TreeNode(to_string(showIndex).c_str()))
     {
         ImGui::Text("Light Type : Spot Light");
         ImGui::DragFloat3("Position"s.c_str(), (float*)&pos, 0.01f, -10.f, 10.f);

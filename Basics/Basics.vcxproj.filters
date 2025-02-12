@@ -226,6 +226,15 @@
     <Filter Include="Game\Demos\Level.0\Texture\Shader">
       <UniqueIdentifier>{c147333d-c808-4517-9476-1a1c9861c37b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Demos\Level.1\Normal Mapping\App">
+      <UniqueIdentifier>{8c4482b0-76f5-4032-832b-254723b5b3d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos\Level.1\Normal Mapping\Resource">
+      <UniqueIdentifier>{daef8183-9ec0-462c-bb4e-4b1baa8ddfc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos\Level.1\Normal Mapping\Shader">
+      <UniqueIdentifier>{8b758074-2dc5-4208-ae02-b0a31adb3a92}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -438,6 +447,10 @@
     <ClInclude Include="TextureManager.h">
       <Filter>Renderer\Managers</Filter>
     </ClInclude>
+    <ClInclude Include="NormalMappingDemo.h">
+      <Filter>Game\Demos\Level.1\Normal Mapping\App</Filter>
+    </ClInclude>
+    <ClInclude Include="NormalMappingResources.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Basics.ico">
@@ -636,6 +649,10 @@
     <ClCompile Include="TextureManager.cpp">
       <Filter>Renderer\Managers</Filter>
     </ClCompile>
+    <ClCompile Include="NormalMappingDemo.cpp">
+      <Filter>Game\Demos\Level.1\Normal Mapping\App</Filter>
+    </ClCompile>
+    <ClCompile Include="NormalMappingResources.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -685,6 +702,9 @@
     </FxCompile>
     <FxCompile Include="..\Shader\Texture.hlsl">
       <Filter>Game\Demos\Level.0\Texture\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shader\NormalMapping.hlsl">
+      <Filter>Game\Demos\Level.1\Normal Mapping\Resource</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

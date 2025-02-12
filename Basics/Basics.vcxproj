@@ -177,6 +177,8 @@
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshHelper.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="NormalMappingDemo.h" />
+    <ClInclude Include="NormalMappingResources.h" />
     <ClInclude Include="PointlightDemo.h" />
     <ClInclude Include="PointlightResources.h" />
     <ClInclude Include="renderer_types.h" />
@@ -258,6 +260,8 @@
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshHelper.cpp" />
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="NormalMappingDemo.cpp" />
+    <ClCompile Include="NormalMappingResources.cpp" />
     <ClCompile Include="PointlightDemo.cpp" />
     <ClCompile Include="PointlightResources.cpp" />
     <ClCompile Include="renderer_types.cpp" />
@@ -318,6 +322,7 @@
     <FxCompile Include="..\Shader\Instancing.hlsl" />
     <FxCompile Include="..\Shader\LambertLight.hlsl" />
     <FxCompile Include="..\Shader\Light.hlsl" />
+    <FxCompile Include="..\Shader\NormalMapping.hlsl" />
     <FxCompile Include="..\Shader\PointLight.hlsl" />
     <FxCompile Include="..\Shader\SpotLight.hlsl" />
     <FxCompile Include="..\Shader\test.hlsl" />

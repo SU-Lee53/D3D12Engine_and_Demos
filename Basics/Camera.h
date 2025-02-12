@@ -45,6 +45,11 @@ public:
 
     std::shared_ptr<Transform> GetTransform() { return m_pTransform; }
 
+    XMFLOAT3 GetEYE() { return m_vCamEYE; }
+    XMFLOAT3 GetAT() { return m_vCamAT; }
+    XMFLOAT3 GetUP() { return m_vCamUP; }
+
+public:
     void DecomposeCameraUVN(XMFLOAT3& outFront, XMFLOAT3& outRight, XMFLOAT3& outUp)
     {
         XMMATRIX xmWorld = XMLoadFloat4x4(&m_pTransform->GetWorldMatrix());

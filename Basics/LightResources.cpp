@@ -211,9 +211,6 @@ void LightRender::Render()
 
 BOOL LightObject::Initialize()
 {
-	m_upTransform = make_unique<Transform>();
-	m_upTransform->Initialize();
-
 	vector<VertexType> vtx;
 	vector<UINT> idx;
 

@@ -12,7 +12,7 @@ public:
 
 	LIGHT_TYPE GetLightType() { return m_lightType; }
 
-	virtual void ControlLightWithImGui(int index) = 0;
+	virtual void ControlLightWithImGui(int showIndex) = 0;
 	void SetOnOFF(BOOL value) { m_bEnable = FALSE; }
 	BOOL GetOnOFF() { return m_bEnable; }
 
@@ -34,7 +34,7 @@ public:
 
 public:
 	virtual RawLightData GetLightRawData() override;
-	virtual void ControlLightWithImGui(int index) override;
+	virtual void ControlLightWithImGui(int showIndex) override;
 
 public:
 	void SetPosition(const XMFLOAT3& pos) { m_desc.DirectionalLight.lightPos = pos; }
@@ -59,7 +59,7 @@ public:
 
 public:
 	virtual RawLightData GetLightRawData() override;
-	virtual void ControlLightWithImGui(int index) override;
+	virtual void ControlLightWithImGui(int showIndex) override;
 
 public:
 	void SetPosition(const XMFLOAT3& pos) { m_desc.PointLight.lightPos = pos; }
@@ -92,7 +92,7 @@ public:
 
 public:
 	virtual RawLightData GetLightRawData() override;
-	virtual void ControlLightWithImGui(int index) override;
+	virtual void ControlLightWithImGui(int showIndex) override;
 
 public:
 	void SetPosition(const XMFLOAT3& pos) { m_desc.SpotLight.lightPos = pos; }
