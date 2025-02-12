@@ -97,25 +97,45 @@ void AssimpConverter::PrintNodeInfo(aiNode* pNode)
 
 void AssimpConverter::PrintTransformInfo(aiNode* pNode)
 {
-	aiMatrix4x4 aimatTransform = pNode->mTransformation;
-	XMFLOAT4X4 matTransform(aimatTransform[0]);
-
-	// Transpose
-	//XMMATRIX xmMat = XMLoadFloat4x4(&matTransform);
-	//XMMatrixTranspose(xmMat);
-	//XMStoreFloat4x4(&matTransform, xmMat);
-
 	string strNodeName = pNode->mName.C_Str();
 	string strTreeName = "Transfrom info : " + strNodeName;
-
-
 	if (ImGui::TreeNode(strTreeName.c_str()))
 	{
+		aiMatrix4x4 aimatTransform = pNode->mTransformation;
+
+		aiVector3D vPosition;
+		aiVector3D vRotation;
+		aiVector3D vScale;
+		aimatTransform.Decompose(vScale, vRotation, vPosition);
+
+		ImGui::TextColored(ImVec4(1.f, 0.f, 0.f, 1.f), "Node Relative");
+		ImGui::Text("Position : (%f, %f, %f)", vPosition.x, vPosition.y, vPosition.z);
+		ImGui::Text("Rotation : (%f, %f, %f)", vRotation.x, vRotation.y, vRotation.z);
+		ImGui::Text("Scale : (%f, %f, %f)", vScale.x, vScale.y, vScale.z);
+
 		ImGui::Text("Transform Matrix : ");
-		ImGui::Text("%f\t%f\t%f\t%f", matTransform(0, 0), matTransform(0, 1), matTransform(0, 2), matTransform(0, 3));
-		ImGui::Text("%f\t%f\t%f\t%f", matTransform(1, 0), matTransform(1, 1), matTransform(1, 2), matTransform(1, 3));
-		ImGui::Text("%f\t%f\t%f\t%f", matTransform(2, 0), matTransform(2, 1), matTransform(2, 2), matTransform(2, 3));
-		ImGui::Text("%f\t%f\t%f\t%f", matTransform(3, 0), matTransform(3, 1), matTransform(3, 2), matTransform(3, 3));
+		ImGui::Text("%f\t%f\t%f\t%f", aimatTransform.a1, aimatTransform.a2, aimatTransform.a3, aimatTransform.a4);
+		ImGui::Text("%f\t%f\t%f\t%f", aimatTransform.b1, aimatTransform.b2, aimatTransform.b3, aimatTransform.b4);
+		ImGui::Text("%f\t%f\t%f\t%f", aimatTransform.c1, aimatTransform.c2, aimatTransform.c3, aimatTransform.c4);
+		ImGui::Text("%f\t%f\t%f\t%f", aimatTransform.d1, aimatTransform.d2, aimatTransform.d3, aimatTransform.d4);
+
+		ImGui::Separator();
+
+		aimatTransform = CalculateLocalTransform(pNode);
+		aimatTransform.Decompose(vScale, vRotation, vPosition);
+
+		ImGui::TextColored(ImVec4(1.f, 0.f, 0.f, 1.f), "Calculated local");
+		ImGui::Text("Position : (%f, %f, %f)", vPosition.x, vPosition.y, vPosition.z);
+		ImGui::Text("Rotation : (%f, %f, %f)", vRotation.x, vRotation.y, vRotation.z);
+		ImGui::Text("Scale : (%f, %f, %f)", vScale.x, vScale.y, vScale.z);
+
+		ImGui::Text("Transform Matrix : ");
+		ImGui::Text("%f\t%f\t%f\t%f", aimatTransform.a1, aimatTransform.a2, aimatTransform.a3, aimatTransform.a4);
+		ImGui::Text("%f\t%f\t%f\t%f", aimatTransform.b1, aimatTransform.b2, aimatTransform.b3, aimatTransform.b4);
+		ImGui::Text("%f\t%f\t%f\t%f", aimatTransform.c1, aimatTransform.c2, aimatTransform.c3, aimatTransform.c4);
+		ImGui::Text("%f\t%f\t%f\t%f", aimatTransform.d1, aimatTransform.d2, aimatTransform.d3, aimatTransform.d4);
+
+		ImGui::Separator();
 
 		ImGui::TreePop();
 	}
@@ -373,10 +393,7 @@ BOOL AssimpConverter::ExportTransform(aiNode* pNode, std::shared_ptr<ModelNode> 
 {
 	if (!pNode) return FALSE;
 
-	// Current aiNode::mTransformation is somewhat weird
-	// but Decomposed data looks legit. so let's use it
-	aiMatrix4x4 transform;
-	transform = pNode->mTransformation;
+	aiMatrix4x4 transform = CalculateLocalTransform(pNode);
 
 	aiVector3D vPosition(0.f, 0.f, 0.f);
 	aiVector3D vRotation(0.f, 0.f, 0.f);

@@ -43,9 +43,9 @@ PSInput VSMain(VSInput input)
 {
     PSInput result = (PSInput) 0;
     
-    
     matrix matViewProj = mul(matView, matProj); // view x proj
-    matrix matWorldViewProj = mul(matWorld, matViewProj); // world x view x proj
+    matrix matLocalViewProj = mul(matLocal, matViewProj); // local x view x proj
+    matrix matWorldViewProj = mul(matWorld, matLocalViewProj); // world x view x proj
     result.position = mul(input.position, matWorldViewProj); // pojtected vertex = vertex x world x view x proj
     result.texCoord = input.texCoord;
     result.color = input.color;

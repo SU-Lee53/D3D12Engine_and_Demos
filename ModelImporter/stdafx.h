@@ -63,31 +63,6 @@ using namespace Microsoft::WRL;
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "d3dcompiler.lib")
 
-
-// fbx SDK
-//#if defined(_M_AMD64)
-//#if defined(_DEBUG)
-//#pragma comment(lib, "../library/lib/FBXSDK/x64/debug/libfbxsdk.lib")
-//#elif
-//#pragma comment(lib, "../library/lib/FBXSDK/x64/release/libfbxsdk.lib")
-//#endif
-//#elif defined(_M_IX86)
-//#if defined(_DEBUG)
-//#pragma comment(lib, "../library/lib/FBXSDK/x86/debug/libfbxsdk.lib")
-//#elif
-//#pragma comment(lib, "../library/lib/FBXSDK/x86/release/libfbxsdk.lib")
-//#endif
-//#elif defined(_M_ARM64EC)
-//#if defined(_DEBUG)
-//#pragma comment(lib, "../library/lib/FBXSDK/arm64/debug/libfbxsdk.lib")
-//#elif
-//#pragma comment(lib, "../library/lib/FBXSDK/arm64/release/libfbxsdk.lib")
-//#endif
-//#endif
-//
-//#include "fbxsdk.h"
-//#define FBXSDK_SHARED
-
 // Assimp
 #if defined(_DEBUG)
 #pragma comment(lib,  "../library/lib/assimp/x64/assimp-vc143-mtd.lib")

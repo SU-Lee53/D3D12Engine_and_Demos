@@ -90,6 +90,8 @@ public:
 
 	std::string QueryRawData(aiMaterialProperty* pProp);
 
+	aiMatrix4x4 CalculateLocalTransform(aiNode* pNode);
+
 private:
 	std::shared_ptr<Assimp::Importer> m_pImporter = nullptr;
 	const aiScene* m_rpScene = nullptr;
@@ -120,4 +122,18 @@ inline std::string AssimpConverter::QueryRawData(aiMaterialProperty* pProp)
 {
 	std::string raw(reinterpret_cast<const char*>(pProp->mData), pProp->mDataLength);
 	return raw;
+}
+
+inline aiMatrix4x4 AssimpConverter::CalculateLocalTransform(aiNode* pNode)
+{
+	aiMatrix4x4 result = pNode->mTransformation;
+
+	aiNode* ancestor = pNode->mParent;
+	while (ancestor->mParent != nullptr)
+	{
+		result = ancestor->mTransformation * result;
+		ancestor = ancestor->mParent;
+	}
+
+	return result;
 }

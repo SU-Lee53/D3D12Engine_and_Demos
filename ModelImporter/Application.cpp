@@ -20,11 +20,11 @@ void Application::Initialize()
 	m_pCamera->Initialize();
 	
 	m_pImporter = make_unique<AssimpConverter>();
-	m_pImporter->Initialize(L"../fbx/Gunship.fbx");
+	m_pImporter->Initialize(L"../fbx/Hummer.fbx");
 
 	m_pLoadedFromImporter = make_shared<Model>();
 	m_pImporter->ExportMeshInConverterToModel(m_pLoadedFromImporter);
-	m_pLoadedFromImporter->ScaleModel(XMFLOAT3(0.1f, 0.1f, 0.1f));
+	//m_pLoadedFromImporter->ScaleModel(XMFLOAT3(0.1f, 0.1f, 0.1f));
 
 
 	m_pLoadedFromBinaries = make_shared<Model>();

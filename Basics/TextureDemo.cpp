@@ -11,7 +11,7 @@ void TextureDemo::Initialize()
 	m_pObj->Initialize();
 
 	shared_ptr<TextureDemoObject> originObj = static_pointer_cast<TextureDemoObject>(m_pObj);
-	originObj->LoadFromBinaryFile(L"../Models/Binaries/Gunship.bin");
+	originObj->LoadFromBinaryFile(L"../Models/Binaries/corolla.bin");
 }
 
 void TextureDemo::Update()
