@@ -15,6 +15,10 @@ using namespace std;
 
 void BlinnPhongDemo::Initialize()
 {
+	// Cam
+	m_pMainCamera = make_shared<Camera>();
+	m_pMainCamera->Initialize();
+
 	m_pObj = make_shared<BlinnPhongObject>();
 	m_pObj->Initialize();
 	
@@ -78,13 +82,13 @@ void BlinnPhongDemo::Update()
 	m_pLightObj->Update();
 
 	m_pObj->Update();
-
+	m_pMainCamera->Update();
 }
 
 void BlinnPhongDemo::Render()
 {
-	RENDER.Add(m_pObj);
-	RENDER.Add(m_pLightObj);
+	RENDER.Add(m_pObj, m_pMainCamera);
+	RENDER.Add(m_pLightObj, m_pMainCamera);
 }
 
 /////////////////////

@@ -9,6 +9,10 @@ using namespace std;
 
 void BasicForwardRenderDemo::Initialize()
 {
+	// Cam
+	m_pMainCamera = make_shared<Camera>();
+	m_pMainCamera->Initialize();
+
 	m_pObj = make_shared<BasicForwardObject>();
 	m_pObj->Initialize();
 
@@ -18,7 +22,7 @@ void BasicForwardRenderDemo::Update()
 {
 	shared_ptr<BasicForwardObject> forwardObj = static_pointer_cast<BasicForwardObject>(m_pObj);
 
-	Vec3 pos = CORE.GetMainCamera()->GetTransform()->GetWorldPosition();
+	Vec3 pos = m_pMainCamera->GetTransform()->GetWorldPosition();
 	Vec3 rot = forwardObj->GetTransform()->GetWorldRotation();
 
 	if (INPUT.GetButton(KEY_TYPE::W))
@@ -51,35 +55,14 @@ void BasicForwardRenderDemo::Update()
 		rot.z -= m_sensitivity * DT;
 	}
 
-	if (INPUT.GetButton(KEY_TYPE::LEFT))
-	{
-		pos.x -= m_sensitivity * DT;
-	}
-
-	if (INPUT.GetButton(KEY_TYPE::RIGHT))
-	{
-		pos.x += m_sensitivity * DT;
-	}
-
-	if (INPUT.GetButton(KEY_TYPE::UP))
-	{
-		pos.z += m_sensitivity * DT;
-	}
-
-	if (INPUT.GetButton(KEY_TYPE::DOWN))
-	{
-		pos.z -= m_sensitivity * DT;
-	}
-
-	CORE.GetMainCamera()->SetPosition(pos);
 	forwardObj->GetTransform()->SetWorldRotation(rot);
 
 	forwardObj->Update();
 
-
+	m_pMainCamera->Update();
 }
 
 void BasicForwardRenderDemo::Render()
 {
-	RENDER.Add(m_pObj);
+	RENDER.Add(m_pObj, m_pMainCamera);
 }

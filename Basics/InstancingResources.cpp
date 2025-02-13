@@ -145,7 +145,7 @@ BOOL InstancingRender::Initialize(std::shared_ptr<Object> owner)
 	return TRUE;
 }
 
-void InstancingRender::Render()
+void InstancingRender::Render(std::shared_ptr<Camera> pCamera)
 {
 	ComPtr<ID3D12GraphicsCommandList>& pCommandList = RENDER.GetCurrentCommandList();
 
@@ -159,7 +159,7 @@ void InstancingRender::Render()
 	pCommandList->SetGraphicsRootSignature(m_RootSignatures[0]->Get());
 
 	// 1. Write data in Constant Buffer
-	m_upCameraCBuffer->PushData(CORE.GetMainCameraCBData());
+	m_upCameraCBuffer->PushData(pCamera->GetCameraCBData());
 
 	// 2. Get Descriptor from DescriptorHeap(m_upDescriptorHeap)
 	ComPtr<ID3D12DescriptorHeap> pDescriptorHeap = m_upDescriptorHeap->pDescriptorHeap;
@@ -262,9 +262,9 @@ void InstancingObject::Update()
 	}
 }
 
-void InstancingObject::Render()
+void InstancingObject::Render(std::shared_ptr<Camera> pCamera)
 {
-	m_upRenderMethod->Render();
+	m_upRenderMethod->Render(pCamera);
 }
 
 BOOL InstancingObject::InitRenderMethod()

@@ -1,6 +1,7 @@
 #pragma once
 
 class Object;
+class Camera;
 
 class RenderManager
 {
@@ -29,13 +30,13 @@ public:
 	}
 
 public:
-	void Add(std::shared_ptr<Object> obj) { m_pRenderQueue.push_back(obj); }
+	void Add(std::shared_ptr<Object> pObj, std::shared_ptr<Camera> pCam) { m_pRenderQueue.push_back(std::make_pair(pObj, pCam)); }
 
 public:
 	void SetVsync(BOOL bVsyncOnOff) { bVsync = bVsyncOnOff; }
 
 private:
-	std::vector<std::shared_ptr<Object>> m_pRenderQueue = {};
+	std::vector<std::pair<std::shared_ptr<Object>, std::shared_ptr<Camera>>> m_pRenderQueue = {};
 
 private:
 	// Pool 구조를 만들어 변경될 예정

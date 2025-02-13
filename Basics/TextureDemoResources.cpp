@@ -137,7 +137,7 @@ BOOL TextureDemoRender::Initialize(std::shared_ptr<Object> owner)
 	return TRUE;
 }
 
-void TextureDemoRender::Render()
+void TextureDemoRender::Render(std::shared_ptr<Camera> pCamera)
 {
 	ComPtr<ID3D12GraphicsCommandList>& pCommandList = RENDER.GetCurrentCommandList();
 
@@ -158,7 +158,7 @@ void TextureDemoRender::Render()
 
 		// Wirte data in ConstantBuffer
 		m_upTransformCBuffer->PushData(CBModelTransformData{ transform.GetLocalMatrixTransposed(), transform.GetWorldMatrixTransposed() });
-		m_upCameraCBuffer->PushData(CORE.GetMainCameraCBData());
+		m_upCameraCBuffer->PushData(pCamera->GetCameraCBData());
 		m_upColorCBuffer->PushData(color.GetMaterialCBData());
 
 		// Get Descriptor Heap
@@ -222,9 +222,9 @@ void TextureDemoObject::Update()
 	}
 }
 
-void TextureDemoObject::Render()
+void TextureDemoObject::Render(std::shared_ptr<Camera> pCamera)
 {
-	m_upRenderMethod->Render();
+	m_upRenderMethod->Render(pCamera);
 }
 
 BOOL TextureDemoObject::InitRenderMethod()

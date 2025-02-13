@@ -235,6 +235,9 @@
     <Filter Include="Game\Demos\Level.1\Normal Mapping\Shader">
       <UniqueIdentifier>{8b758074-2dc5-4208-ae02-b0a31adb3a92}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Renderer\Terrain">
+      <UniqueIdentifier>{163eb216-e9d3-4825-b4eb-920ca9608997}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -450,7 +453,10 @@
     <ClInclude Include="NormalMappingDemo.h">
       <Filter>Game\Demos\Level.1\Normal Mapping\App</Filter>
     </ClInclude>
-    <ClInclude Include="NormalMappingResources.h" />
+    <ClInclude Include="Terrain.h" />
+    <ClInclude Include="NormalMappingResources.h">
+      <Filter>Game\Demos\Level.1\Normal Mapping\Resource</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Basics.ico">
@@ -652,7 +658,10 @@
     <ClCompile Include="NormalMappingDemo.cpp">
       <Filter>Game\Demos\Level.1\Normal Mapping\App</Filter>
     </ClCompile>
-    <ClCompile Include="NormalMappingResources.cpp" />
+    <ClCompile Include="Terrain.cpp" />
+    <ClCompile Include="NormalMappingResources.cpp">
+      <Filter>Game\Demos\Level.1\Normal Mapping\Resource</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -704,7 +713,7 @@
       <Filter>Game\Demos\Level.0\Texture\Shader</Filter>
     </FxCompile>
     <FxCompile Include="..\Shader\NormalMapping.hlsl">
-      <Filter>Game\Demos\Level.1\Normal Mapping\Resource</Filter>
+      <Filter>Game\Demos\Level.1\Normal Mapping\Shader</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

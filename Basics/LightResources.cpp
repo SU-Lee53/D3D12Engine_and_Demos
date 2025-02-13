@@ -147,7 +147,7 @@ BOOL LightRender::Initialize(std::shared_ptr<Object> owner)
 	return TRUE;
 }
 
-void LightRender::Render()
+void LightRender::Render(std::shared_ptr<Camera> pCamera)
 {
 	ComPtr<ID3D12GraphicsCommandList>& pCommandList = RENDER.GetCurrentCommandList();
 
@@ -166,7 +166,7 @@ void LightRender::Render()
 		transformData.matWorld = transform.GetWorldMatrixTransposed();
 	}
 	m_upTransformCBuffer->PushData(transformData);
-	m_upCameraCBuffer->PushData(CORE.GetMainCameraCBData());
+	m_upCameraCBuffer->PushData(pCamera->GetCameraCBData());
 	m_upColorCBuffer->PushData(color.GetMaterialCBData());
 
 	// Light Data is in Application(LightDemo)
@@ -240,9 +240,9 @@ void LightObject::Update()
 	m_upTransform->Update();
 }
 
-void LightObject::Render()
+void LightObject::Render(std::shared_ptr<Camera> pCamera)
 {
-	m_upRenderMethod->Render();
+	m_upRenderMethod->Render(pCamera);
 }
 
 BOOL LightObject::InitRenderMethod()

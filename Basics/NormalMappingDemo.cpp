@@ -9,6 +9,10 @@ using namespace std;
 
 void NormalMappingDemo::Initialize()
 {
+	// Cam
+	m_pMainCamera = make_shared<Camera>();
+	m_pMainCamera->Initialize();
+
 	m_pObj = make_shared<NormalMappingObject>();
 	m_pObj->Initialize();
 
@@ -19,20 +23,18 @@ void NormalMappingDemo::Initialize()
 	m_pSpotLight->Initialize();
 
 	// Cam
-	CORE.GetMainCamera()->SetPosition(XMFLOAT3(0.f, 0.f, -5.f));
+	m_pMainCamera->SetPosition(XMFLOAT3(0.f, 0.f, -5.f));
 }
 
 void NormalMappingDemo::Update()
 {
-
 	// Make spot light attach to Camera
 	SpotLight& refSpotLight = *static_pointer_cast<SpotLight>(m_pSpotLight);
-	Camera& refCamera = *CORE.GetMainCamera();
 
-	refSpotLight.SetPosition(refCamera.GetPosition());
+	refSpotLight.SetPosition(m_pMainCamera->GetPosition());
 
 	XMFLOAT3 front, right, up;
-	refCamera.DecomposeCameraUVN(front, right, up);
+	m_pMainCamera->DecomposeCameraUVN(front, right, up);
 	refSpotLight.SetDirection(front);
 
 	if (ImGui::Begin("Control SpotLight"))
@@ -42,11 +44,13 @@ void NormalMappingDemo::Update()
 
 		ImGui::End();
 	}
+
+	m_pMainCamera->Update();
 }
 
 void NormalMappingDemo::Render()
 {
-	RENDER.Add(m_pObj);
+	RENDER.Add(m_pObj, m_pMainCamera);
 }
 
 CBLightData NormalMappingDemo::GetLightCBDataInDemo()

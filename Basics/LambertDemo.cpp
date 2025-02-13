@@ -8,6 +8,10 @@ using namespace std;
 
 void LambertDemo::Initialize()
 {
+	// Cam
+	m_pMainCamera = make_shared<Camera>();
+	m_pMainCamera->Initialize();
+
 	m_pObj = make_shared<Lambert::LambertObject>();
 	m_pObj->Initialize();
 	
@@ -37,12 +41,12 @@ void LambertDemo::Update()
 
 
 	m_pObj->Update();
-
+	m_pMainCamera->Update();
 }
 
 void LambertDemo::Render()
 {
-	RENDER.Add(m_pObj);
+	RENDER.Add(m_pObj, m_pMainCamera);
 }
 
 

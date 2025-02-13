@@ -9,6 +9,10 @@ using namespace std;
 
 void HierarchyModelDemo::Initialize()
 {
+	// Cam
+	m_pMainCamera = make_shared<Camera>();
+	m_pMainCamera->Initialize();
+
 	m_pObj = make_shared<HierarchyModelObject>();
 	m_pObj->Initialize();
 
@@ -20,10 +24,10 @@ void HierarchyModelDemo::Initialize()
 void HierarchyModelDemo::Update()
 {
 	m_pObj->Update();
-
+	m_pMainCamera->Update();
 }
 
 void HierarchyModelDemo::Render()
 {
-	RENDER.Add(m_pObj);
+	RENDER.Add(m_pObj, m_pMainCamera);
 }

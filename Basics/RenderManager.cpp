@@ -3,6 +3,7 @@
 #include "Core.h"
 #include "Object.h"
 #include "RenderMethod.h"
+#include "Camera.h"
 
 BOOL RenderManager::Initialize()
 {
@@ -68,9 +69,9 @@ void RenderManager::Render()
 	// DO NOT PUSH Camera data IN THIS FUNCTION
 	// Reason : camera can be diffrent by each render passes
 
-	for (const auto& obj : m_pRenderQueue)
+	for (const auto& p : m_pRenderQueue)
 	{
-		obj->Render();
+		p.first->Render(p.second);
 	}
 
 }

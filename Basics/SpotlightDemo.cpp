@@ -14,6 +14,10 @@ using namespace BasicForward;
 
 void SpotlightDemo::Initialize()
 {
+	// Cam
+	m_pMainCamera = make_shared<Camera>();
+	m_pMainCamera->Initialize();
+
 	m_pObjs.resize(9);
 	for (auto& obj : m_pObjs)
 	{
@@ -71,7 +75,7 @@ void SpotlightDemo::Initialize()
 	shared_ptr<BasicForwardObject> originLightObj = static_pointer_cast<BasicForwardObject>(m_pLightObj);
 	originLightObj->GetTransform()->SetWorldScale(XMFLOAT3(0.1f, 0.1f, 0.1f));
 
-	CORE.GetMainCamera()->SetPosition(XMFLOAT3(0.f, 0.f, -6.f));
+	m_pMainCamera->SetPosition(XMFLOAT3(0.f, 0.f, -6.f));
 
 }
 
@@ -139,17 +143,17 @@ void SpotlightDemo::Update()
 		obj->Update();
 	}
 	
-
+	m_pMainCamera->Update();
 }
 
 void SpotlightDemo::Render()
 {
 	for (auto& obj : m_pObjs)
 	{
-		RENDER.Add(obj);
+		RENDER.Add(obj, m_pMainCamera);
 	}
 
-	RENDER.Add(m_pLightObj);
+	RENDER.Add(m_pLightObj, m_pMainCamera);
 }
 
 ///////////////

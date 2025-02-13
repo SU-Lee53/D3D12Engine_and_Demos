@@ -130,7 +130,7 @@ BOOL HierarchyModelRender::Initialize(std::shared_ptr<Object> owner)
 	return TRUE;
 }
 
-void HierarchyModelRender::Render()
+void HierarchyModelRender::Render(std::shared_ptr<Camera> pCamera)
 {
 	ComPtr<ID3D12GraphicsCommandList>& pCommandList = RENDER.GetCurrentCommandList();
 
@@ -151,7 +151,7 @@ void HierarchyModelRender::Render()
 			transformData.matWorld = transform.GetWorldMatrixTransposed();
 		}
 		m_upTransformCBuffer->PushData(transformData);
-		m_upCameraCBuffer->PushData(CORE.GetMainCameraCBData());
+		m_upCameraCBuffer->PushData(pCamera->GetCameraCBData());
 		m_upColorCBuffer->PushData(node->pColorData->GetMaterialCBData());
 
 		// 2. Get Descriptor from DescriptorHeap(m_upDescriptorHeap)
@@ -209,9 +209,9 @@ void HierarchyModelObject::Update()
 	}
 }
 
-void HierarchyModelObject::Render()
+void HierarchyModelObject::Render(std::shared_ptr<Camera> pCamera)
 {
-	m_upRenderMethod->Render();
+	m_upRenderMethod->Render(pCamera);
 }
 
 BOOL HierarchyModelObject::InitRenderMethod()

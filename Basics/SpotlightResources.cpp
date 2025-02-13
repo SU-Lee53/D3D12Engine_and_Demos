@@ -148,7 +148,7 @@ BOOL SpotlightRender::Initialize(std::shared_ptr<Object> owner)
 	return TRUE;
 }
 
-void SpotlightRender::Render()
+void SpotlightRender::Render(std::shared_ptr<Camera> pCamera)
 {
 	ComPtr<ID3D12GraphicsCommandList>& pCommandList = RENDER.GetCurrentCommandList();
 
@@ -167,7 +167,7 @@ void SpotlightRender::Render()
 		transformData.matWorld = transform.GetWorldMatrixTransposed();
 	}
 	m_upTransformCBuffer->PushData(transformData);
-	m_upCameraCBuffer->PushData(CORE.GetMainCameraCBData());
+	m_upCameraCBuffer->PushData(pCamera->GetCameraCBData());
 	m_upColorCBuffer->PushData(color.GetMaterialCBData());
 
 	// Light Data is in Application(SpotlightDemo)
@@ -244,9 +244,9 @@ void SpotlightObject::Update()
 	m_upTransform->Update();
 }
 
-void SpotlightObject::Render()
+void SpotlightObject::Render(std::shared_ptr<Camera> pCamera)
 {
-	m_upRenderMethod->Render();
+	m_upRenderMethod->Render(pCamera);
 }
 
 BOOL SpotlightObject::InitRenderMethod()

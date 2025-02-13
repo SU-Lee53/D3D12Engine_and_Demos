@@ -147,7 +147,7 @@ BOOL PointlightRender::Initialize(std::shared_ptr<Object> owner)
 	return TRUE;
 }
 
-void PointlightRender::Render()
+void PointlightRender::Render(std::shared_ptr<Camera> pCamera)
 {
 	ComPtr<ID3D12GraphicsCommandList>& pCommandList = RENDER.GetCurrentCommandList();
 
@@ -166,7 +166,7 @@ void PointlightRender::Render()
 		transformData.matWorld = transform.GetWorldMatrixTransposed();
 	}
 	m_upTransformCBuffer->PushData(transformData);
-	m_upCameraCBuffer->PushData(CORE.GetMainCameraCBData());
+	m_upCameraCBuffer->PushData(pCamera->GetCameraCBData());
 	m_upColorCBuffer->PushData(color.GetMaterialCBData());
 
 	// Light Data is in Application(PointlightDemo)
@@ -243,9 +243,9 @@ void PointlightObject::Update()
 	m_upTransform->Update();
 }
 
-void PointlightObject::Render()
+void PointlightObject::Render(std::shared_ptr<Camera> pCamera)
 {
-	m_upRenderMethod->Render();
+	m_upRenderMethod->Render(pCamera);
 }
 
 BOOL PointlightObject::InitRenderMethod()

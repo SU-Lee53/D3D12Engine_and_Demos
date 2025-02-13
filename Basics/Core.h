@@ -23,7 +23,6 @@ private:
 	void CreateDescriptorHeapForDSV();
 	void CreateDepthStencilView(UINT width, UINT height);
 	void CreateFence();
-	void CreateMainCamera();
 
 public:
 	// Getter, Setter
@@ -53,10 +52,6 @@ public:
 
 		return m_ui64LastFenceValues[contextIndex];
 	}
-
-	CBCameraData GetMainCameraCBData();
-
-	std::shared_ptr<class Camera> GetMainCamera() { return m_pMainCamera; }
 
 private:
 	// Device
@@ -90,7 +85,5 @@ private:
 	// Viewport, Rect
 	D3D12_VIEWPORT	m_Viewport = {};
 	D3D12_RECT		m_ScissorRect = {};
-
-	std::shared_ptr<class Camera> m_pMainCamera;
 };
 

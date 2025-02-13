@@ -110,6 +110,7 @@ using namespace std::literals;
 #include "Object.h"
 #include "StructuredBuffer.h"
 #include "Mesh.h"
+#include "Camera.h"
 
 // Debugs
 #ifdef _DEBUG

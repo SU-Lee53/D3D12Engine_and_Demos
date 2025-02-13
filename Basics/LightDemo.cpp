@@ -11,6 +11,10 @@ using namespace BasicForward;
 
 void LightDemo::Initialize()
 {
+	// Cam
+	m_pMainCamera = make_shared<Camera>();
+	m_pMainCamera->Initialize();
+
 	// Obj
 	{
 		m_pObjs.resize(8);
@@ -50,9 +54,6 @@ void LightDemo::Initialize()
 
 	// Lights
 	SetLights();
-
-	// Cam
-	CORE.GetMainCamera()->SetPosition(XMFLOAT3(0.f, 0.f, -6.f));
 }
 
 void LightDemo::Update()
@@ -96,12 +97,21 @@ void LightDemo::Update()
 	{
 		obj->Update();
 	}
+
+	m_pMainCamera->Update();
 }
 
 void LightDemo::Render()
 {
-	std::for_each(m_pLightPairs.begin(), m_pLightPairs.end(), [](LightPair& p) { RENDER.Add(p.second); });
-	std::for_each(m_pObjs.begin(), m_pObjs.end(), [](std::shared_ptr<Object> obj) { RENDER.Add(obj); });
+	for (const auto& p : m_pLightPairs)
+	{
+		RENDER.Add(p.second, m_pMainCamera);
+	}
+
+	for (const auto& obj : m_pObjs)
+	{
+		RENDER.Add(obj, m_pMainCamera);
+	}
 }
 
 void LightDemo::SetLights()

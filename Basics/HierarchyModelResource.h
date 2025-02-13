@@ -34,7 +34,7 @@ namespace HierarchyModel
 	{
 	public:
 		virtual BOOL Initialize(std::shared_ptr<Object> owner) override;
-		virtual void Render() override;
+		virtual void Render(std::shared_ptr<Camera> pCamera) override;
 
 	private:
 		std::unique_ptr<ConstantBuffer<CBModelTransformData>> m_upTransformCBuffer = nullptr;
@@ -231,7 +231,7 @@ namespace HierarchyModel
 	public:
 		virtual BOOL Initialize() override;
 		virtual void Update() override;
-		virtual void Render() override;
+		virtual void Render(std::shared_ptr<Camera> pCamera) override;
 
 	private:
 		BOOL InitRenderMethod();

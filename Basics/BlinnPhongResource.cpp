@@ -147,7 +147,7 @@ BOOL BlinnPhongRender::Initialize(std::shared_ptr<Object> owner)
 	return TRUE;
 }
 
-void BlinnPhongRender::Render()
+void BlinnPhongRender::Render(std::shared_ptr<Camera> pCamera)
 {
 	ComPtr<ID3D12GraphicsCommandList>& pCommandList = RENDER.GetCurrentCommandList();
 
@@ -166,7 +166,7 @@ void BlinnPhongRender::Render()
 		transformData.matWorld = transform.GetWorldMatrixTransposed();
 	}
 	m_upTransformCBuffer->PushData(transformData);
-	m_upCameraCBuffer->PushData(CORE.GetMainCameraCBData());
+	m_upCameraCBuffer->PushData(pCamera->GetCameraCBData());
 	m_upColorCBuffer->PushData(color.GetMaterialCBData());
 
 	// Light Data is in Application(LambertDemo)
@@ -243,9 +243,9 @@ void BlinnPhongObject::Update()
 	m_upTransform->Update();
 }
 
-void BlinnPhongObject::Render()
+void BlinnPhongObject::Render(std::shared_ptr<Camera> pCamera)
 {
-	m_upRenderMethod->Render();
+	m_upRenderMethod->Render(pCamera);
 }
 
 BOOL BlinnPhongObject::InitRenderMethod()

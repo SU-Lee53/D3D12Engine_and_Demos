@@ -163,10 +163,6 @@ BOOL Core::Initialize(BOOL bEnableDebugLayer, BOOL bEnableGBV)
 
     // Fence
     CreateFence();
-
-    // Main Camera
-    CreateMainCamera();
-
     // TODO : Commamd List, Allocator 는 Render로 뺄지 말지 결정하고 생성
 
     return TRUE;
@@ -227,10 +223,6 @@ BOOL Core::UpdateWindowSize(DWORD dwBackBufferWidth, DWORD dwBackBufferHeight)
     m_ScissorRect.top = 0;
     m_ScissorRect.right = dwBackBufferWidth;
     m_ScissorRect.bottom = dwBackBufferHeight;
-
-    // TODO : Reset Camera
-    m_pMainCamera->Resize(dwBackBufferWidth, dwBackBufferHeight);
-
 
     return FALSE;
 }
@@ -343,15 +335,4 @@ void Core::CreateFence()
 
     m_hFenceEvent = ::CreateEvent(nullptr, FALSE, FALSE, nullptr);
 
-}
-
-void Core::CreateMainCamera()
-{
-    m_pMainCamera = std::make_shared<Camera>();
-    m_pMainCamera->Initialize();
-}
-
-CBCameraData Core::GetMainCameraCBData()
-{
-    return m_pMainCamera->GetCameraCBData();
 }

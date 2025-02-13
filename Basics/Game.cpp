@@ -147,7 +147,6 @@ void Game::Update()
     GUI.Update();
 
     // Update Game Logic
-    CORE.GetMainCamera()->Update();
     m_Desc.app->Update();
 
     // Update FPS

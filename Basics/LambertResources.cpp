@@ -148,7 +148,7 @@ BOOL LambertRender::Initialize(std::shared_ptr<Object> owner)
 	return TRUE;
 }
 
-void LambertRender::Render()
+void LambertRender::Render(std::shared_ptr<Camera> pCamera)
 {
 	ComPtr<ID3D12GraphicsCommandList>& pCommandList = RENDER.GetCurrentCommandList();
 
@@ -168,7 +168,7 @@ void LambertRender::Render()
 			transformData.matWorld = transform.GetWorldMatrixTransposed();
 		}
 		m_upTransformCBuffer->PushData(transformData);
-		m_upCameraCBuffer->PushData(CORE.GetMainCameraCBData());
+		m_upCameraCBuffer->PushData(pCamera->GetCameraCBData());
 		m_upColorCBuffer->PushData(node->pColorData->GetMaterialCBData());
 
 		// Light Data is in Application(LambertDemo)
@@ -247,9 +247,9 @@ void LambertObject::Update()
 	}
 }
 
-void LambertObject::Render()
+void LambertObject::Render(std::shared_ptr<Camera> pCamera)
 {
-	m_upRenderMethod->Render();
+	m_upRenderMethod->Render(pCamera);
 }
 
 BOOL LambertObject::InitRenderMethod()

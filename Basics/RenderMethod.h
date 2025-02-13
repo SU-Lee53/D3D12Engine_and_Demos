@@ -15,6 +15,7 @@
 class Object;
 class Pipeline;
 class RootSignature;
+class Camera;
 
 class RenderMethod
 {
@@ -22,8 +23,8 @@ public:
 	virtual ~RenderMethod() {}
 
 public:
-	virtual BOOL Initialize(std::shared_ptr<Object> owner) = 0;
-	virtual void Render() = 0;
+	virtual BOOL Initialize(std::shared_ptr<Object> pOwner) = 0;
+	virtual void Render(std::shared_ptr<Camera> pCamera) = 0;
 
 protected:
 	std::weak_ptr<Object> m_wpOwner;

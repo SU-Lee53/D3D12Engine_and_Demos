@@ -156,7 +156,7 @@ BOOL NormalMappingRender::Initialize(std::shared_ptr<Object> owner)
 	return TRUE;
 }
 
-void NormalMappingRender::Render()
+void NormalMappingRender::Render(std::shared_ptr<Camera> pCamera)
 {
 	ComPtr<ID3D12GraphicsCommandList>& pCommandList = RENDER.GetCurrentCommandList();
 
@@ -174,7 +174,7 @@ void NormalMappingRender::Render()
 
 	// 1. Write data in Constant Buffer
 	m_upTransformCBuffer->PushData({ transform.GetLocalMatrixTransposed(), transform.GetWorldMatrixTransposed() });
-	m_upCameraCBuffer->PushData(CORE.GetMainCameraCBData());
+	m_upCameraCBuffer->PushData(pCamera->GetCameraCBData());
 	m_upColorCBuffer->PushData(color.GetMaterialCBData());
 
 	CBLightData lightData = static_pointer_cast<NormalMappingDemo>(GAME.GetGameDesc().app)->GetLightCBDataInDemo();
@@ -268,9 +268,9 @@ void NormalMappingObject::Update()
 	m_upTransform->Update();
 }
 
-void NormalMappingObject::Render()
+void NormalMappingObject::Render(std::shared_ptr<Camera> pCamera)
 {
-	m_upRenderMethod->Render();
+	m_upRenderMethod->Render(pCamera);
 }
 
 BOOL NormalMappingObject::InitRenderMethod()

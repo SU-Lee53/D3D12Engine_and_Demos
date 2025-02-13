@@ -135,7 +135,7 @@ BOOL ForwardRender::Initialize(std::shared_ptr<Object> owner)
 	return TRUE;
 }
 
-void ForwardRender::Render()
+void ForwardRender::Render(std::shared_ptr<Camera> pCamera)
 {
 	ComPtr<ID3D12GraphicsCommandList>& pCommandList = RENDER.GetCurrentCommandList();
 
@@ -155,7 +155,7 @@ void ForwardRender::Render()
 	CBTransformData data;
 	data.matWorld = pTransform->GetWorldMatrixTransposed();
 	m_upTransformCBuffer->PushData(data);
-	m_upCameraCBuffer->PushData(CORE.GetMainCameraCBData());
+	m_upCameraCBuffer->PushData(pCamera->GetCameraCBData());
 
 	// 2. Get Descriptor from DescriptorHeap(m_upDescriptorHeap)
 	ComPtr<ID3D12DescriptorHeap> pDescriptorHeap = m_upDescriptorHeap->pDescriptorHeap;
@@ -212,9 +212,9 @@ void BasicForwardObject::Update()
 	m_pTransform->Update();
 }
 
-void BasicForwardObject::Render()
+void BasicForwardObject::Render(std::shared_ptr<Camera> pCamera)
 {
-	m_pRenderMethod->Render();
+	m_pRenderMethod->Render(pCamera);
 }
 
 BOOL BasicForwardObject::InitRenderMethod()
