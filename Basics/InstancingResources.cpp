@@ -170,12 +170,14 @@ void InstancingRender::Render(std::shared_ptr<Camera> pCamera)
 	
 	pCommandList->SetDescriptorHeaps(1, pDescriptorHeap.GetAddressOf());
 
+	// Current pDescriptorHeap layout (Probably)
+	// | CBV(Transform): b0 | 
+	// -> If you write huge data like structuredbuffer to descriptor heap, your gpu might be completely mad!!
+	// -> solution : use shader resource view bruh
+
 	// 4. Set Structured Buffer and push data
 	pCommandList->SetGraphicsRootShaderResourceView(1, m_upInstancingSBuffer->GetGPUVirtualAddress());
 	m_upInstancingSBuffer->PushData(originOwner.m_InstancingDatas.data(), originOwner.m_InstancingDatas.size());
-
-	// Current pDescriptorHeap layout (Probably)
-	// | CBV(Transform): b0 | SRV(Instancing Data): t0 |
 
 	CD3DX12_GPU_DESCRIPTOR_HANDLE gpuHandle(pDescriptorHeap->GetGPUDescriptorHandleForHeapStart());
 	pCommandList->SetGraphicsRootDescriptorTable(0, gpuHandle);

@@ -10,6 +10,7 @@
 //#include "InstancingDemo.h"
 #include "TextureDemo.h"
 #include "NormalMappingDemo.h"
+#include "TerrainDemo.h"
 
 #ifdef _DEBUG
 #define _CRTDBG_MAP_ALLOC
@@ -32,7 +33,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		desc.windowName = L"D3D12Engine";
 		desc.hInstance = hInstance;
 		desc.hWnd = NULL;
-		desc.app = std::make_shared<NormalMappingDemo>();
+		desc.app = std::make_shared<TerrainDemo>();
 
 	}
 

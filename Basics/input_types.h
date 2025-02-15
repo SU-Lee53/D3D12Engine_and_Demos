@@ -13,7 +13,7 @@ struct BasicInput : public Input
 	static std::vector<D3D12_INPUT_ELEMENT_DESC> descs;
 };
 
-struct DefaultInput
+struct DefaultInput : public Input
 {
 	XMFLOAT3 Position = { 0,0,0 };
 	XMFLOAT4 Color = { 0,0,0,0 };
@@ -25,8 +25,17 @@ struct DefaultInput
 	static std::vector<D3D12_INPUT_ELEMENT_DESC> descs;
 };
 
+struct TerrainInput : public Input
+{
+	XMFLOAT3 Position = { 0,0,0 };
+	XMFLOAT2 TexCoord = { 0,0 };
+
+	static std::vector<D3D12_INPUT_ELEMENT_DESC> descs;
+};
+
 using BasicVertexType = BasicInput;
 using VertexType = DefaultInput;
+using TerrainVertexType = TerrainInput;
 
 /////////////
 // Concept //

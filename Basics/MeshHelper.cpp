@@ -216,3 +216,50 @@ void MeshHelper::CreatePlane(std::vector<VertexType>& vertices, std::vector<UINT
 
 	indices = { 0, 1, 2, 2, 1, 3 };
 }
+
+void MeshHelper::CreateTerrainGrid(std::vector<TerrainVertexType>& vertices, std::vector<UINT>& indices, UINT width, UINT height)
+{
+	for (int z = 0; z < height + 1; z++)
+	{
+		for (int x = 0; x < width + 1; x++)
+		{
+			TerrainVertexType v;
+			v.Position = Vec3(static_cast<float>(x), 0, static_cast<float>(z));
+			v.TexCoord = Vec2(static_cast<float>(x), static_cast<float>(z));
+
+
+			
+			// UV
+			// z 1.0
+			// |
+			// |
+			// |
+			// |
+			// |
+			// |
+			// 0.0 ------------- x 1.0
+
+
+			vertices.push_back(v);
+		}
+	}
+
+	for (int z = 0; z < height; z++)
+	{
+		for (int x = 0; x < width; x++)
+		{
+			// [0]
+			//  |  \
+			// [2] - [1]
+			indices.push_back((width + 1) * (z + 1) + (x));
+			indices.push_back((width + 1) * (z)+ (x + 1));
+			indices.push_back((width + 1) * (z)+ (x));
+			// [1] - [2]
+			//     \  |
+			//       [0]
+			indices.push_back((width + 1) * (z) + (x + 1));
+			indices.push_back((width + 1) * (z + 1) + (x));
+			indices.push_back((width + 1) * (z + 1) + (x + 1));
+		}
+	}
+}

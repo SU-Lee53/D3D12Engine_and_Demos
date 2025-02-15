@@ -206,6 +206,7 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="Terrain.h" />
+    <ClInclude Include="TerrainDemo.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureDemo.h" />
     <ClInclude Include="TextureDemoResources.h" />
@@ -293,6 +294,7 @@
     <ClCompile Include="SpotlightResources.cpp" />
     <ClCompile Include="StructuredBuffer.cpp" />
     <ClCompile Include="Terrain.cpp" />
+    <ClCompile Include="TerrainDemo.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TextureDemo.cpp" />
     <ClCompile Include="TextureDemoResources.cpp" />
@@ -327,6 +329,7 @@
     <FxCompile Include="..\Shader\NormalMapping.hlsl" />
     <FxCompile Include="..\Shader\PointLight.hlsl" />
     <FxCompile Include="..\Shader\SpotLight.hlsl" />
+    <FxCompile Include="..\Shader\Terrain.hlsl" />
     <FxCompile Include="..\Shader\test.hlsl" />
     <FxCompile Include="..\Shader\Texture.hlsl" />
   </ItemGroup>

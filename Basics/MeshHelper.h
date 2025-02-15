@@ -10,5 +10,7 @@ public:
 
 	static void CreatePlane(std::vector<VertexType>& vertices, std::vector<UINT>& indices);
 
+	static void CreateTerrainGrid(std::vector<TerrainVertexType>& vertices, std::vector<UINT>& indices, UINT width, UINT height);
+
 };
 

@@ -19,6 +19,7 @@ private:
 public:
 	D3D12_BUFFER_SRV GetSRV() { return m_SRV; }
 	std::unique_ptr<DescriptorHeap>& GetDescriptorHeap() { return m_upDescriptorHeap; }
+	ComPtr<ID3D12Resource>& GetResource() { return m_pTexResource; }
 
 private:
 	ComPtr<ID3D12Resource> m_pTexResource = nullptr;

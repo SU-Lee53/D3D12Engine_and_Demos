@@ -238,6 +238,15 @@
     <Filter Include="Renderer\Terrain">
       <UniqueIdentifier>{163eb216-e9d3-4825-b4eb-920ca9608997}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Demos\Level.1\Terrain\App">
+      <UniqueIdentifier>{bc812113-e937-43f5-ab61-5ae3781adb37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos\Level.1\Terrain\Resource">
+      <UniqueIdentifier>{e5d67ca3-8820-46b6-806c-f51ae6becd3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos\Level.1\Terrain\Shader">
+      <UniqueIdentifier>{00c8ec9a-e788-41cd-a3cf-bfef137ee9c9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -453,10 +462,13 @@
     <ClInclude Include="NormalMappingDemo.h">
       <Filter>Game\Demos\Level.1\Normal Mapping\App</Filter>
     </ClInclude>
-    <ClInclude Include="Terrain.h" />
     <ClInclude Include="NormalMappingResources.h">
       <Filter>Game\Demos\Level.1\Normal Mapping\Resource</Filter>
     </ClInclude>
+    <ClInclude Include="Terrain.h">
+      <Filter>Renderer\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainDemo.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Basics.ico">
@@ -658,10 +670,13 @@
     <ClCompile Include="NormalMappingDemo.cpp">
       <Filter>Game\Demos\Level.1\Normal Mapping\App</Filter>
     </ClCompile>
-    <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="NormalMappingResources.cpp">
       <Filter>Game\Demos\Level.1\Normal Mapping\Resource</Filter>
     </ClCompile>
+    <ClCompile Include="Terrain.cpp">
+      <Filter>Renderer\Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainDemo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -714,6 +729,9 @@
     </FxCompile>
     <FxCompile Include="..\Shader\NormalMapping.hlsl">
       <Filter>Game\Demos\Level.1\Normal Mapping\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shader\Terrain.hlsl">
+      <Filter>Game\Demos\Level.1\Terrain\Shader</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>
