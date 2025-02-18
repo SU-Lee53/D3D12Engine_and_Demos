@@ -10,6 +10,7 @@ cbuffer CameraData : register(b0)
 struct VSInput
 {
     float3 Pos : POSITION;
+    float3 TexCoord : TEXCOORD;
 };
 
 struct PSInput
@@ -22,19 +23,20 @@ PSInput VSMain(VSInput input)
 {
     PSInput output = (PSInput) 0;
     
+    float4 pos = float4(input.Pos, 1.0f);
+    
     // delete translation from view matrix
-    matrix viewWithoutTranslate = matView;
-    viewWithoutTranslate._41 = 0.f;
-    viewWithoutTranslate._42 = 0.f;
-    viewWithoutTranslate._43 = 0.f;
+    matrix view = matView;
+    view._41 = 0.f;
+    view._42 = 0.f;
+    view._43 = 0.f;
+    matrix proj = matProj;
     
-    // Compute Transform
-    float4 pos = mul(float4(input.Pos, 1.f), viewWithoutTranslate);
-    pos = mul(pos, matProj);
+    matrix vp = mul(view, proj);
     
-    output.texCoord = input.Pos;
-    output.position = pos;
-    
+    output.position = mul(pos, vp);
+    output.texCoord = input.TexCoord;
+
     return output;
 }
 
@@ -43,5 +45,6 @@ SamplerState skyboxSampler : register(s0);
 
 float4 PSMain(PSInput input) : SV_Target
 {
-    return texSkybox.Sample(skyboxSampler, input.texCoord);
+    float3 uv = input.texCoord * 0.5 + 0.5;
+    return texSkybox.Sample(skyboxSampler, uv);
 }

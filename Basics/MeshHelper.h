@@ -13,6 +13,6 @@ public:
 	static void CreateTerrainGrid(std::vector<TerrainVertexType>& vertices, std::vector<UINT>& indices, UINT width, UINT height);
 
 	static void CreateSkyboxCube(std::vector<SkyboxVertexType>& vertices, std::vector<UINT>& indices);
-	static void CreateQuadMeshForCubeMapping(std::vector<SkyboxVertexType>& vertices, std::vector<UINT>& indices);
+	static void CreateQuadMeshForCubeMapping(std::vector<CubemapVertexType>& vertices, std::vector<UINT>& indices);
 };
 

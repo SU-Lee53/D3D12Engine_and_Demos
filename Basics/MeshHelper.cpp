@@ -266,59 +266,47 @@ void MeshHelper::CreateTerrainGrid(std::vector<TerrainVertexType>& vertices, std
 
 void MeshHelper::CreateSkyboxCube(std::vector<SkyboxVertexType>& vertices, std::vector<UINT>& indices)
 {
+	float fx = 1.0f;
+	float fy = 1.0f;
+	float fz = 1.0f;
+
 	vertices.resize(8);
-	/*
-		    4 -------- 5
-		  / |         /|
-		 /  |        / |
-		0 --+----- 1   |
-		|   7 -----+-- 6 
-		|  /       |  /
-		| /        | /
-		3 -------- 2
-	*/
 
-
-
-	vertices[0].Position = XMFLOAT3(-1.f, 1.f, -1.f);
-	vertices[1].Position = XMFLOAT3(1.f, 1.f, -1.f);
-	vertices[2].Position = XMFLOAT3(1.f, -1.f, -1.f);
-	vertices[3].Position = XMFLOAT3(-1.f, -1.f, -1.f);
-	vertices[4].Position = XMFLOAT3(-1.f, 1.f, 1.f);
-	vertices[5].Position = XMFLOAT3(1.f, 1.f, 1.f);
-	vertices[6].Position = XMFLOAT3(1.f, -1.f, 1.f);
-	vertices[7].Position = XMFLOAT3(-1.f, -1.f, 1.f);
+	// Front 
+	vertices[0] = SkyboxVertexType(Input{}, XMFLOAT3{ -fx, +fy, -fz }, XMFLOAT3{ -fx, +fy, -fz });
+	vertices[1] = SkyboxVertexType(Input{}, XMFLOAT3{ +fx, +fy, -fz }, XMFLOAT3{ +fx, +fy, -fz });
+	vertices[2] = SkyboxVertexType(Input{}, XMFLOAT3{ +fx, +fy, +fz }, XMFLOAT3{ +fx, +fy, +fz });
+	vertices[3] = SkyboxVertexType(Input{}, XMFLOAT3{ -fx, +fy, +fz }, XMFLOAT3{ -fx, +fy, +fz });
+	// Back		  
+	vertices[4] = SkyboxVertexType(Input{}, XMFLOAT3{ -fx, -fy, -fz }, XMFLOAT3{ -fx, +fy, -fz });
+	vertices[5] = SkyboxVertexType(Input{}, XMFLOAT3{ +fx, -fy, -fz }, XMFLOAT3{ +fx, +fy, -fz });
+	vertices[6] = SkyboxVertexType(Input{}, XMFLOAT3{ +fx, -fy, +fz }, XMFLOAT3{ +fx, +fy, +fz });
+	vertices[7] = SkyboxVertexType(Input{}, XMFLOAT3{ -fx, -fy, +fz }, XMFLOAT3{ -fx, +fy, +fz });
 
 	indices.resize(36);
 
-	// Front (z = -1)
-	indices[0] = 0; indices[1] = 2; indices[2] = 1;
-	indices[3] = 0; indices[4] = 3; indices[5] = 2;
-
-	// Back (z = +1)
-	indices[6] = 4; indices[7] = 5; indices[8] = 6;
-	indices[9] = 4; indices[10] = 6; indices[11] = 7;
-
-	// Left (x = -1)
-	indices[12] = 4; indices[13] = 7; indices[14] = 3;
-	indices[15] = 4; indices[16] = 3; indices[17] = 0;
-
-	// Right (x = +1)
-	indices[18] = 1; indices[19] = 2; indices[20] = 6;
-	indices[21] = 1; indices[22] = 6; indices[23] = 5;
-
-	// Upper (y = +1)
-	indices[24] = 4; indices[25] = 0; indices[26] = 1;
-	indices[27] = 4; indices[28] = 1; indices[29] = 5;
-
-	// Lower (y = -1)
-	indices[30] = 3; indices[31] = 7; indices[32] = 6;
-	indices[33] = 3; indices[34] = 6; indices[35] = 2;
-
+	// Front
+	indices[0] = 3; indices[1] = 1; indices[2] = 0;
+	indices[3] = 2; indices[4] = 1; indices[5] = 3;
+	// Upper
+	indices[6] = 0; indices[7] = 5; indices[8] = 4;
+	indices[9] = 1; indices[10] = 5; indices[11] = 0;
+	// Back
+	indices[12] = 3; indices[13] = 4; indices[14] = 7;
+	indices[15] = 0; indices[16] = 4; indices[17] = 3;
+	// Lower
+	indices[18] = 1; indices[19] = 6; indices[20] = 5;
+	indices[21] = 2; indices[22] = 6; indices[23] = 1;
+	// Left
+	indices[24] = 2; indices[25] = 7; indices[26] = 6;
+	indices[27] = 3; indices[28] = 7; indices[29] = 2;
+	// Right
+	indices[30] = 6; indices[31] = 4; indices[32] = 5;
+	indices[33] = 7; indices[34] = 4; indices[35] = 6;
 
 }
 
-void MeshHelper::CreateQuadMeshForCubeMapping(std::vector<SkyboxVertexType>& vertices, std::vector<UINT>& indices)
+void MeshHelper::CreateQuadMeshForCubeMapping(std::vector<CubemapVertexType>& vertices, std::vector<UINT>& indices)
 {
 	// Triangle 1
 	vertices.resize(6);

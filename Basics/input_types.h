@@ -33,9 +33,17 @@ struct TerrainInput : public Input
 	static std::vector<D3D12_INPUT_ELEMENT_DESC> descs;
 };
 
+struct CubemapInput : public Input
+{
+	XMFLOAT3 Position = { 0,0,0 };
+
+	static std::vector<D3D12_INPUT_ELEMENT_DESC> descs;
+};
+
 struct SkyboxInput : public Input
 {
 	XMFLOAT3 Position = { 0,0,0 };
+	XMFLOAT3 TexCoord = { 0,0,0 };	// TextureCube is Texture3D
 
 	static std::vector<D3D12_INPUT_ELEMENT_DESC> descs;
 };
@@ -43,6 +51,7 @@ struct SkyboxInput : public Input
 using BasicVertexType = BasicInput;
 using VertexType = DefaultInput;
 using TerrainVertexType = TerrainInput;
+using CubemapVertexType = CubemapInput;
 using SkyboxVertexType = SkyboxInput;
 
 /////////////

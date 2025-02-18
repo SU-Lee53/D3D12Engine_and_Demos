@@ -62,6 +62,59 @@ BOOL SkyboxRootSignaturePass1::Initialize()
 	return TRUE;
 }
 
+/////////////////////
+// Pass 1 Pipeline //
+/////////////////////
+
+BOOL SkyboxPipelinePass1::Initialize(std::shared_ptr<class RootSignature> rootSignature)
+{
+	SHADER.CompileAndAddShader<VertexShader>("SkyboxPass1VS", L"../Shader/Skybox_Pass1.hlsl", "VSMain");
+	SHADER.CompileAndAddShader<PixelShader>("SkyboxPass1PS", L"../Shader/Skybox_Pass1.hlsl", "PSMain");
+
+	VertexShader& vs = *SHADER.GetShader<VertexShader>("SkyboxPass1VS");
+	PixelShader& ps = *SHADER.GetShader<PixelShader>("SkyboxPass1PS");
+
+	// Set Pipeline State
+	{
+		m_Desc.InputLayout = { CubemapInput::descs.data(), (UINT)CubemapInput::descs.size() };
+		m_Desc.VS = CD3DX12_SHADER_BYTECODE(vs.GetBlob()->GetBufferPointer(), vs.GetBlob()->GetBufferSize());
+		m_Desc.PS = CD3DX12_SHADER_BYTECODE(ps.GetBlob()->GetBufferPointer(), ps.GetBlob()->GetBufferSize());
+		m_Desc.pRootSignature = rootSignature->Get();
+		m_Desc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
+		m_Desc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
+		m_Desc.BlendState.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
+		m_Desc.BlendState.RenderTarget[1].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
+		m_Desc.BlendState.RenderTarget[2].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
+		m_Desc.BlendState.RenderTarget[3].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
+		m_Desc.BlendState.RenderTarget[4].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
+		m_Desc.BlendState.RenderTarget[5].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
+		m_Desc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
+		m_Desc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS;
+		m_Desc.DepthStencilState.StencilEnable = FALSE;
+		m_Desc.DepthStencilState.DepthEnable = TRUE;
+		m_Desc.RasterizerState.CullMode = D3D12_CULL_MODE_BACK;
+		m_Desc.RasterizerState.FillMode = D3D12_FILL_MODE_SOLID;
+		m_Desc.RasterizerState.DepthClipEnable = TRUE;
+		m_Desc.SampleMask = UINT_MAX;
+		m_Desc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+		m_Desc.NumRenderTargets = 6;
+		m_Desc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;	// Fortmat from Skybox::m_pCubeMapTexture
+		m_Desc.RTVFormats[1] = DXGI_FORMAT_R8G8B8A8_UNORM;
+		m_Desc.RTVFormats[2] = DXGI_FORMAT_R8G8B8A8_UNORM;
+		m_Desc.RTVFormats[3] = DXGI_FORMAT_R8G8B8A8_UNORM;
+		m_Desc.RTVFormats[4] = DXGI_FORMAT_R8G8B8A8_UNORM;
+		m_Desc.RTVFormats[5] = DXGI_FORMAT_R8G8B8A8_UNORM;
+		m_Desc.DSVFormat = DXGI_FORMAT_UNKNOWN;				// DSV is Unused
+		m_Desc.SampleDesc.Count = 1;
+	}
+
+	ThrowIfFailed(
+		DEVICE->CreateGraphicsPipelineState(&m_Desc, IID_PPV_ARGS(m_PipelineState.GetAddressOf()))
+	);
+
+	return TRUE;
+}
+
 /////////////////////////
 // Pass 2 RootSignature //
 /////////////////////////
@@ -124,59 +177,6 @@ BOOL SkyboxRootSignaturePass2::Initialize()
 }
 
 /////////////////////
-// Pass 1 Pipeline //
-/////////////////////
-
-BOOL SkyboxPipelinePass1::Initialize(std::shared_ptr<class RootSignature> rootSignature)
-{
-	SHADER.CompileAndAddShader<VertexShader>("SkyboxPass1VS", L"../Shader/Skybox_Pass1.hlsl", "VSMain");
-	SHADER.CompileAndAddShader<PixelShader>("SkyboxPass1PS", L"../Shader/Skybox_Pass1.hlsl", "PSMain");
-
-	VertexShader& vs = *SHADER.GetShader<VertexShader>("SkyboxPass1VS");
-	PixelShader& ps = *SHADER.GetShader<PixelShader>("SkyboxPass1PS");
-
-	// Set Pipeline State
-	{
-		m_Desc.InputLayout = { SkyboxInput::descs.data(), (UINT)SkyboxInput::descs.size() };
-		m_Desc.VS = CD3DX12_SHADER_BYTECODE(vs.GetBlob()->GetBufferPointer(), vs.GetBlob()->GetBufferSize());
-		m_Desc.PS = CD3DX12_SHADER_BYTECODE(ps.GetBlob()->GetBufferPointer(), ps.GetBlob()->GetBufferSize());
-		m_Desc.pRootSignature = rootSignature->Get();
-		m_Desc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-		m_Desc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
-		m_Desc.BlendState.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
-		m_Desc.BlendState.RenderTarget[1].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
-		m_Desc.BlendState.RenderTarget[2].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
-		m_Desc.BlendState.RenderTarget[3].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
-		m_Desc.BlendState.RenderTarget[4].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
-		m_Desc.BlendState.RenderTarget[5].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
-		m_Desc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
-		m_Desc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS;
-		m_Desc.DepthStencilState.StencilEnable = FALSE;
-		m_Desc.DepthStencilState.DepthEnable = TRUE;
-		m_Desc.RasterizerState.CullMode = D3D12_CULL_MODE_BACK;
-		m_Desc.RasterizerState.FillMode = D3D12_FILL_MODE_SOLID;
-		m_Desc.RasterizerState.DepthClipEnable = TRUE;
-		m_Desc.SampleMask = UINT_MAX;
-		m_Desc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
-		m_Desc.NumRenderTargets = 6;
-		m_Desc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;	// Fortmat from Skybox::m_pCubeMapTexture
-		m_Desc.RTVFormats[1] = DXGI_FORMAT_R8G8B8A8_UNORM;
-		m_Desc.RTVFormats[2] = DXGI_FORMAT_R8G8B8A8_UNORM;
-		m_Desc.RTVFormats[3] = DXGI_FORMAT_R8G8B8A8_UNORM;
-		m_Desc.RTVFormats[4] = DXGI_FORMAT_R8G8B8A8_UNORM;
-		m_Desc.RTVFormats[5] = DXGI_FORMAT_R8G8B8A8_UNORM;
-		m_Desc.DSVFormat = DXGI_FORMAT_UNKNOWN;				// DSV is Unused
-		m_Desc.SampleDesc.Count = 1;
-	}
-
-	ThrowIfFailed(
-		DEVICE->CreateGraphicsPipelineState(&m_Desc, IID_PPV_ARGS(m_PipelineState.GetAddressOf()))
-	);
-
-	return TRUE;
-}
-
-/////////////////////
 // Pass 2 Pipeline //
 /////////////////////
 
@@ -190,16 +190,16 @@ BOOL SkyboxPipelinePass2::Initialize(std::shared_ptr<class RootSignature> rootSi
 
 	// Set Pipeline State
 	{
-		m_Desc.InputLayout = { SkyboxInput::descs.data(), (UINT)SkyboxInput::descs.size() };
+		m_Desc.InputLayout = { SkyboxVertexType::descs.data(), (UINT)SkyboxVertexType::descs.size() };
 		m_Desc.VS = CD3DX12_SHADER_BYTECODE(vs.GetBlob()->GetBufferPointer(), vs.GetBlob()->GetBufferSize());
 		m_Desc.PS = CD3DX12_SHADER_BYTECODE(ps.GetBlob()->GetBufferPointer(), ps.GetBlob()->GetBufferSize());
 		m_Desc.pRootSignature = rootSignature->Get();
 		m_Desc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
 		m_Desc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
 		m_Desc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
-		m_Desc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS;
+		m_Desc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
 		m_Desc.DepthStencilState.StencilEnable = FALSE;
-		m_Desc.DepthStencilState.DepthEnable = FALSE;
+		m_Desc.DepthStencilState.DepthEnable = TRUE;
 		m_Desc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
 		m_Desc.RasterizerState.CullMode = D3D12_CULL_MODE_FRONT;	// Skybox needs cull front
 		m_Desc.RasterizerState.FillMode = D3D12_FILL_MODE_SOLID;
@@ -294,7 +294,7 @@ void SkyboxRender::Pass1(std::shared_ptr<Camera> pCamera)
 	shared_ptr<Skybox> owner = static_pointer_cast<Skybox>(m_wpOwner.lock());
 	SkyboxCubeMap& cubeMap = *owner->m_pCubeMap;
 	Texture& texSkybox = *owner->m_pSkyboxTexture;
-	Mesh<SkyboxVertexType>& mesh = *owner->m_pCubeMap->m_upQuadMesh;
+	Mesh<CubemapVertexType>& mesh = *owner->m_pCubeMap->m_upQuadMesh;
 	VertexBuffer& vertexBuffer = mesh.GetBuffer()->vertexBuffer;
 	IndexBuffer& indexBuffer = mesh.GetBuffer()->indexBuffer;
 
@@ -405,7 +405,6 @@ void SkyboxRender::Pass2(std::shared_ptr<Camera> pCamera)
 	Descriptor TextureDescriptorHandle = m_upDescriptorHeap->Alloc();
 	DEVICE->CopyDescriptorsSimple(1, TextureDescriptorHandle.cpuHandle, texSkybox.m_pCubeMapTexture->GetDescriptorHeap()->DescriptorHandleFromStart.cpuHandle, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
-
 	// 6. Root Signature first
 	pCommandList->SetGraphicsRootSignature(m_RootSignatures[1]->Get());
 
@@ -483,11 +482,11 @@ BOOL SkyboxCubeMap::Initialize(const std::string& strTextureName, UINT uiCubeMap
 	}
 
 	// Create Mesh for cube mapping
-	vector<SkyboxVertexType> vtx;
+	vector<CubemapVertexType> vtx;
 	vector<UINT> idx;
 	MeshHelper::CreateQuadMeshForCubeMapping(vtx, idx);
 
-	m_upQuadMesh = make_unique<Mesh<SkyboxVertexType>>();
+	m_upQuadMesh = make_unique<Mesh<CubemapVertexType>>();
 	m_upQuadMesh->Initialize(vtx, idx);
 
 	// Create View 
@@ -571,7 +570,7 @@ BOOL Skybox::Initialize(std::wstring wstrTexturePath)
 
 	vector<SkyboxVertexType> vtx = {};
 	vector<UINT> idx = {};
-	MeshHelper::CreateQuadMeshForCubeMapping(vtx, idx);
+	MeshHelper::CreateSkyboxCube(vtx, idx);
 	
 	m_upSkyboxMesh = make_unique<Mesh<SkyboxVertexType>>();
 	m_upSkyboxMesh->Initialize(vtx, idx);

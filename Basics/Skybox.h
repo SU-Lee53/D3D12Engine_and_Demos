@@ -60,7 +60,7 @@ struct SkyboxCubeMap
 	void ChangeResourceStateToShaderResource(D3D12_RESOURCE_STATES currentState = D3D12_RESOURCE_STATE_RENDER_TARGET);
 
 	// Variables
-	std::unique_ptr<Mesh<SkyboxVertexType>> m_upQuadMesh = nullptr;
+	std::unique_ptr<Mesh<CubemapVertexType>> m_upQuadMesh = nullptr;
 	XMFLOAT4X4 m_ViewMatrices[6] = {};
 	XMFLOAT4X4 m_ProjMatrix = {};
 
