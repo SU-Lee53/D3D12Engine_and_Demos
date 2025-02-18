@@ -10,7 +10,8 @@ public:
 	friend class TextureManager;
 
 private:
-	BOOL Initialize(std::wstring wstrPath);
+	BOOL InitializeAsDefault(std::wstring wstrPath);
+	BOOL InitializeAsBlankCubemap(UINT uiCubeMapSize = 512, UINT uiMipLevels = 0);
 
 private:
 	BOOL LoadFromDDSFile(std::wstring wstrPath, D3D12_RESOURCE_DESC& outDesc);
@@ -21,6 +22,8 @@ public:
 	std::unique_ptr<DescriptorHeap>& GetDescriptorHeap() { return m_upDescriptorHeap; }
 	ComPtr<ID3D12Resource>& GetResource() { return m_pTexResource; }
 
+	XMFLOAT2 GetTextureSize() { return m_TextureSize; }
+
 private:
 	ComPtr<ID3D12Resource> m_pTexResource = nullptr;
 	std::unique_ptr<DescriptorHeap> m_upDescriptorHeap = nullptr;
@@ -28,5 +31,7 @@ private:
 	D3D12_BUFFER_SRV m_SRV = {};
 
 	std::string m_strPath = "";
+
+	XMFLOAT2 m_TextureSize = {0.f, 0.f};
 };
 

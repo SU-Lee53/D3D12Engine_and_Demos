@@ -247,6 +247,15 @@
     <Filter Include="Game\Demos\Level.1\Terrain\Shader">
       <UniqueIdentifier>{00c8ec9a-e788-41cd-a3cf-bfef137ee9c9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Renderer\Skybox">
+      <UniqueIdentifier>{aaab2129-7180-4c6e-bc5f-5382978f484f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer\Skybox\Shader">
+      <UniqueIdentifier>{d5638fd0-c5b6-415c-ac22-c28f499c3133}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Demos\Level.1\Skybox\App">
+      <UniqueIdentifier>{d3c970c4-49ca-454a-81b3-13b797a4ebc5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -468,7 +477,15 @@
     <ClInclude Include="Terrain.h">
       <Filter>Renderer\Terrain</Filter>
     </ClInclude>
-    <ClInclude Include="TerrainDemo.h" />
+    <ClInclude Include="Skybox.h">
+      <Filter>Renderer\Skybox</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyboxDemo.h">
+      <Filter>Game\Demos\Level.1\Skybox\App</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainDemo.h">
+      <Filter>Game\Demos\Level.1\Terrain\App</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Basics.ico">
@@ -676,7 +693,15 @@
     <ClCompile Include="Terrain.cpp">
       <Filter>Renderer\Terrain</Filter>
     </ClCompile>
-    <ClCompile Include="TerrainDemo.cpp" />
+    <ClCompile Include="Skybox.cpp">
+      <Filter>Renderer\Skybox</Filter>
+    </ClCompile>
+    <ClCompile Include="SkyboxDemo.cpp">
+      <Filter>Game\Demos\Level.1\Skybox\App</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainDemo.cpp">
+      <Filter>Game\Demos\Level.1\Terrain\App</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -732,6 +757,12 @@
     </FxCompile>
     <FxCompile Include="..\Shader\Terrain.hlsl">
       <Filter>Game\Demos\Level.1\Terrain\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shader\Skybox_Pass1.hlsl">
+      <Filter>Renderer\Skybox\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shader\Skybox_Pass2.hlsl">
+      <Filter>Renderer\Skybox\Shader</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

@@ -33,9 +33,17 @@ struct TerrainInput : public Input
 	static std::vector<D3D12_INPUT_ELEMENT_DESC> descs;
 };
 
+struct SkyboxInput : public Input
+{
+	XMFLOAT3 Position = { 0,0,0 };
+
+	static std::vector<D3D12_INPUT_ELEMENT_DESC> descs;
+};
+
 using BasicVertexType = BasicInput;
 using VertexType = DefaultInput;
 using TerrainVertexType = TerrainInput;
+using SkyboxVertexType = SkyboxInput;
 
 /////////////
 // Concept //

@@ -200,6 +200,8 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="SimpleMath.h" />
+    <ClInclude Include="Skybox.h" />
+    <ClInclude Include="SkyboxDemo.h" />
     <ClInclude Include="SpotlightDemo.h" />
     <ClInclude Include="SpotlightResources.h" />
     <ClInclude Include="StructuredBuffer.h" />
@@ -290,6 +292,8 @@
     <ClCompile Include="SimpleMath.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Skybox.cpp" />
+    <ClCompile Include="SkyboxDemo.cpp" />
     <ClCompile Include="SpotlightDemo.cpp" />
     <ClCompile Include="SpotlightResources.cpp" />
     <ClCompile Include="StructuredBuffer.cpp" />
@@ -328,6 +332,8 @@
     <FxCompile Include="..\Shader\Light.hlsl" />
     <FxCompile Include="..\Shader\NormalMapping.hlsl" />
     <FxCompile Include="..\Shader\PointLight.hlsl" />
+    <FxCompile Include="..\Shader\Skybox_Pass1.hlsl" />
+    <FxCompile Include="..\Shader\Skybox_Pass2.hlsl" />
     <FxCompile Include="..\Shader\SpotLight.hlsl" />
     <FxCompile Include="..\Shader\Terrain.hlsl" />
     <FxCompile Include="..\Shader\test.hlsl" />

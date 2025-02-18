@@ -282,7 +282,7 @@ BOOL Terrain::Initialize(std::wstring wstrDiffPath, std::wstring wstrHeightPath)
 
 BOOL Terrain::Initialize()
 {
-	OutputDebugStringA("Wrong Initializer Called\n");
+	OutputDebugStringA("Wrong Initialize Function Called\n");
 	__debugbreak();
 	return FALSE;
 }

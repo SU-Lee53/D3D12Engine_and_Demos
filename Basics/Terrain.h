@@ -54,7 +54,7 @@ class Terrain : public Object
 {
 public:
 	Terrain();
-	~Terrain();
+	virtual ~Terrain();
 
 public:
 	BOOL Initialize(std::wstring wstrDiffPath, std::wstring wstrHeightPath);

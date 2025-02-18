@@ -14,7 +14,7 @@ Texture::~Texture()
 
 }
 
-BOOL Texture::Initialize(std::wstring wstrPath)
+BOOL Texture::InitializeAsDefault(std::wstring wstrPath)
 {
 	std::filesystem::path p(wstrPath);
 	m_strPath = p.string();
@@ -61,6 +61,77 @@ BOOL Texture::Initialize(std::wstring wstrPath)
 	}
 
 	return bResult;
+}
+
+BOOL Texture::InitializeAsBlankCubemap(UINT uiCubeMapSize, UINT uiMipLevels)
+{
+	D3D12_RESOURCE_DESC cubeDesc = {};
+	cubeDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
+	cubeDesc.Alignment = 0;
+	cubeDesc.Width = uiCubeMapSize;
+	cubeDesc.Height = uiCubeMapSize;
+	cubeDesc.DepthOrArraySize = 6;	// Cube map has 6 sides
+	cubeDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	cubeDesc.SampleDesc.Count = 1;
+	cubeDesc.SampleDesc.Quality = 0;
+	cubeDesc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
+	cubeDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
+	cubeDesc.MipLevels = 1;
+
+	// Clear value
+	D3D12_CLEAR_VALUE clearValue = {};
+	clearValue.Format = cubeDesc.Format;
+	clearValue.Color[0] = 0.f;
+	clearValue.Color[1] = 0.f;
+	clearValue.Color[2] = 0.f;
+	clearValue.Color[3] = 1.f;
+
+	// Create Default heap (Not Upload Heap)
+	HRESULT hr = DEVICE->CreateCommittedResource(
+	&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+		D3D12_HEAP_FLAG_NONE,
+		& cubeDesc,
+		D3D12_RESOURCE_STATE_RENDER_TARGET,
+		&clearValue,
+		IID_PPV_ARGS(&m_pTexResource));
+
+	if (FAILED(hr))
+	{
+		OutputDebugStringA("Failed to create cubemap");
+		__debugbreak();
+		return FALSE;
+	}
+	else
+	{
+		D3D12_DESCRIPTOR_HEAP_DESC heapDesc = {};
+		{
+			heapDesc.NumDescriptors = 1;
+			heapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+			heapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+		}
+
+		// Create Descriptor Heap
+		m_upDescriptorHeap = make_unique<DescriptorHeap>();
+		m_upDescriptorHeap->Initialize(heapDesc);
+
+		// Create Shader Resource View For Pass 2
+		D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+		srvDesc.Format = cubeDesc.Format;
+		srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURECUBE;
+		srvDesc.TextureCube.MostDetailedMip = 0;
+		srvDesc.TextureCube.MipLevels = cubeDesc.MipLevels;
+		srvDesc.TextureCube.ResourceMinLODClamp = 0.f;
+		srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+
+		DEVICE->CreateShaderResourceView(m_pTexResource.Get(), &srvDesc, m_upDescriptorHeap->DescriptorHandleFromStart.cpuHandle);
+
+		m_SRV = srvDesc.Buffer;
+
+		return TRUE;
+	}
+
+	__debugbreak();
+	return FALSE;
 }
 
 BOOL Texture::LoadFromDDSFile(std::wstring wstrPath, D3D12_RESOURCE_DESC& outDesc)
@@ -110,6 +181,8 @@ BOOL Texture::LoadFromDDSFile(std::wstring wstrPath, D3D12_RESOURCE_DESC& outDes
 	RESOURCE.FenceAndWait();
 
 	outDesc = texDesc;
+	m_TextureSize.x = texDesc.Width;
+	m_TextureSize.y = texDesc.Height;
 
 	return TRUE;
 }
@@ -164,6 +237,9 @@ BOOL Texture::LoadFromWICFile(std::wstring wstrPath, D3D12_RESOURCE_DESC& outDes
 	RESOURCE.FenceAndWait();
 
 	outDesc = texDesc;
+	m_TextureSize.x = texDesc.Width;
+	m_TextureSize.y = texDesc.Height;
+
 
 	return TRUE;
 }

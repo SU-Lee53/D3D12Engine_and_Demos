@@ -8,6 +8,7 @@ cbuffer CameraData : register(b1)
 {
     matrix matView;
     matrix matProj;
+    float3 cameraPos;   // unused for now
 }
 
 struct VSInput

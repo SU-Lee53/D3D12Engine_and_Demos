@@ -18,7 +18,7 @@ BOOL TextureManager::CreateAndAddTexuture(const std::string& strTextureName, con
     }
 
     shared_ptr<Texture> pTexture = make_shared<Texture>();
-    bResult = pTexture->Initialize(strTexturePath);
+    bResult = pTexture->InitializeAsDefault(strTexturePath);
 
     if (bResult == FALSE)
     {
@@ -27,6 +27,28 @@ BOOL TextureManager::CreateAndAddTexuture(const std::string& strTextureName, con
 
     m_pTextureMap.insert(make_pair(strTextureName, pTexture));
     
+    return bResult;
+}
+
+BOOL TextureManager::CreateBlankCubemapAndAddTexture(const std::string& strName, UINT uiCubeMapSize, UINT uiMipLevels, D3D12_RESOURCE_STATES initResourceState)
+{
+    BOOL bResult = TRUE;
+    if (m_pTextureMap.find(strName) != m_pTextureMap.end())
+    {
+        return TRUE;    // Texture already exist
+    }
+
+    shared_ptr<Texture> pTexture = make_shared<Texture>();
+    bResult = pTexture->InitializeAsBlankCubemap(uiCubeMapSize, uiMipLevels);
+
+
+    if (bResult == FALSE)
+    {
+        __debugbreak();
+    }
+
+    m_pTextureMap.insert(make_pair(strName, pTexture));
+
     return bResult;
 }
 
@@ -75,7 +97,7 @@ BOOL TextureManager::CreateErrorTexture()
 
     BOOL bResult = TRUE;
     shared_ptr<Texture> pTexture = make_shared<Texture>();
-    bResult = pTexture->Initialize(L"../Models/Texture/error.jpg");
+    bResult = pTexture->InitializeAsDefault(L"../Models/Texture/error.jpg");
     if (!bResult)
     {
         __debugbreak();
