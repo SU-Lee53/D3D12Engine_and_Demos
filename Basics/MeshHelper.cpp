@@ -266,22 +266,22 @@ void MeshHelper::CreateTerrainGrid(std::vector<TerrainVertexType>& vertices, std
 
 void MeshHelper::CreateSkyboxCube(std::vector<SkyboxVertexType>& vertices, std::vector<UINT>& indices)
 {
-	float fx = 1.0f;
-	float fy = 1.0f;
-	float fz = 1.0f;
+	float fx = 0.5f;
+	float fy = 0.5f;
+	float fz = 0.5f;
 
 	vertices.resize(8);
 
 	// Front 
-	vertices[0] = SkyboxVertexType(Input{}, XMFLOAT3{ -fx, +fy, -fz }, XMFLOAT3{ -fx, +fy, -fz });
-	vertices[1] = SkyboxVertexType(Input{}, XMFLOAT3{ +fx, +fy, -fz }, XMFLOAT3{ +fx, +fy, -fz });
-	vertices[2] = SkyboxVertexType(Input{}, XMFLOAT3{ +fx, +fy, +fz }, XMFLOAT3{ +fx, +fy, +fz });
-	vertices[3] = SkyboxVertexType(Input{}, XMFLOAT3{ -fx, +fy, +fz }, XMFLOAT3{ -fx, +fy, +fz });
-	// Back		  
-	vertices[4] = SkyboxVertexType(Input{}, XMFLOAT3{ -fx, -fy, -fz }, XMFLOAT3{ -fx, +fy, -fz });
-	vertices[5] = SkyboxVertexType(Input{}, XMFLOAT3{ +fx, -fy, -fz }, XMFLOAT3{ +fx, +fy, -fz });
-	vertices[6] = SkyboxVertexType(Input{}, XMFLOAT3{ +fx, -fy, +fz }, XMFLOAT3{ +fx, +fy, +fz });
-	vertices[7] = SkyboxVertexType(Input{}, XMFLOAT3{ -fx, -fy, +fz }, XMFLOAT3{ -fx, +fy, +fz });
+	vertices[0] = SkyboxVertexType(Input{}, XMFLOAT3{ -fx, +fy, -fz }, XMFLOAT3{ -1.0f, +1.0f, -1.0f });
+	vertices[1] = SkyboxVertexType(Input{}, XMFLOAT3{ +fx, +fy, -fz }, XMFLOAT3{ +1.0f, +1.0f, -1.0f });
+	vertices[2] = SkyboxVertexType(Input{}, XMFLOAT3{ +fx, +fy, +fz }, XMFLOAT3{ +1.0f, +1.0f, +1.0f });
+	vertices[3] = SkyboxVertexType(Input{}, XMFLOAT3{ -fx, +fy, +fz }, XMFLOAT3{ -1.0f, +1.0f, +1.0f });
+	// Back						  
+	vertices[4] = SkyboxVertexType(Input{}, XMFLOAT3{ -fx, -fy, -fz }, XMFLOAT3{ -1.0f, -1.0f, -1.0f });
+	vertices[5] = SkyboxVertexType(Input{}, XMFLOAT3{ +fx, -fy, -fz }, XMFLOAT3{ +1.0f, -1.0f, -1.0f });
+	vertices[6] = SkyboxVertexType(Input{}, XMFLOAT3{ +fx, -fy, +fz }, XMFLOAT3{ +1.0f, -1.0f, +1.0f });
+	vertices[7] = SkyboxVertexType(Input{}, XMFLOAT3{ -fx, -fy, +fz }, XMFLOAT3{ -1.0f, -1.0f, +1.0f });
 
 	indices.resize(36);
 
@@ -303,7 +303,6 @@ void MeshHelper::CreateSkyboxCube(std::vector<SkyboxVertexType>& vertices, std::
 	// Right
 	indices[30] = 6; indices[31] = 4; indices[32] = 5;
 	indices[33] = 7; indices[34] = 4; indices[35] = 6;
-
 }
 
 void MeshHelper::CreateQuadMeshForCubeMapping(std::vector<CubemapVertexType>& vertices, std::vector<UINT>& indices)

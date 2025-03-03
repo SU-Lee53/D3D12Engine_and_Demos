@@ -45,6 +45,7 @@ SamplerState skyboxSampler : register(s0);
 
 float4 PSMain(PSInput input) : SV_Target
 {
-    float3 uv = input.texCoord * 0.5 + 0.5;
-    return texSkybox.Sample(skyboxSampler, uv);
+    //float3 uv = input.texCoord * 0.5 + 0.5;
+    float3 dir = normalize(input.texCoord);
+    return texSkybox.Sample(skyboxSampler, dir);
 }

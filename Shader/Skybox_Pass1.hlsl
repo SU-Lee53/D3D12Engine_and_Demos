@@ -77,11 +77,11 @@ float3 FaceToUVDirection(uint face, float2 uv)
             break;
         
         case 2: // +y
-            dir = float3(xy.x, -1.f, xy.y);
+            dir = float3(xy.x, 1.f, -xy.y);
             break;
         
         case 3: // -y
-            dir = float3(xy.x, 1.f, -xy.y);
+            dir = float3(xy.x, -1.f, xy.y);
             break;
         
         case 4: // +z
